@@ -55,16 +55,14 @@ class BankController extends Controller
 
     public function update(Request $request, $id)
     {
-        $bankupd= Bank::where('BankName', '=', $request->BankName )
-                ->where('todelete','=',1)
-                ->get();
-        if($bankupd>count() == 0)
-        {
+        
             $updclass = Bank::find($id);
             $updclass->BankName = $request->BankName;
             $updclass->save();
             return Response($updclass);
-        } 
+
+        
+
     }
 
     public function checkbox($id)

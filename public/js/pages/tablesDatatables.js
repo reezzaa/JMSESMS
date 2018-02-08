@@ -163,7 +163,7 @@ var TablesDatatables = function() {
             });
             $('#billbycontract-datatable').dataTable({
                 "aaSorting": [ [1,'asc'] ],
-                "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 3 ] } ],
+                "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 4 ] } ],
                 "iDisplayLength": 10,
                 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
             });

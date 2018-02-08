@@ -1,6 +1,26 @@
 @extends('layouts.BD.transact.transact_main')
 @section('head')
+<script>
+  var pathname = window.location.pathname;
+  var lastPart = pathname.split("/").pop();
 
+
+   function readByAjax()
+  {
+    
+      $.ajax({
+        type : 'get',
+        url  : '/bd/readByAjax2/'+lastPart,
+        dataType : 'html',
+        success:function(data)
+        { 
+            $('.table-responsive').html(data);
+              
+        }
+      })
+  };
+  readByAjax();
+</script>
 @endsection
 @section('sidebar')
   <!-- Main Sidebar -->
@@ -38,42 +58,68 @@
 
     </ol>
        <div class="block full">
+                      @foreach($contract as $check)
+
                         <!-- Working Tabs Title -->
                         <div class="block-title themed-background">
-                            <h2 style="color:white"><strong>Contract No. </strong></h2>
-                        </div>
-                        <!-- END Working Tabs Title -->
-
-                        <!-- Working Tabs Content -->
-                              <h5><strong>Client: </strong>Sample</h5>
-                              <br>
-                           
-                                <ul class="nav nav-tabs push" data-toggle="tabs">
-                                    <li class="active"><a href="#tabs-billing">For billing</a></li>
-                                    <li><a href="#tabs-collection">Project Status Overview</a></li>
-                                    <li><a href="#tabs-incurrences">Refrences of Billing</a></li>
-
-                                  <!--   <li><a href="#tabs-messages" data-toggle="tooltip" title="Messages"><i class="fa fa-envelope-o"></i></a></li>
-                                    <li><a href="#tabs-settings" data-toggle="tooltip" title="Settings"><i class="fa fa-cog"></i></a></li> -->
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tabs-billing">
-        
-                                    </div>
-                                    <div class="tab-pane" id="tabs-collection">
-                                      @include('layouts.BD.transact.billing.overview')
-                                    </div>
-                                    <div class="tab-pane" id="tabs-incurrences">
-                                      @include('layouts.BD.transact.billing.references')
-
-                                    </div>
-                                  <!--   <div class="tab-pane" id="example-tabs-messages">Messages..</div>
-                                    <div class="tab-pane" id="example-tabs-settings">Settings..</div> -->
+                            <h2 style="color:white"><strong>{{$check->name}} </strong></h2>
+                        </div>        
+                         @if($check->d_status==0)
+                              <div class="row">
+                                 <h4 class="col-md-6 col-md-offset-1" style="color: green"><strong>Overall Progress: </strong></h4>
+                                <div class="col-md-5">
+                                  <div class="btn-group col-md-offset-3">
+                                     <button value="{{ $check->conid }}" id="process_bill" class="btn btn-info">Process Billing</button>
+                                   </div>
                                 </div>
-                                <!-- END Default Tabs -->
+                               </div> <br>
+                               <div class="row">
+                                   <p class="col-md-offset-2"><strong>Status: </strong> <label class="label label-danger">No Downpayment</label></p>
+                                 </div>
+                              @else
+                                                    
+                              <div class="row">
+                                 <h4 class="col-md-6 col-md-offset-1" style="color: green"><strong>Overall Progress: {{$com}}%</strong></h4>
+                                <div class="col-md-5">
+                                  <div class="btn-group col-md-offset-3">
+                                     <button value="{{ $check->conid }}" id="process_bill" class="btn btn-info">Process Billing</button>
+                                     <button value="{{ $check->conid }}" class="btn btn-default"><i class="fa fa-calendar-o"></i> Add Task </button>
+                                     <button value="{{ $check->conid }}" class="btn btn-default"><i class="gi gi-cargo"></i> Adjust Stocks </button>
+                                   </div>
+                                </div>
+                               </div> <br>
+                               <div class="row">
+                                   <p class="col-md-offset-2"><strong>Status: </strong> <label class="label label-success">Paid Downpayment</label></p>
+                               </div>      
+                                @endif
+                                @endforeach
+                               
+                              <div class="table-responsive">                           
+                          </div>
                     </div>
                     <!-- END Working Tabs Block -->
          
+ <div id="show_stock_modal" class="modal fade edit-employee-modal" tabindex="-1" role="dialog" aria-labelledby="EditSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="block full container-fluid">
+              <div class="block-title themed-background">
+              <div class="block-options pull-right">
+                          <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                      </div>
+                      <h3 class="themed-background" style="color:white;" id="name"></h3></div>
+                
+                   {{ Form::open(['method' => 'POST','url'=>'/bd/billing','id'=>'frm-insert','target'=>'_blank']) }}
+                    @include('layouts.BD.transact.billing.current')
+                    <input type="hidden" name="ContractID" value="{{$id}}">
+                   {{ Form::close() }}     
+                    
+
+        </div>
+      </div>
+    </div> 
+  </div>
+
     
 
 @endsection
@@ -90,7 +136,61 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
- 
+    $(this).on('click','#process_bill',function(){
+      NProgress.start();
+            $('#show_stock_modal').modal('show');
+       /////////////////stop top loading//////////
+              NProgress.done();
+        ///////////////////////////////////////////
+    });
+
+    // $('#bill').on('click',function(e){
+    //   e.preventDefault();
+    //   var ddata = {
+    //     ContractID: lastPart,
+    //     term: $('#term').val(),
+    //     termdate: $('#termdate').val(),
+    //     amount: $('#amount').val(),
+    //     subtotal: $('#subtotal').val(),
+    //     desc: $('#desc').val()
+    //   }
+    //   console.log(ddata);
+    //     $.ajax({
+    //             type : 'post',
+    //             url  : '/bd/billing',
+    //             data : ddata,
+    //             dataType: 'json',
+    //             success:function(data){
+    //               $(function(){
+    //             $.bootstrapGrowl('<h4>Success!</h4> ', {
+    //               type: 'success',
+    //               delay: '2500',
+    //               allow_dismiss: true
+    //             });
+    //           });
+               
+    //           // window.location.reload();
+
+    //             },
+    //             error:function(data){
+    //              $(function(){
+    //             $.bootstrapGrowl('<h4>Cannot Save!</h4>', {
+    //               type: 'success',
+    //               delay: '2500',
+    //               allow_dismiss: true
+    //             });
+    //           });
+    //           // window.location.reload();
+                   
+    //             }
+    //           })
+    // });
+
+    $('#print').on('submit',function(e){
+      var classID = $(this).val();
+      e.preventDefault();
+     
+    });
       
     });
   </script>

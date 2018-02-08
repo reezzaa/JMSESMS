@@ -10,9 +10,13 @@ use App\ServicesOffered;
 use App\PaymentMode;
 use App\Tax;
 use App\Contract;
-use App\ProgressBill;
+use App\ContractOrder;
 use App\ContractTask;
+use App\ProgressBill;
 use App\Downpayment;
+use App\DueWT;
+use DateTime;
+use Carbon\carbon;;
 use DB;
 use Response;
 class SetupContractController extends Controller
@@ -215,14 +219,43 @@ class SetupContractController extends Controller
                 'status'=>0,
                 'active'=>0
                 ]);
+           
+           $co = new ContractOrder();
+           $co->ContractID = $contractID;
+           $co->co = $request->co;
+           $co->date = $request->co_date;
+           $co->save();
+
            $i='';
+
+           $min=Carbon::parse($request->min);
+           $max=Carbon::parse($request->max);
+           $ov_dur= $min->diffInDays($max);
+           // $datetime = new DateTime($min);
+           // $datetime2 = new DateTime($max);
+           // $interval = $datetime2->diff($datetime);
+           // $days = $interval->format('%a');
+
+
+           
                 for ($i=0; $i < count($request->task) ; $i++) { 
+                    
+                    $to_add = Carbon::parse($request->task_to[$i]);
+
                     $task = new ContractTask();
                     $task->ContractID = $contractID;
                     $task->ServID = $request->task[$i];
+                    $task->from = $request->task_from[$i];
+                    $task->to = $request->task_to[$i];
+                    $task->to_addDay = $to_add->addDay();
                     $task->status = 0;
                     $task->save();
-                }
+                    
+                    $due = new DueWT();
+                    $due->TaskID = $task->id;
+                    $due->wt = ($request->duration[$i]/$ov_dur)*100;
+                    $due->save();
+                }             
                 for ($i=0; $i < count($request->progress) ; $i++) { 
                     $mode = new ProgressBill();
                     $mode->ContractID = $contractID;
@@ -243,7 +276,7 @@ class SetupContractController extends Controller
                 $down->save();
                 
         \Session::flash('flash_add_success','Contract Added!');
-        return redirect()->route('receiveorder.index');
+        return redirect()->route('contract.index');
     }
 
     /**

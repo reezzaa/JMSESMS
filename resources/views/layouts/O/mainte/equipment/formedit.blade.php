@@ -30,9 +30,11 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    <div class="form-group">
-      <label for="equipkeys">Equipment key (<em>identifier</em>)</label> <span class="text-danger">*</span> 
+    <div class="form-group" >
+      
+        <label for="equipkeys">Equipment key (<em>identifier</em>)</label> <span class="text-danger">*</span> 
       {!! Form::text('equipkeys',null ,['id'=>'equipkeys','placeholder'=>'e.g. Serial key', 'class' => 'form-control', 'maxlength'=>'45']) !!}
+    
       <span id="duplicatez3" class="help-block animation-slideDown">
         Duplicate Material Name
       </span>
@@ -44,9 +46,11 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="form-group">
+    <div class="form-group" id="editlease">
+      <div id="remos">
       <label for="equipleasers">Equipment Leaser </label> <span class="text-danger">*</span> 
       {!! Form::text('equipleasers',null ,['id'=>'equipleasers','placeholder'=>'Leaser', 'class' => 'form-control', 'maxlength'=>'50']) !!}
+    </div>
       <span id="duplicate3" class="help-block animation-slideDown">
         Duplicate Material Name
       </span>

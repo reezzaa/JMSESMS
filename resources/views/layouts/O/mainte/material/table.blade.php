@@ -26,7 +26,8 @@
             {{ $u->DetailUOMText }}
         </td>
         <td class="text-center">
-           ₱ {{ $u->MaterialUnitPrice }}
+           ₱ {{ $u->MaterialUnitPrice }}  <br>
+           <i> {{\Carbon\Carbon::parse($u->date)->toDayDateTimeString()}}</i>
         </td>
         <td class="text-center">
           <label class="switch switch-primary">
@@ -46,6 +47,9 @@
           </td>
         <td>
           <div class="text-center">
+             
+            <button id="show_supp" class="btn btn-alt btn-default show_supp" value = "{{$u->matID}}" data-toggle="tooltip" data-placement="top" data-original-title="Adjustment History"><span class="fa fa-history"></span>
+            </button>
             <button id="view_supp" class="btn btn-alt btn-info view_supp" value = "{{$u->matID}}" data-toggle="tooltip" data-placement="top" data-original-title="View"><span class="gi gi-eye_open"></span>
             </button>
             <button id="edit_supp" class="btn btn-alt btn-warning edit_supp" value = "{{$u->matID}}" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><span class="gi gi-pencil"></span>
@@ -58,7 +62,30 @@
     @endforeach
   </tbody>
 </table> 
-
+  <div id="show_stock_modal" class="modal fade edit-employee-modal" tabindex="-1" role="dialog" aria-labelledby="EditSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="block full container-fluid">
+              <div class="block-title themed-background">
+              <div class="block-options pull-right">
+                          <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                      </div>
+                      <h3 class="themed-background" style="color:white;" id="name"></h3></div>
+                 <table class="table table-vcenter table-striped table-borderless table-hover" style="font-family: 'Arial'">
+            <thead>
+              <tr>
+                <th class="text-center">DATE</th>
+                <th class="text-center">PRICE</th>
+              </tr>
+            </thead>
+            <tbody id="area" class="text-center">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> 
+  </div>
 <div id="view_modal" class="modal fade view_modal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-md">
     <div class="modal-content">

@@ -10,8 +10,6 @@ class ServicesOffered extends Model
       'ServiceOffName',
       'todelete',
       'status',
-      'duration',
-      'remarks',
       
     ];
     public $timestamps = false;

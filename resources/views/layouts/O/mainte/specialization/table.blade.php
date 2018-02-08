@@ -38,7 +38,7 @@
         </td>
         <td>
           <div class="text-center">
-            <button id="view_supp" class="btn btn-alt btn-default view_supp" value = "{{$u->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Rate Adjustment History"><span class="fa fa-history"></span>
+            <button id="view_supp" class="btn btn-alt btn-default view_supp" value = "{{$u->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Adjustment History"><span class="fa fa-history"></span>
             </button>
             <button id="edit_supp" class="btn btn-alt btn-warning edit_supp" value = "{{$u->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><span class="gi gi-pencil"></span>
             </button>

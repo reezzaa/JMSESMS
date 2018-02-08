@@ -17,7 +17,12 @@
  #ge {
     background-color: green;
     color: white;
-    font-size: 12;
+    font-size: 10;
+  }
+  tbody
+  {
+    font-size: 10;
+  	
   }
   
     tr:nth-child(even) {background-color: #E6E6E6}
@@ -43,7 +48,7 @@
 		                <th class="text-center col-md-2">UNIT COST</th>
 		                <th class="text-center col-md-2">TOTAL COST</th>
 		                <th class="text-center col-md-2">SUPPLIER</th>
-		                <th class="text-center col-md-2">DELIVERY RECEIPT</th>
+		                <th class="text-center col-md-2" >DELIVERY RECEIPT</th>
 		              </tr>
 		            </thead>
 		            <tbody  class="text-center">

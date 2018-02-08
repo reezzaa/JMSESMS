@@ -85,6 +85,7 @@
             for(a4=0;a4<data.length;a4++)
             {
               $('#price').val(data[a4].total);
+              $('#duration').val(data[a4].duration);
             }
           }
         })
@@ -144,28 +145,24 @@ function computetax()
       <li><a href="{{ route('pm.home') }}"><i class="fa fa-home"></i></a></li>
       <li><a>Setup Contract</a></li>
   </ol>
-        <div class="block">
+        <!-- <div class="block"> -->
           <div class="container">
               <div class="stepwizard">
                   <div class="stepwizard-row setup-panel">
-                      <div class="stepwizard-step col-xs-3"> 
-                          <a href="#step-1" type="button" class="btn btn-success btn-circle">1</a>
-                          <p><small></small></p>
+                      <div class="stepwizard-step col-xs-4"> 
+                          <a href="#step-1" type="button" class="btn btn-success btn-circle"><i class="fa fa-files-o"></i></a>
+                          <p><small>Contract Details</small></p>
                       </div>
-                      <div class="stepwizard-step col-xs-3"> 
-                          <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
-                          <p><small></small></p>
+                      <div class="stepwizard-step col-xs-4"> 
+                          <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-sliders"></i></a>
+                          <p><small>Scope of Works</small></p>
                       </div>
-                      <div class="stepwizard-step col-xs-3"> 
-                          <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
-                          <p><small></small></p>
-                      </div>
-                      <div class="stepwizard-step col-xs-3"> 
-                          <a href="#step-4" type="button" class="btn btn-default btn-circle" disabled="disabled">4</a>
-                          <p><small></small></p>
+                      <div class="stepwizard-step col-xs-4"> 
+                          <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled"><i class="fa fa-briefcase"></i></a>
+                          <p><small>Commercial Terms</small></p>
                       </div>
                   </div>
-              </div>
+              <!-- </div> -->
     
     {!! Form::open(['url'=>'o/task', 'method'=>'POST', 'id'=>'frm-insert']) !!}  
                 
@@ -195,14 +192,49 @@ function computetax()
       $('#service').val('').trigger('chosen:updated');
        $('span#duplicate').hide();
        $('#price').val("");
+       $('#task_from').val("");
+       $('#task_to').val("");
+       $('#duration').val("");
       $('#addtask_modal').modal('show');
     });
 
      var task = [];
      var price =[];
-     
+     var task_from =[];
+     var task_to =[];
+     var duration =[];
+     var min='';
+     var max='';
     $('#addtask').click(function(){
       var name = $('#task').val();
+      var from = $('#task_from').val();
+      var to = $('#task_to').val();
+      var dur = $('#duration').val();
+
+                    if(min =='')
+                    {
+                      min = from;
+                    } 
+                    else if(min>from)
+                    {
+                      min = from;
+                    }
+                    else
+                    {
+                      min = min;
+                    }
+                    if(max =='')
+                    {
+                      max = to;
+                    } 
+                    else if(max<to)
+                    {
+                      max = to;
+                    }
+                    else
+                    {
+                      max =max;
+                    }
               /////////////////start top loading//////////
               NProgress.start();
               ///////////////////////////////////////////
@@ -214,7 +246,10 @@ function computetax()
                 dataType: 'json',
                 success:function(data){
                     task.push(name);
-                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+data.total+'</td><td class="text-center"><button class="btn-alt btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
+                    task_from.push(from);
+                    task_to.push(to);
+                    duration.push(dur);
+                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+data.total+'</td><td class="text-center">'+from+'</td><td class="text-center">'+to+'</td><td class="text-center"><button class="btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
                      subtotal+=parseFloat(data.total);
                   $('#subtotal').text('₱ '+subtotal);
                   if($('#totaldue').text()!="")
@@ -261,6 +296,9 @@ function computetax()
       $('#'+getID+'').slideUp('slow', function () {$(this).remove()
       });
       task.pop();
+      task_from.pop();
+      task_to.pop();
+      duration.pop();
       /////////////////start top loading//////////
       NProgress.done();
       ///////////////////////////////////////////
@@ -279,7 +317,14 @@ function computetax()
                 from: $('#from').val(),
                 to: $('#to').val(),
                 location: $('#location').val(),
+                co: $('#co').val(),
+                co_date: $('#co_date').val(),
                 task: task,
+                task_from: task_from,
+                task_to: task_to,
+                duration: duration,
+                min: min,
+                max: max,
                 progress: $('#progress').val(),
                 term: $('#term').val(),
                 termdate: $('#termdate').val(),
@@ -287,6 +332,8 @@ function computetax()
                 vatrate: $('#vatrate_val').val(),
                 newcost: newcost
             }
+            alert(min);
+            alert(max);
             $.ajax({
               type : 'post',
               url  : 'setup',
@@ -296,17 +343,14 @@ function computetax()
                  /////////////////stop top loading//////////
                 NProgress.done();
                 ///////////////////////////////////////////
-                window.location = 'receiveorder';
+                window.location = 'contract';
               },
               error:function(data){
                 /////////////////stop top loading//////////
                 NProgress.done();
                 ///////////////////////////////////////////
-                $.bootstrapGrowl('<h4>Error!</h4> <p>Cannot Save!</p>', {
-                        type: 'warning',
-                        delay: '1700',
-                        allow_dismiss: true
-                      });
+                // window.location = 'contract';
+                
               }
             })
           

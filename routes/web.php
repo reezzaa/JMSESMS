@@ -74,8 +74,8 @@ Route::prefix('pm')->group(function(){
 	Route::get('/setup/getTaskPrice/{id}','PM\SetupContractController@getTaskPrice');
 	Route::get('/setup/getTask/{id}','PM\SetupContractController@getTask');
 
-	Route::resource('/receiveorder','PM\ReceiveContractOrderController');
-	Route::get('/readByAjax30','PM\ReceiveContractOrderController@readByAjax');
+	Route::resource('/contract','PM\ContractController');
+	Route::get('/readByAjax30','PM\ContractController@readByAjax');
 
 
 });
@@ -130,11 +130,23 @@ Route::prefix('bd')->group(function(){
 	//billing and Collection
 	Route::resource('/billingcollection','BD\BillingCollectionController');
 	Route::get('/readByAjax1','BD\BillingCollectionController@readByAjax');
-	Route::get('/billing','BD\BillingCollectionController@createBill')->name('bd.trans.bill');
-	Route::get('/collection','BD\BillingCollectionController@createCollect')->name('bd.trans.collect');
 
+	Route::resource('/billing','BD\BillingController');
+	Route::get('/readByAjax2/{id}','BD\BillingController@readByAjax')->name('bd.bill');
+	Route::get('/printInvoice/{id}','BD\BillingController@printInvoice')->name('bd.printInvoice');
 
+	Route::resource('/collection','BD\CollectionController');
+	Route::get('/readByAjax3/{id}','BD\CollectionController@readByAjax')->name('bd.collect');
+	Route::post('/collectcash','BD\CollectionController@collectcash')->name('bd.collect.cash');
+	Route::get('/printOR/{id}','BD\CollectionController@printOR')->name('bd.printOR');
 
+	Route::prefix('collection')->group(function(){
+
+		Route::get('/process/{id}','BD\CollectionController@process')->name('bd.process');
+		Route::get('/process/byCash/{id}','BD\CollectionController@byCash')->name('bd.cash');
+		Route::get('/process/byCheque/{id}','BD\CollectionController@byCheque')->name('bd.cheque');
+
+	});
 });
 
 Route::prefix('o')->group(function(){
@@ -252,7 +264,7 @@ Route::prefix('o')->group(function(){
 
 	//Services Offered
 	Route::resource('/serviceOff','O\ServicesOfferedController');
-	Route::get('/readByAjax30','O\ServicesOfferedController@readByAjax');
+	Route::get('/readByAjax20','O\ServicesOfferedController@readByAjax');
 	Route::put('/serviceOff/{id}/delete ','O\ServicesOfferedController@delete');
 	Route::put('/serviceOff/checkbox/{id}', 'O\ServicesOfferedController@checkbox');
 
@@ -305,6 +317,11 @@ Route::prefix('o')->group(function(){
 	Route::post('/stockadjustment/{id}/storeThis',['as'=>'stockadjustment.storeThis','uses'=>'O\StockController@storeThis']);
 	Route::post('/stockadjustment/{id}/storeThat',['as'=>'stockadjustment.storeThat','uses'=>'O\StockController@storeThat']);
 	Route::post('/stockadjustment/printStockCard','O\StockController@printStockCard')->name('o.stockadjustment.printStockCard');
+	Route::get('/stockqueries','O\StockController@queries')->name('o.stockadjustment.queries');
+	Route::get('/readQueries','O\StockController@readQueries');
+	Route::get('/findMate/{id}','O\StockController@findMate');
+	Route::get('/findSupp/{id}','O\StockController@findSupp');
+
 
 
 });

@@ -12,8 +12,10 @@ use App\Material;
 use App\MaterialPrice;
 use App\GroupUOM;
 use App\DetailUOM;
+use App\MatPrice;
 use Response;
 use DB;
+use Carbon\carbon;
 class MaterialController extends Controller
 {
         public function __construct()
@@ -30,6 +32,7 @@ class MaterialController extends Controller
         $material = Material::join('tblMaterialClass', 'tblMaterial.MatClassID', 'tblMaterialClass.id')
             ->join('tblMaterialType', 'tblMaterialClass.MatTypeID', 'tblMaterialType.id')
             ->join('tblDetailUOM', 'tblMaterial.MatUOM', 'tblDetailUOM.id')
+            ->leftjoin('tblmatdate','tblmatdate.MatID','tblMaterial.id')
             ->select('tblMaterial.id as matID','tblMaterial.*','tblMaterialClass.MatClassName','tblDetailUOM.*','tblMaterialType.*')
             ->orderby('tblMaterial.id')
             ->where('tblMaterial.todelete','=',1)
@@ -71,22 +74,37 @@ class MaterialController extends Controller
     {
         $matAdd = Material::where('MatClassID', '=', $request->MatClassID )
             ->where('MaterialName', '=', $request->MaterialName )
+            ->where('MatUOM', '=', $request->MatUOM )
+            ->where('MaterialBrand', '=', $request->MaterialBrand )
+            ->where('MaterialSize', '=', $request->MaterialSize )
+            ->where('MaterialColor', '=', $request->MaterialColor )
+            ->where('MaterialDimension', '=', $request->MaterialDimension )
+            ->where('MaterialUnitPrice', '=', $request->MaterialUnitPrice )
             ->where('todelete','=',1)
             ->get();
+
         if($matAdd->count() == 0)
         {
-            $matID = Material::insertGetId([
-                'MatClassID'=>$request->MatClassID,
-                'MaterialName'=>$request->MaterialName,
-                'MatUOM'=>$request->MatUOM,
-                'MaterialBrand'=>$request->MaterialBrand,
-                'MaterialSize'=>$request->MaterialSize,
-                'MaterialColor'=>$request->MaterialColor,
-                'MaterialDimension'=>$request->MaterialDimension,
-                'MaterialUnitPrice'=>$request->MaterialUnitPrice,
-                'todelete'=>1,
-                'status'=>1
-                ]);
+            $updmat = new Material();
+            $updmat->MaterialName = $request->MaterialName;
+            $updmat->MatClassID = $request->MatClassID;
+            $updmat->MatUOM = $request->MatUOM;
+            $updmat->MaterialBrand = $request->MaterialBrand;
+            $updmat->MaterialSize = $request->MaterialSize;
+            $updmat->MaterialColor = $request->MaterialColor;
+            $updmat->MaterialDimension = $request->MaterialDimension;
+            $updmat->MaterialUnitPrice = $request->MaterialUnitPrice;
+            $updmat->status =1;
+            $updmat->todelete = 1;
+            $updmat->date = Carbon::now();
+            $updmat->save();
+
+            $var = new MatPrice();
+            $var->MatID = $updmat->id;
+            $var->date = Carbon::now();
+            $var->up_mat = $request->MaterialUnitPrice;
+            $var->save();
+
             return Response($matAdd);
         }
     }
@@ -126,9 +144,35 @@ class MaterialController extends Controller
             $updmat->MaterialColor = $request->MaterialColor;
             $updmat->MaterialDimension = $request->MaterialDimension;
             $updmat->MaterialUnitPrice = $request->MaterialUnitPrice;
+            $updmat->date = Carbon::now();
             $updmat->save();
-            return Response($updmat);
+
+         $specdescAdd = Material::where('MaterialUnitPrice', $request->MaterialUnitPrice )
+            ->where('date', $request->date)
+            ->where('id',$matID)
+            ->where('todelete','=',1)
+            ->get();
+         if($specdescAdd->count() == 0)
+        {
+            $var = new MatPrice();
+            $var->MatID = $matID;
+            $var->date = Carbon::now();
+            $var->up_mat = $request->MaterialUnitPrice;
+            $var->save();
+        }
+
+         return Response($updmat);
       
+    }
+    public function show($id)
+    {
+         $spece = Material::leftjoin('tblmatdate','tblmatdate.MatID','tblmaterial.id')
+        ->select('tblMaterial.MaterialName','tblMaterial.id','tblmatdate.up_mat','tblmatdate.date')
+        ->where('tblMaterial.id',$id)
+        ->orderby('tblmatdate.date','DESC')
+        ->get();
+        // dd($spece);
+        return Response($spece);
     }
    
     public function checkbox($id)

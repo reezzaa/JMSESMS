@@ -216,6 +216,26 @@
           NProgress.done();
           ///////////////////////////////////////////
     }
+    function findEPrice(val)
+    {
+        /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#equipprice').val('');
+          var a4;
+          $.get('getEPrice/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a4=0;a4<data.length;a4++)
+            {
+              $('#equipprice').val(data[a4].EquipPrice);
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+    }
 
     function compute(val)
     {
@@ -404,9 +424,9 @@ function mcheck()
     //   $('span#duplicate5').hide();
     // });
 
-    //   $('#duration').focus(function(){
-    //   $('span#duplicate6').hide();
-    // });
+      $('#duration').focus(function(){
+      $('span#duplicate6').hide();
+    });
 
     //   $('#unit').focus(function(){
     //   $('span#duplicate7').hide();
@@ -435,7 +455,7 @@ function mcheck()
 
     //AddBtn matModal reset
     $('.addmatBtn').click(function(){
-      $('.select-chosen').val('').trigger('chosen:updated');
+      $('.hehe').val('').trigger('chosen:updated');
        $('span#duplicate').hide();
       $('span#duplicate1').hide();
       $('span#duplicate2').hide();
@@ -446,7 +466,7 @@ function mcheck()
     });
 
     $('.addequiBtn').click(function(){
-      $('.select-chosen').val('').trigger('chosen:updated');
+      $('.hehe').val('').trigger('chosen:updated');
       $('span#duplicate').hide();
       $('span#duplicate1').hide();
       $('span#duplicate2').hide();
@@ -455,7 +475,7 @@ function mcheck()
     });
 
     $('.addworkBtn').click(function(){
-      $('.select-chosen').val('').trigger('chosen:updated');
+      $('.hehe').val('').trigger('chosen:updated');
       $('span#duplicate').hide();
       $('span#duplicate1').hide();
       $('span#duplicate3').hide();

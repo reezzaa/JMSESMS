@@ -4,7 +4,12 @@ namespace App\Http\Controllers\BD;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\CompanyUtil;
+use DB;
+use App\ServiceInvoiceHeader;
+use App\Client;
+use App\Contract;
+use Carbon\carbon;
 class BillingCollectionController extends Controller
 {
 
@@ -12,6 +17,7 @@ class BillingCollectionController extends Controller
     {
         $this->middleware('auth:budgetdepartment');
     }
+
     public function index()
     {
         //
@@ -20,14 +26,19 @@ class BillingCollectionController extends Controller
 
     public function readByAjax()
     {
-        return view('layouts.BD.transact.table');
+        $var = Contract::join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
+        // ->where('tblcontract.status','!=',0)
+        ->select('tblcontract.*','tblcontract.id as conid','tblclient.strCompClientName')
+        ->get();
+
+        foreach ($var as $key ) {
+             $key->amount=number_format($key->amount,2);
+                
+            }
+
+        return view('layouts.BD.transact.table', compact('var'));
     }
    
-    public function createBill()
-    {
-        return view('layouts.BD.transact.billing.index');
-        
-    }
     public function createCollect()
     {
         return view('layouts.BD.transact.collection.index');

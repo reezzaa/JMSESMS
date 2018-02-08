@@ -70,15 +70,13 @@
     <li >
         <a href="{{ route('stockadjustment.index') }}"><i class="fa fa-cubes sidebar-nav-icon"></i>Stock Adjustment </a>
     </li>
-    <li>
-                <a href="#" class="sidebar-nav-submenu"><i class="fa fa-angle-left sidebar-nav-indicator"></i>
-                <i class="gi gi-user sidebar-nav-icon"></i>Client</a>
-                <ul>
-                    <li>
-                        <a href="#" ><i class="fa fa-angle-left sidebar-nav-icon"></i>List of Clients</a>
-                    </li>
-                </ul>
-            </li>
+    <li class="sidebar-header">
+        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"></a></span>
+         <span class="sidebar-header-title">Queries & Reports</span>
+     </li>
+    <li >
+        <a href="{{ route('stockadjustment.index') }}"><i class="fa fa-search sidebar-nav-icon"></i>Stocks </a>
+    </li>
    <!--  <li class="sidebar-header">
         <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="hi hi-list"></i></a></span>
          <span class="sidebar-header-title">Lists</span>

@@ -21,10 +21,7 @@
         <a href="{{ route('setup.index') }}"><i class="gi gi-adjust_alt sidebar-nav-icon"></i>Setup Contract</a>
     </li>
     <li >
-        <a href="{{ route('receiveorder.index') }}"><i class="gi gi-adjust_alt sidebar-nav-icon"></i>Receive Contract Order</a>
-    </li>
-    <li >
-        <a><i class="gi gi-adjust sidebar-nav-icon"></i>Manage Contracts</a>
+        <a  href="{{ route('contract.index') }}"><i class="hi hi-list sidebar-nav-icon"></i>Manage Contracts</a>
     </li>
    <!--  <li class="sidebar-header">
        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="hi hi-list"></i></a></span>

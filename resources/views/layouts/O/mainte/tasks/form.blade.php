@@ -9,7 +9,7 @@
                             </div>
                               <label for="" class="col-md-2">Service <span class="text-danger">*</span> </label>
                               <div class="col-md-7" >
-                                <select name="service" id="service" class="form-control select-chosen">
+                                <select name="service" id="service" class="form-control select-chosen" required="required">
                                   <option value=""></option>
                                   @foreach($serv as $serv)
                                   <option value="{{$serv->id}}">{{$serv->ServiceOffName}}</option>
@@ -47,30 +47,28 @@
                       </div>
               <br>
               <div class="row">
+            <div class="col-md-1">
+              
+            </div>
+              <label for="" class="col-md-4">Work Duration (<em>approximate</em>) <span class="text-danger">*</span></label>
+              <div class="col-md-2">
+                {!! Form::text('duration',null ,['id'=>'duration','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','required','style'=>"text-align: right"]) !!}
+                   
+                    <script>
+                      $('#duration').numeric({
+                          decimalSeparator: ".",
+                          maxDecimalPlaces : 2,
+                          allowMinus:   false
+                      });
+                    </script>
+              </div>
               <div class="col-md-1">
+                <input type="text" class="form-control" value="day/s" disabled="disabled">
+              </div>
+              <div class="col-md-4">
                 
               </div>
-                <label for="" class="col-md-4">Work Duration (<em>approximate</em>) <span class="text-danger">*</span></label>
-                <div class="col-md-2">
-                  {!! Form::text('duration',null ,['id'=>'duration','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','required','style'=>"text-align: right"]) !!}
-                      <!-- <span id="duplicate6" class="help-block animation-slideDown">
-                        Duplicate Material Name
-                      </span> -->
-                      <script>
-                        $('#duration').numeric({
-                            decimalSeparator: ".",
-                            maxDecimalPlaces : 2,
-                            allowMinus:   false
-                        });
-                      </script>
-                </div>
-                <div class="col-md-1">
-                  <input type="text" class="form-control" value="day/s" disabled="disabled">
-                </div>
-                <div class="col-md-4">
-                  
-                </div>
-              </div>
+            </div>
               <br>
               <div class="row">
               <div class="col-md-1"></div>
@@ -109,7 +107,7 @@
                                           <div class="form-group">
                                             <div>
                                               <label for="specname">Skills Description</label> <span class="text-danger">*</span>
-                                              <select id="specname" name="specname" style="width: 250px;" onchange="findRPD(this.value)" class="select-chosen" data-placeholder="Select Skill">
+                                              <select id="specname" name="specname" style="width: 250px;" onchange="findRPD(this.value)" class="select-chosen hehe" data-placeholder="Select Skill">
                                                 <option></option>
                                                 <option value=""></option>
                                                  @foreach($spec as $spec)
@@ -171,7 +169,7 @@
                                     <div class="col-md-1"></div>
                                   <div class="col-md-10">
                                     <label for=""> Additional Fee</label>
-                                     <select id="addworkfee" name="addworkfee" style="width: 250px;" class="select-chosen" onchange="addWorkFee(this.value)" data-placeholder="Choose..">
+                                     <select id="addworkfee" name="addworkfee" style="width: 250px;" class="select-chosen hehe" onchange="addWorkFee(this.value)" data-placeholder="Choose..">
                                               <option></option>
                                               <option value=""></option>
                                                @foreach($addfee as $fee)
@@ -227,7 +225,7 @@
                                         <div class="form-group">
                                           <div>
                                             <label for="materialClass">Classification</label>
-                                            <select id="materialClass" name="materialClass" onchange="findMatbyClass(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Filter by Classification">
+                                            <select id="materialClass" name="materialClass" onchange="findMatbyClass(this.value)" style="width: 250px;" class="select-chosen hehe" data-placeholder="Filter by Classification">
                                               <option></option>
                                               <option value=""></option>
                                               @foreach($materialClass as $materialClass)
@@ -242,7 +240,7 @@
                                         <div class="form-group">
                                           <div>
                                             <label for="uom">Unit of Measurement</label>
-                                            <select id="uom" name="uom" onchange="findMatbyUOM(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Filter by UOM">
+                                            <select id="uom" name="uom" onchange="findMatbyUOM(this.value)" style="width: 250px;" class="select-chosen hehe" data-placeholder="Filter by UOM">
                                               <option></option>
                                               <option value=""></option>
                                               @foreach($uom as $uom)
@@ -260,7 +258,7 @@
                                         <div class="form-group">
                                           <div>
                                             <label for="material">Material</label> <span class="text-danger">*</span>
-                                            <select id="material" name="material" onchange="findPrice(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Select Material">
+                                            <select id="material" name="material" onchange="findPrice(this.value)" style="width: 250px;" class="select-chosen hehe" data-placeholder="Select Material">
                                               <option></option>
                                                @foreach($material as $material)
                                               <option value="{{ $material->id }}">{{ $material->MaterialName }}
@@ -337,7 +335,7 @@
                             <div class="col-md-1"></div>
                           <div class="col-md-10">
                             <label for=""> Additional Fee</label>
-                             <select id="addmatfee" name="addmatfee" style="width: 250px;" class="select-chosen" onchange="addMatFee(this.value)" data-placeholder="Choose..">
+                             <select id="addmatfee" name="addmatfee" style="width: 250px;" class="select-chosen hehe" onchange="addMatFee(this.value)" data-placeholder="Choose..">
                                       <option></option>
                                       <option value=""></option>
                                        @foreach($addfee as $mfee)
@@ -389,7 +387,7 @@
                           <div class="form-group">
                             <div>
                               <label for="equipname">Equipment Name</label> <span class="text-danger">*</span>
-                              <select id="equipname" name="equipname" onchange="findEPrice(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Select Equipment">
+                              <select id="equipname" name="equipname" onchange="findEPrice(this.value)" style="width: 250px;" class="select-chosen hehe" data-placeholder="Select Equipment">
                                 <option></option>
                                 <option value=""></option>
                                 @foreach($equip as $equip)
@@ -407,7 +405,7 @@
                           <div class="form-group">
                             <div>
                               <label for="equipprice">Rental Price</label> <span class="text-danger">*</span>
-                              {!! Form::text('text',null ,['id'=>'equipprice','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','onchange'=>'compute2(this.value)','disabled'=>'disabled']) !!}
+                              {!! Form::text('text',null ,['id'=>'equipprice','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
                             </div>
                           </div>
                         </div>

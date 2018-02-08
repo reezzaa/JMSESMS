@@ -157,6 +157,7 @@
   </div>
 </div>
 <input type="hidden" id="matID" name="matID">
+<input type="hidden" id="date" name="date">
 <div class="row">
   <div class="pull-right">
     <button id="cancel" type="button" class="btn btn-warning" data-dismiss="modal"><span class="gi gi-remove_2"></span> Cancel</button>

@@ -17,6 +17,7 @@ class Material extends Model
       'MaterialUnitPrice',
       'todelete',
       'status',
+      'date',
     ];
     public $timestamps = false;
     protected $table = 'tblmaterial';

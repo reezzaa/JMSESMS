@@ -192,4 +192,107 @@ class StockController extends Controller
         // $pdf->save($location); 
         return $pdf->stream(); 
   }
+
+  public function queries()
+  {
+      $getMat = DB::table('tblMaterial')
+        ->select('tblMaterial.MaterialName','tblMaterial.id')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->orderby('id')
+        ->get();
+      $getSupp = DB::table('tblsupplier')
+        ->select('tblsupplier.SuppDesc','tblsupplier.id')
+        ->where('tblsupplier.status',1)
+        ->where('tblsupplier.todelete',1)
+        ->orderby('id')
+
+        ->get();
+
+        return view('layouts.O.queries.index',['getMat'=>$getMat,'getSupp'=>$getSupp]);
+  }
+   public function readQueries()
+    {
+        $mat = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.MatID','tblMaterial.id')
+        ->leftjoin('tblsupplier','tblsupplier.id','tblstockcard.SuppID')
+        ->select('tblMaterial.*','tblStockCard.*','tblsupplier.SuppDesc')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->orderby('tblStockCard.date')
+        ->get();
+
+        return view('layouts.O.queries.table',['mat'=>$mat]);
+    }
+
+    public function findMate($id)
+    {
+        $fmat = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.MatID','tblMaterial.id')
+        ->leftjoin('tblsupplier','tblsupplier.id','tblstockcard.SuppID')
+        ->select('tblMaterial.*','tblStockCard.*','tblsupplier.SuppDesc')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->where('tblMaterial.id',$id)
+        ->orderby('tblStockCard.date')
+        ->get();
+
+        return view('layouts.O.queries.table1',['fmat'=>$fmat]);
+    }
+    public function findSupp($id)
+    {
+        $suppmat = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.MatID','tblMaterial.id')
+        ->leftjoin('tblsupplier','tblsupplier.id','tblstockcard.SuppID')
+        ->select('tblMaterial.*','tblStockCard.*','tblsupplier.SuppDesc')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->where('tblsupplier.id',$id)
+        ->orderby('tblStockCard.date')
+        ->get();
+
+        return view('layouts.O.queries.table2',['suppmat'=>$suppmat]);
+    }
+    public function readByAjax2()
+    {
+        $imat = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.intStockMatID','tblMaterial.intMaterialID')
+        ->select('tblMaterial.*','tblStockCard.*')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->where('tblStockCard.strStockMethod','IN')
+        ->orderby('tblStockCard.dtmStockDate')
+        ->get();
+
+        return view('layouts.queries.Stock.table2',['imat'=>$imat]);
+    }
+    public function readByAjax3()
+    {
+        $omat = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.intStockMatID','tblMaterial.intMaterialID')
+        ->select('tblMaterial.*','tblStockCard.*')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->where('tblStockCard.strStockMethod','OUT')
+        ->orderby('tblStockCard.dtmStockDate')
+        ->get();
+
+        return view('layouts.queries.Stock.table3',['omat'=>$omat]);
+    }
+    public function findStartDate($id)
+    {
+        $getsdate = Carbon::parse($id);
+        $getsdate->toDateString();
+        $sdate = DB::table('tblMaterial')
+        ->join('tblStockCard','tblStockCard.intStockMatID','tblMaterial.intMaterialID')
+        ->select('tblMaterial.*','tblStockCard.*')
+        ->where('tblMaterial.status',1)
+        ->where('tblMaterial.todelete',1)
+        ->where('tblStockCard.dtmStockDate',$getsdate)
+        ->orderby('tblStockCard.dtmStockDate','DESC')
+        ->get();
+
+        return view('layouts.queries.Stock.table4',['sdate'=>$sdate]);
+
+    }
 }

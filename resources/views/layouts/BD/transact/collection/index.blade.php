@@ -1,6 +1,26 @@
 @extends('layouts.BD.transact.transact_main')
 @section('head')
+<script>
+   var pathname = window.location.pathname;
+  var lastPart = pathname.split("/").pop();
 
+
+   function readByAjax()
+  {
+    
+      $.ajax({
+        type : 'get',
+        url  : '/bd/readByAjax3/'+lastPart,
+        dataType : 'html',
+        success:function(data)
+        { 
+            $('.table-responsive').html(data);
+              
+        }
+      })
+  };
+  readByAjax();
+</script>
 @endsection
 @section('sidebar')
   <!-- Main Sidebar -->
@@ -39,38 +59,48 @@
        <div class="block full">
                         <!-- Working Tabs Title -->
                         <div class="block-title themed-background">
-                            <h2 style="color:white"><strong>Contract No. </strong></h2>
+                            <h2 style="color:white"><strong>{{$coll->name}}</strong></h2>
                         </div>
-                        <!-- END Working Tabs Title -->
+                        <h4><b>List of Service Invoice</b></h4><br>
+                       <div class="table-responsive">
+                         
+                       </div>
 
-                        <!-- Working Tabs Content -->
-                              <h5><strong>Client: </strong>Sample</h5>
-                              <br>
-                           
-                                <ul class="nav nav-tabs push" data-toggle="tabs">
-                                    <li class="active"><a href="#tabs-billing">Open Invoices</a></li>
-                                    <li><a href="#tabs-collection">Payment History</a></li>
-                                    <li><a href="#tabs-incurrences"></a></li>
-
-                                  <!--   <li><a href="#tabs-messages" data-toggle="tooltip" title="Messages"><i class="fa fa-envelope-o"></i></a></li>
-                                    <li><a href="#tabs-settings" data-toggle="tooltip" title="Settings"><i class="fa fa-cog"></i></a></li> -->
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tabs-billing">
-                                      @include('layouts.BD.transact.collection.openinvoices')
-                                      
-                                    </div>
-                                    <div class="tab-pane" id="tabs-collection">
-                                      
-                                    </div>
-                                    <div class="tab-pane" id="tabs-incurrences">
-                                    </div>
-                                  <!--   <div class="tab-pane" id="example-tabs-messages">Messages..</div>
-                                    <div class="tab-pane" id="example-tabs-settings">Settings..</div> -->
-                                </div>
-                                <!-- END Default Tabs -->
                     </div>
-                    <!-- END Working Tabs Block -->
+    <div id="show_modal" class="modal fade show_modal" tabindex="-1" role="dialog" aria-labelledby="EditSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="block">
+             <div class="block-title themed-background">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                </div>
+                <h3 class="themed-background" style="color:white;"><strong>Clearing</strong></h3>
+              </div>
+
+                <div class="form-group">
+                     <table class="table">
+                       <tr><td>
+                        {!! Form::open(['url'=>'collection','method'=>'PUT','id'=>'frm-upd']) !!}
+                         
+                          <input type="hidden" id="or">
+                          <button type="submit" class="btn btn-block btn-info">Clear</button>
+                        {!!Form::close()!!}</td>
+
+                         <td><button class="btn btn-block btn-default">Stale Cheque</button></td>
+                         <td><button class="btn btn-block btn-default">DAIF</button></td>
+                       </tr>
+                     </table>
+                          
+                           
+                      </div>
+                    </div>
+                <br>
+                <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div> 
          
     
 
@@ -82,11 +112,54 @@
     // $(function(){ FormsValidation.init(); });
      $(document).ready(function(){
       var id='';
-      var url = "billing";
+      var url = "collection";
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+      });
+
+      $('.upd').on('click',function(){
+        NProgress.start();
+        var classID = $(this).val();
+        $('#or').val(classID);
+        $('#show_modal').modal('show');
+        NProgress.done();
+      });
+
+      $(this).on('submit','#frm-upd',function(e){
+           e.preventDefault();
+              var formData =  
+              {
+                or: $('#or').val()
+              }
+              
+              /////////////////start top loading//////////
+              NProgress.start();
+              ///////////////////////////////////////////
+              $.ajax({
+                type : 'put',
+                url  : '/bd/collection/'+lastPart,
+                data : formData,
+                dataType: 'json',
+                success:function(data){
+                  readByAjax();
+                    /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                  $(".modal").modal('hide');
+                  swal("Updated Successfully!", "success");
+
+                },
+                error:function(data){
+                  /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                alert('error');
+                 
+                }
+              })          
+           e.stopPropagation();
       });
  
       

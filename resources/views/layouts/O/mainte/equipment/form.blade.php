@@ -45,9 +45,11 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="form-group">
-      <label for="equipleaser">Equipment Leaser </label> <span class="text-danger">*</span> 
+    <div class="form-group" id="addlease">
+     <div id="remo">
+        <label for="equipleaser">Equipment Leaser </label> <span class="text-danger">*</span> 
       {!! Form::text('equipleaser',null ,['id'=>'equipleaser','placeholder'=>'Leaser', 'class' => 'form-control', 'maxlength'=>'50']) !!}
+     </div>
       <span id="duplicate3" class="help-block animation-slideDown">
         Duplicate Material Name
       </span>

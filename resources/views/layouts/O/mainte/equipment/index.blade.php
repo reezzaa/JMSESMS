@@ -20,10 +20,12 @@
      if($('#rent').val()==0)
       {
         $('#this').remove();
+        $('#remo').remove();
       }
     else
       {
         $('#here').html('<div id="this"><label for="equipprice">Rental Price per Day</label> <span class="text-danger">*</span><input type="text" id="equipprice" name="equipprice" placeholder="e.g 999999" class="form-control" maxlength="30"></div>');
+         $('#addlease').html('<div id="remo"><label for="equipleaser">Equipment Leaser</label> <span class="text-danger">*</span><input type="text" id="equipleaser" name="equipleaser" placeholder="Leaser" class="form-control" maxlength="50"></div>');
       }
      
            
@@ -33,11 +35,13 @@
      if ($('#rents').val()==0)
        {
         $('#that').remove();
+        $('#remos').remove();
 
        }
        else 
        {
         $('#there').html('<div id="that"><label for="equipprices">Rental Price per Day</label> <span class="text-danger">*</span><input type="text" id="equipprices" name="equipprices" placeholder="e.g 999999" class="form-control" maxlength="30"></div>');
+        $('#editlease').html('<div id="remos"><label for="equipleasers">Equipment Leaser</label> <span class="text-danger">*</span><input type="text" id="equipleasers" name="equipleasers" placeholder="Leaser" class="form-control" maxlength="50"></div>');
        }
   }
 </script>

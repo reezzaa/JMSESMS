@@ -72,10 +72,10 @@
     </li>
      <li class="sidebar-header">
         <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"></a></span>
-         <span class="sidebar-header-title">Queries</span>
+         <span class="sidebar-header-title">Queries & Reports</span>
      </li>
     <li >
-        <a href="{{ route('stockadjustment.index') }}"><i class="fa fa-search sidebar-nav-icon"></i>Queries </a>
+        <a href="{{ route('o.stockadjustment.queries') }}"><i class="fa fa-search sidebar-nav-icon"></i>Stocks </a>
     </li>
     <!-- <li>
                 <a href="#" class="sidebar-nav-submenu"><i class="fa fa-angle-left sidebar-nav-indicator"></i>

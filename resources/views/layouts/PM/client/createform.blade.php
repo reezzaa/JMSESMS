@@ -79,7 +79,7 @@
   <div class="col-md-4">
     <div class="form-group">
       <div>
-        {!! Form::label('strCompClientEmail','Email') !!}
+        {!! Form::label('strCompClientEmail','Email') !!}<span class="text-danger">*</span>
         {!! Form::email('strCompClientEmail',null, array('class'=>'form-control','placeholder'=>'Email')) !!}
       </div>
     </div>
@@ -105,8 +105,26 @@
   <div class="col-md-3">
     <div class="form-group">
       <div>
+          
         {!! Form::label('strCompClientProv','Province') !!}<span class="text-danger">*</span>
-        {!! Form::text('strCompClientProv',null, array('class'=>'form-control','placeholder'=>'Province')) !!}
+        <select name="strCompClientProv" id="strCompClientProv" class="form-control select-chosen">
+          <option value="Region I">Region I</option>
+          <option value="Region II">Region II</option>
+          <option value="Region III">Region III</option>
+          <option value="NCR">NCR</option>
+          <option value="Region IV-A">Region IV-A</option>
+          <option value="Region IV-B">Region IV-B</option>
+          <option value="Region V">Region V</option>
+          <option value="Region VI">Region VI</option>
+          <option value="Region VII">Region VII</option>
+          <option value="Region VIII">Region VIII</option>
+          <option value="Region IX">Region IX</option>
+          <option value="Region X">Region X</option>
+          <option value="Region XI">Region XI</option>
+          <option value="Region XII">Region XII</option>
+          <option value="Region XIII">Region XIII</option>
+          <option value="Region ARMM">Region ARMM</option>
+        </select>
       </div>
     </div>
   </div>

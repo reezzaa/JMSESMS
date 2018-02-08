@@ -355,6 +355,7 @@
                 $('#matdimens').val(data[a].MaterialDimension);
                 $('#matprices').val(data[a].MaterialUnitPrice);
                 $('#matID').val(data[a].matID);
+                $('#date').val(data[a].date);
                 selfName=$('#matnames').val();
                 className=$('#matclasse').val();
                 selfPrice=$('#matprices').val();
@@ -383,7 +384,8 @@
                 MaterialSize: $('#matsizes').val(),
                 MaterialColor: $('#matcolors').val(),
                 MaterialDimension: $('#matdimens').val(),
-                MaterialUnitPrice: $('#matprices').val()
+                MaterialUnitPrice: $('#matprices').val(),
+                date: $('#date').val()
           }
                 if(selfName == $('#matnames').val() && className == $('#matclasse').val() && selfPrice == $('#prices').val() && selfuom == $('#detailuoms').val())
                 {
@@ -494,6 +496,39 @@
             })
            e.stopPropagation();
         }); 
+     $(this).on('click','.show_supp',function(){
+               var classID = $(this).val();
+          var a,b=0;
+
+         /////////////////top loading//////////
+          NProgress.start();
+          /////////////////////////////////////
+          $.ajax({
+          type : 'get',
+          url  : url+'/'+classID,
+          dataType: 'json',
+          success:function(data){
+            for(a=0;a<1;a++)
+            {
+                document.getElementById("name").innerHTML += '<strong>'+data[a].MaterialName+'</strong>';
+                $('#show_stock_modal').modal('show');
+
+            }
+             for(a=0;a<data.length;a++)
+            {
+                document.getElementById("area").innerHTML += '<tr><td>'+data[a].date+'</td><td> ₱ '+data[a].up_mat+'</td></tr>';
+              
+            }
+          }
+          });
+
+           /////////////////stop top loading//////////
+            NProgress.done();
+            ///////////////////////////////////////////
+          $('#name').empty();
+          $('#area').empty();
+
+          });
   });
   </script>
 @endsection

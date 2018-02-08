@@ -1,39 +1,21 @@
-<div class="panel panel-success setup-content" id="step-1">
+        
+        <div class="panel  setup-content" id="step-1">
             <div class="panel-heading">
-                 <h3 class="panel-title">Select Client</h3>
+                 <h3 class="panel-title"></h3>
             </div>
             <div class="panel-body">
-                <div class="form-group">
-                    <!-- <input maxlength="100" type="text" required="required" class="form-control" placeholder="Enter First Name" /> -->
-                    <div class="col-md-offset-2 col-md-1">
+              <div class="form-group col-md-10">
                     <label class="control-label">Client</label><span class="text-danger">*</span> 
-                    </div>
-                    <div class="col-md-6">                        
+
                         <select name="client" id="client" required="required" class="form-control select-chosen">
                         <option value=""></option>
                         @foreach($client as $client)
                         <option value="{{$client->strCompClientID}}">{{$client->strCompClientName}}</option>
                         @endforeach
                     </select>
+
                     </div>
-                    <div class="col-md-2">
-                        <a href="{{ route('client.create')}}"><i class="fa fa-plus"></i> Add Client</a>
-                    </div>
-                </div>
-                <br><br>
-                <!-- <div class="form-group">
-                    <label class="control-label">Last Name</label>
-                    <input maxlength="100" type="text" required="required" class="form-control" placeholder="Enter Last Name" />
-                </div> -->
-                <button class="btn btn-primary nextBtn pull-right" type="button">Next</button>
-            </div>
-        </div>
-        
-        <div class="panel panel-success setup-content" id="step-2">
-            <div class="panel-heading">
-                 <h3 class="panel-title">Contract Details</h3>
-            </div>
-            <div class="panel-body">
+                   
                 <div class="form-group col-md-12">
                     <label class="control-label">Contract Name <span class="text-danger">*</span></label>
                     <input maxlength="200" id="contractname" name="contractname" type="text" required="required" class="form-control" placeholder="Enter Company Name" />
@@ -57,16 +39,25 @@
                     <label class="control-label">Service Location <span class="text-danger">*</span></label>
                     <input maxlength="200" id="location" name="location " type="text" required="required" class="form-control" placeholder="Enter Service Location" />
                 </div>
+                <hr>
+                <div class="form-group col-md-6">
+                    <label class="control-label">Contract Order Number <span class="text-danger">*</span></label>
+                    <input maxlength="45" id="co" name="co " type="text" required="required" class="form-control" placeholder="Enter Contract or Job Order Number" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label">Date Received <span class="text-danger">*</span></label>
+                    <input maxlength="45" id="co_date" name="co_date " type="text" required="required" class="form-control input-datepicker text-center" placeholder="CO date received" data-date-format="yyyy-mm-dd" />
+                </div>
                 <button class="btn btn-primary nextBtn pull-right" type="button">Next</button>
             </div>
         </div>
         
-        <div class="panel panel-success setup-content" id="step-3">
+        <div class="panel  setup-content" id="step-2">
             <div class="panel-heading">
-                 <h3 class="panel-title">Scope of Works</h3>
+                 <h3 class="panel-title"></h3>
             </div>
             <div class="panel-body">
-                 <a id="" class="btn btn-md btn-default addtaskBtn" data-placement="top" data-toggle="tooltip" title="Add Task"><i class="fa fa-plus"></i> Add Task</a> <hr>
+                 
 
                 <table id="" class="table table-vcenter table-striped table-bordered table-hover">
                   <thead>
@@ -74,6 +65,8 @@
                       <th class="text-center">Service</th>
                       <th class="text-center" >Task</th>
                       <th class="text-center" >Cost</th>
+                      <th class="text-center" >From</th>
+                      <th class="text-center" >To</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -138,6 +131,23 @@
                                         </div>
                                       </div>
                                     </div>
+                                      <div class="col-md-4">
+                                        <div class="form-group">
+                                          <div>
+                                            <label for="duration">Duration</label>
+                                            {!! Form::text('text',null ,['id'=>'duration','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                          </div>
+                                        </div>
+                                      </div>
+                                       <div class="form-group col-md-8">
+                                          <label class="control-label" for="example-daterange1">Task Period <span class="text-danger">*</span></label>
+                                          <div class="input-group input-daterange" data-date-format="yyyy-mm-dd">
+                                                  <input type="text" id="task_from" name="task_from" class="form-control text-center val" placeholder="From" required="required">
+                                                  <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
+                                                  <input type="text" id="task_to" name="task_to" class="form-control text-center val" placeholder="To" required="required">
+                                          </div>
+                                        
+                                      </div>
                                    <hr>
                                     <div class="col-md-offset-10">
                                         <a id="addtask" class="btn btn-primary btn-alt">Add </a>
@@ -147,20 +157,22 @@
                               </div>
                             </div>
                           </div>
-
-                <button class="btn btn-primary nextBtn pull-right" type="button">Next</button>
+              <div class="pull-right">
+                  <a id="" class="btn btn-md btn-default addtaskBtn" data-placement="top" data-toggle="tooltip" title="Add Task"><i class="fa fa-plus"></i> Add Task</a> 
+                <button class="btn btn-primary nextBtn" type="button">Next</button>
+              </div>
             </div>
            
         </div>
         
-        <div class="panel panel-success setup-content" id="step-4">
+        <div class="panel  setup-content" id="step-3">
             <div class="panel-heading">
-                 <h3 class="panel-title">Commercial Terms</h3>
+                 <h3 class="panel-title"></h3>
             </div>
             <div class="panel-body">
                 <div class="row">
                   <div class="form-group col-md-6">
-                        <label for="strFormPayment" class="col-sm-4 text-center">Mode of Payment</label><h5><em>*billing based on a project's progress</em></h5>         
+                        <label for="strFormPayment" class="col-sm-4 text-center">Mode of Payment</label>         
 
                   <div class="col-sm-12 form-inline">
                        <select id="progress" name="progress[]" class="select-chosen" data-placeholder="Choose.." style="width: 250px;" multiple>

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/plugins.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
-    <link id="theme-link" rel="stylesheet" href="{{asset('css/themes/blue.css')}}">
+    <link id="theme-link" rel="stylesheet" href="{{asset('css/themes/flatie.css')}}">
     <link rel="stylesheet" href="{{asset('css/themes.css')}}">
     <script src="{{asset('dist/sweetalert.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{asset('dist/sweetalert.css')}}">
@@ -171,18 +171,18 @@
     </style>
     @yield('head')
   </head>
-  <body class="page-loading">
+  <body>
           <!-- Preloader -->
           <!-- Preloader functionality (initialized in js/app.js) - pageLoading() -->
           <!-- Used only if page preloader is enabled from inc/config (PHP version) or the class 'page-loading' is added in body element (HTML version) -->
-          <div class="preloader themed-background">
+          <!-- <div class="preloader themed-background">
               <h1 class="push-top-bottom text-light text-center"><strong>JMSESMS</strong></h1>
               <div class="inner">
                   <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
                   <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
               </div>
           </div>
-          <!-- END Preloader -->
+ -->          <!-- END Preloader -->
 
           <!-- Page Container -->
           <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations footer-fixed">

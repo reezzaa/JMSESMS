@@ -8,5 +8,6 @@ class Payment extends Model
 {
     //
     public $timestamps = false;
+    protected $primaryKey = 'OrID';
     protected $table = 'tblpayment';
 }

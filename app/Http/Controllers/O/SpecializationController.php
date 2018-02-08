@@ -77,8 +77,8 @@ class SpecializationController extends Controller
 
     public function edit($specID)
     {
-        $spece = Specialization::join('tblspecdate','tblspecdate.SpecID','tblspecialization.id')
-        ->select('tblspecialization.SpecDesc','tblspecialization.id','tblspecialization.rpd','tblspecdate.date')
+        $spece = Specialization::leftjoin('tblspecdate','tblspecdate.SpecID','tblspecialization.id')
+        ->select('tblspecialization.SpecDesc','tblspecialization.id','tblspecialization.rpd','tblspecialization.date')
         ->where('tblspecialization.id',$specID)
         ->orderby('tblspecdate.date','DESC')
         ->first();
@@ -87,12 +87,12 @@ class SpecializationController extends Controller
     }
     public function show($id)
     {
-        $spece = Specialization::join('tblspecdate','tblspecdate.SpecID','tblspecialization.id')
+        $spece = Specialization::leftjoin('tblspecdate','tblspecdate.SpecID','tblspecialization.id')
         ->select('tblspecialization.SpecDesc','tblspecialization.id','tblspecdate.up_rpd','tblspecdate.date')
         ->where('tblspecialization.id',$id)
         ->orderby('tblspecdate.date','DESC')
         ->get();
-
+        // dd($spece);
         return Response($spece);
     }
 

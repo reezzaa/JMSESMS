@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/plugins.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
-    <link id="theme-link" rel="stylesheet" href="{{asset('css/themes/spring.css')}}">
+    <link id="theme-link" rel="stylesheet" href="{{asset('css/themes/flatie.css')}}">
     <link rel="stylesheet" href="{{asset('css/themes.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('dist/sweetalert.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/cascade.css')}}">

@@ -135,7 +135,7 @@ body {
 
 #page-content {
     padding: 10px 5px 1px;
-    background-color: #eaedf1;
+    background-color: #FFFFFF;
 }
 
 #page-content + footer {
@@ -3098,11 +3098,12 @@ fieldset[disabled] .btn-info.active {
 }
 
 .panel-title {
+
     font-size: 14px;
 }
 
 .panel-default > .panel-heading {
-    background-color: #f9f9f9;
+    background-color: #FFFFFF;
 }
 
 .panel-group {

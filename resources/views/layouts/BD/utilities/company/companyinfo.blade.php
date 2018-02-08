@@ -16,7 +16,7 @@
                                     <h3 class="themed-background" style="color:white;"><strong>Edit Company Information</strong></h3>
                                   </div>
                                   {!! Form::model($utilities,['action'=>['BD\UtilitiesController@update', $utilities->intCompanyUtilID], 'id'=>'save-computil','class'=>'form-horizontal', 'method'=>'PATCH', 'files' => true]) !!}
-                                    @include('layouts.O.utilities.company.form2')
+                                    @include('layouts.BD.utilities.company.form2')
                                     <div class="form-group form-actions">
                                         <div class="col-md-9 col-md-offset-3">
                                           {!! Form::submit('Submit',['class'=>'btn btn-alt btn-success']) !!}
