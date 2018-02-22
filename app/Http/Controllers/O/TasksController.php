@@ -102,14 +102,16 @@ class TasksController extends Controller
         }
         for($i = 0;$i<count($request->material);$i++)
         {
+            $getTotalMat+= $request->cost[$i];
+
             $test = new ServMaterial();
             $test->ServID = $servOff->id;
             $test->MatID = $request->material[$i];
             $test->quantity = $request->materialqty[$i];
             $test->todelete = 1;
+            $test->total = $getTotalMat;
             $test->save();
 
-            $getTotalMat+= $request->cost[$i];
 
         }
         for($i = 0;$i<count($request->equipname);$i++)

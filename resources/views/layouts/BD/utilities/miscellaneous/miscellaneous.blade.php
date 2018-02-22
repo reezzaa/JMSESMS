@@ -80,7 +80,7 @@
               {{ $u->MiscDesc }}
           </td>
           <td class="text-center">
-              {{ $u->MiscValue }} %
+             Php {{ $u->MiscValue }} 
           </td>
           <td class="text-center">
           <label class="switch switch-primary">

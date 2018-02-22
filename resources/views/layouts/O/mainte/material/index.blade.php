@@ -170,6 +170,7 @@
     var className = '';
     var selfprice = '';
     var selfuom='';
+    var suppp='';
     var id='';
     var date = new Date();
     var url = "material";
@@ -214,6 +215,7 @@
         $('span#duplicate4').hide();
         $('span#duplicate5').hide();
         $('span#duplicate6').hide();
+        $('span#duplicates').hide();
         $('#addMat_modal').modal('show');
       });
       //////////////////////////////////////////////////////////////
@@ -225,6 +227,7 @@
         $('span#duplicate4').hide();
         $('span#duplicate5').hide();
         $('span#duplicate6').hide();
+        $('span#duplicates').hide();
         e.preventDefault();
         if($('#mattype').val() != "")
         {
@@ -238,6 +241,8 @@
                 {
                   if($('#detailuom').val() != "")
                   {
+                    if($('#supplier').val() != "")
+                  {
                     /////////////////start top loading//////////
                     NProgress.start();
                     ///////////////////////////////////////////
@@ -249,8 +254,10 @@
                       MaterialSize: $('#matsize').val(),
                       MaterialColor: $('#matcolor').val(),
                       MaterialDimension: $('#matdimen').val(),
+                      SuppID: $('#supplier').val(),
                       MaterialUnitPrice: $('#matprice').val()
                     }
+                    console.log(ddata);
                     $.ajax({
                       type : 'post',
                       url  : url,
@@ -269,6 +276,12 @@
                          $('span#duplicate2').show();
                       }
                     })
+                    }
+                  else
+                  {
+                    $('span#duplicates').text("Fill up required");
+                    $('span#duplicates').show();
+                  }
                   }
                   else
                   {
@@ -348,7 +361,8 @@
                 $('#mattypes > option[value="'+ data[a].mattypeID +'"]').prop('selected', true);
                 $('#matclasse > option[value="'+ data[a].MatClassID +'"]').prop('selected', true);
                 $('#groupuoms > option[value="'+ data[a].groupID +'"]').prop('selected', true);
-                $('#detailuoms > option[value="'+ data[a].MatUOM +'"]').prop('selected', true);            
+                $('#detailuoms > option[value="'+ data[a].MatUOM +'"]').prop('selected', true);  
+                $('#suppliers > option[value="'+ data[a].SuppID +'"]').prop('selected', true);
                 $('#matbrands').val(data[a].MaterialBrand);
                 $('#matsizes').val(data[a].MaterialSize);
                 $('#matcolors').val(data[a].MaterialColor);
@@ -360,6 +374,7 @@
                 className=$('#matclasse').val();
                 selfPrice=$('#matprices').val();
                 selfuom=$('#detailuoms').val();
+                suppp=$('#suppliers').val();
                 changeSymbol(data[a].MatUOM);
                 // alert(className);
 
@@ -385,9 +400,10 @@
                 MaterialColor: $('#matcolors').val(),
                 MaterialDimension: $('#matdimens').val(),
                 MaterialUnitPrice: $('#matprices').val(),
+                SuppID: $('#suppliers').val(),
                 date: $('#date').val()
           }
-                if(selfName == $('#matnames').val() && className == $('#matclasse').val() && selfPrice == $('#prices').val() && selfuom == $('#detailuoms').val())
+                if(selfName == $('#matnames').val() && className == $('#matclasse').val() && selfPrice == $('#prices').val() && selfuom == $('#detailuoms').val()&& suppp == $('#suppliers').val())
                 {
                   swal("Info", "Same Required Material Information", "info");
                 }
@@ -435,7 +451,7 @@
             }
             for (a=0;a<data.length;a++) 
             {
-              document.getElementById("right").innerHTML += '<ol> <strong>  Price: </strong>  ₱ '+data[a].MaterialUnitPrice+'</ol>';
+              document.getElementById("right").innerHTML += '<ol> <strong>  Price: </strong>  ₱ '+data[a].MaterialUnitPrice+'</ol><br><ol> <strong>  Supplier: </strong>  '+data[a].SuppDesc+'</ol>';
              document.getElementById("header").innerHTML += '<ol> <strong>  Type: </strong>'+data[a].MatTypeName+'</ol><ol><strong>  Classification: </strong>'+data[a].MatClassName+'</ol><br><ol><strong>  Unit of Measurement: </strong>'+data[a].DetailUOMText+'</ol>';
               document.getElementById("detail").innerHTML += ' <hr> <ol><h4><strong>Specifications</strong></h4><br> <ol> <strong>Brand: </strong>'+data[a].MaterialBrand+'</ol><ol> <strong>Size: </strong>'+data[a].MaterialSize+'</ol><ol> <strong>Color: </strong>'+data[a].MaterialColor+'</ol><ol> <strong>Dimension: </strong>'+data[a].MaterialDimension+'</ol>';
             };

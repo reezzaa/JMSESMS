@@ -73,9 +73,19 @@ Route::prefix('pm')->group(function(){
 	Route::get('/setup/findTaskbyNone','PM\SetupContractController@findTaskbyNone');
 	Route::get('/setup/getTaskPrice/{id}','PM\SetupContractController@getTaskPrice');
 	Route::get('/setup/getTask/{id}','PM\SetupContractController@getTask');
+	Route::get('/setup/getExpPrice/{id}','PM\SetupContractController@getExpPrice');
+	Route::get('/setup/getMisc/{id}','PM\SetupContractController@getMisc');
+	Route::get('/setup/getRateValue/{id}','PM\SetupContractController@getRateValue');
+	Route::get('/setup/getRate/{id}','PM\SetupContractController@getRate');
 
 	Route::resource('/contract','PM\ContractController');
 	Route::get('/readByAjax30','PM\ContractController@readByAjax');
+	Route::get('/contract/findTaskbyService/{id}','PM\ContractController@findTaskbyService');
+	Route::get('/contract/findTaskbyNone','PM\ContractController@findTaskbyNone');
+	Route::get('/contract/getTaskPrice/{id}','PM\ContractController@getTaskPrice');
+	Route::post('/contract/storeTask/{id}','PM\ContractController@storeTask')->name('pm.storeTask');
+	// Route::post('/contract/removeTask/{id}','PM\ContractController@removeTask');
+
 
 
 });
@@ -134,6 +144,14 @@ Route::prefix('bd')->group(function(){
 	Route::resource('/billing','BD\BillingController');
 	Route::get('/readByAjax2/{id}','BD\BillingController@readByAjax')->name('bd.bill');
 	Route::get('/printInvoice/{id}','BD\BillingController@printInvoice')->name('bd.printInvoice');
+	Route::post('/progressbilling','BD\BillingController@storeProgBill')->name('bd.bill.progress');
+
+	Route::resource('/stock','BD\StockController');
+	Route::post('/stock/{id}/storeThis',['as'=>'stock.storeThis','uses'=>'BD\StockController@storeThis']);
+	Route::post('/stock/{id}/storeThat',['as'=>'stock.storeThat','uses'=>'BD\StockController@storeThat']);
+	Route::get('/stock/getSupp/{id}','BD\StockController@getSupp');
+	Route::get('/stock/getSuppPrice/{id}','BD\StockController@getSuppPrice');
+
 
 	Route::resource('/collection','BD\CollectionController');
 	Route::get('/readByAjax3/{id}','BD\CollectionController@readByAjax')->name('bd.collect');
@@ -147,6 +165,9 @@ Route::prefix('bd')->group(function(){
 		Route::get('/process/byCheque/{id}','BD\CollectionController@byCheque')->name('bd.cheque');
 
 	});
+	Route::resource('/references','BD\ReferencesReportController');
+	Route::post('/references/printReferencesofBilling','BD\ReferencesReportController@printReferencesofBilling')->name('bd.printReferencesofBilling');
+
 });
 
 Route::prefix('o')->group(function(){
@@ -255,12 +276,12 @@ Route::prefix('o')->group(function(){
 	Route::put('/equipment/checkbox/{id}', 'O\EquipmentController@checkbox');
 	Route::put('/equipment/{id}/delete ','O\EquipmentController@delete');
 	//Price Adjustment
-	Route::resource('/price','O\PriceController');
-	Route::get('/readByAjax16','O\PriceController@readByAjax');
-	// Route::get('/readByAjax17','O\PriceController@readByAjax1');
-	Route::get('/readByAjax18','O\PriceController@readByAjax2');
-	// Route::put('/price/spec/{id}','O\PriceController@spec_update');
-	Route::put('/price/equip/{id}','O\PriceController@equip_update');
+	// Route::resource('/price','O\PriceController');
+	// Route::get('/readByAjax16','O\PriceController@readByAjax');
+	// // Route::get('/readByAjax17','O\PriceController@readByAjax1');
+	// Route::get('/readByAjax18','O\PriceController@readByAjax2');
+	// // Route::put('/price/spec/{id}','O\PriceController@spec_update');
+	// Route::put('/price/equip/{id}','O\PriceController@equip_update');
 
 	//Services Offered
 	Route::resource('/serviceOff','O\ServicesOfferedController');
@@ -304,11 +325,11 @@ Route::prefix('o')->group(function(){
 	Route::put('/supplier/{id}/delete ','O\SupplierController@delete');
 
 
-	// //Delivery Trucks
-	// Route::resource('/deliverytruck','O\DeliveryTruckController');
-	// Route::get('/readByAjax6','O\DeliveryTruckController@readByAjax');
-	// Route::put('/deliverytruck/checkbox/{id}', 'O\DeliveryTruckController@checkbox');
-	// Route::put('/deliverytruck/{id}/delete ','O\DeliveryTruckController@delete');
+	//Delivery Trucks
+	Route::resource('/expenses','O\ExpensesController');
+	Route::get('/readByAjax18','O\ExpensesController@readByAjax');
+	Route::put('/expenses/checkbox/{id}', 'O\ExpensesController@checkbox');
+	Route::put('/expenses/{id}/delete ','O\ExpensesController@delete');
 	////////////////////////////////////////////////////////
 
 	Route::resource('/stockadjustment','O\StockController');

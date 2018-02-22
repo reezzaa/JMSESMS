@@ -19,17 +19,17 @@
     </li>
     <li class="sidebar-header">
         <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"></a></span>
-         <span class="sidebar-header-title">Queries & Reports</span>
-     </li>
+         <span class="sidebar-header-title">Reports</span>
+     </li> 
      
     <li >
-        <a><i class="gi gi-search sidebar-nav-icon"></i>Statement of Accounts</a>
+        <a><i class="fa fa-file-pdf-o sidebar-nav-icon"></i>Statement of Accounts</a>
     </li>
     <li >
-        <a><i class="gi gi-search sidebar-nav-icon"></i>References of Billing</a>
+        <a><i class="fa fa-file-pdf-o sidebar-nav-icon"></i>References of Billing</a>
     </li>
     <li >
-        <a><i class="gi gi-search sidebar-nav-icon"></i>Overall Collection</a>
+        <a><i class="fa fa-file-pdf-o sidebar-nav-icon"></i>Overall Collection</a>
     </li>
     
    <!--  <li class="sidebar-header">

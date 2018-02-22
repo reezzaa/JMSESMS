@@ -4,7 +4,6 @@
       <th class="text-center">ID</th>
       <th class="text-center">Contract Name</th>
       <th class="text-center">Client</th>
-      <th class="text-center">CO#</th>
       <th class="text-center">From</th>
       <th class="text-center">Through</th>
       <th class="text-center">Status</th>
@@ -22,9 +21,6 @@
         </td>
        <td class="text-center">
             {{ $u->strCompClientName }}
-        </td>
-        <td class="text-center">
-            <b>CO# {{$u->co}}</b> 
         </td>
         <td class="text-center">
         {{\Carbon\Carbon::parse($u->from)->toFormattedDateString()}}

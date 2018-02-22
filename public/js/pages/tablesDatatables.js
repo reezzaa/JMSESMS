@@ -44,7 +44,7 @@ var TablesDatatables = function() {
                 //Material
                 $('#material-datatable').dataTable({
                     "aaSorting": [ [0,'asc'] ],
-                    "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 5,6 ] } ],
+                    "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 6,7 ] } ],
                     "iDisplayLength": 10,
                     "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
                 });
@@ -105,6 +105,12 @@ var TablesDatatables = function() {
                 });$('#price3-datatable').dataTable({
                     "aaSorting": [ [0,'asc'] ],
                     "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 2 ] } ],
+                    "iDisplayLength": 10,
+                    "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+                });
+                $('#expense-datatable').dataTable({
+                    "aaSorting": [ [0,'asc'] ],
+                    "aoColumnDefs": [ { "bSearchable": false, "bSortable": false, "aTargets": [ 2,3 ] } ],
                     "iDisplayLength": 10,
                     "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
                 });

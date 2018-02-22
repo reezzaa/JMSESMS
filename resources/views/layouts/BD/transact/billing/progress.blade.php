@@ -24,25 +24,24 @@
                             </td>
                           </table>
                           <p class="text-center"><b style="font-family: 'Bodoni Black';font-size: 150%;">SERVICE INVOICE</b></p>
-                          @foreach($down as $down)
                           <table class=" table-borderless">
                             <tr>
-                              <td class="col-md-4"><h5><b>Customer: {{$down->strCompClientName}}</b></h5></td>
+                              <td class="col-md-4"><h5><b>Customer: {{$prog->strCompClientName}}</b></h5></td>
                               <td class="col-md-4"><h5><b>Date: {{\Carbon\Carbon::parse($date)->toFormattedDateString()}}</b></h5></td>
                               <td></td>
 
                             </tr>
                             <tr>
-                              <td class="col-md-8"><h5><b>Address: {{$down->strCompClientAddress}} {{$down->strCompClientCity}}, {{$down->strCompClientProv}}</b></h5></td>
+                              <td class="col-md-8"><h5><b>Address: {{$prog->strCompClientAddress}} {{$prog->strCompClientCity}}, {{$prog->strCompClientProv}}</b></h5></td>
                               <td ></td>
                               <td ></td>
 
                             </tr>
                             <tr>
-                              <td class="col-md-4"><h5><b>TIN: {{$down->strCompClientTIN}} </b></h5></td>
-                              <td class="col-md-4"><h5><b>Terms: {{$down->term}} {{$down->termdate}}</b></h5></td>
-                                <input type="hidden" id="term" name='term' value="{{$down->term}}">
-                                <input type="hidden" id="termdate" name="termdate" value="{{$down->termdate}}">
+                              <td class="col-md-4"><h5><b>TIN: {{$prog->strCompClientTIN}} </b></h5></td>
+                              <td class="col-md-4"><h5><b>Terms: {{$prog->term}} {{$prog->termdate}}</b></h5></td>
+                                <input type="hidden" id="term" name='term' value="{{$prog->term}}">
+                                <input type="hidden" id="termdate" name="termdate" value="{{$prog->termdate}}">
                               <td class="col-md-4"></td>
 
                             </tr>
@@ -55,31 +54,34 @@
                               <th class="col-md-4 text-center">AMOUNT</th>
                             </tr>
                             <tr>
-                              <td style="height: 300px" class="text-center">
+                              <td style="height: 300px" >
                                 <br><br>
-                                <!-- @if($down->active==0) -->
-                                <h4><b>30 % Downpayment for the {{$down->name}}</b></h4>
-                                <input type="hidden" id="desc" name="desc" value="30 % Downpayment for the {{$down->name}}">
-                                <!-- @endif -->
-
+                                <h4 class="text-center"><b> {{$prog->Mode}} % Progress Billing for the {{$prog->name}}</b></h4>
+                                <input type="hidden" id="desc" name="desc" value="{{$prog->Mode}} % Progress Billing for the {{$prog->name}}">
+                                <br><h5 class="col-md-offset-3"><b>Total Contract Amount: </b> PHP {{$prog->amount}}</h5>
+                                <br><h5 class="col-md-offset-1"><b>THIS PAYMENT: {{$prog->Mode}} % </b> PHP {{$prog->initial}}</h5>
+                                <br><h5 class="col-md-offset-1"><b> LESS: 10% Retention </b> PHP {{$prog->retValue}}</h5>
+                                <br><h5 class="col-md-offset-1"><b> LESS: 30% Recoupment </b> PHP {{$prog->recValue}}</h5>
+                                <br><br><h5 class="col-md-offset-2"><b>This Payment: <u>PHP {{$prog->pb_amount}}</u></b></h5>
+                                
                               </td>
                               <td style="height: 500px" class="text-center">
                                 <br><br>
-                                <h4>PHP {{$down->initialtax}}</h4>
+                                <h4>PHP {{$prog->initialtax}}</h4>
 
                               </td>
                             </tr>
                             <tr>
                               <td style="text-align: right"> TOTAL AMOUNT DUE</td>
-                              <td class="text-center"> <b>PHP {{$down->initialtax}}</b></td>
+                              <td class="text-center"> <b>PHP {{$prog->initialtax}}</b></td>
                             </tr>
                             <tr>
                               <td style="text-align: right;"> VALUE ADDED TAX</td>
-                              <td class="text-center"> <b>PHP {{$down->taxValue}}</b></td>
+                              <td class="text-center"> <b>PHP {{$prog->taxValue}}</b></td>
                             </tr>
                             <tr>
                               <td style="text-align: right;"> <h4>TOTAL </h4></td>
-                              <td class="text-center"> <h4><b>PHP {{$down->down_amount}}</b></h4></td>
+                              <td class="text-center"> <h4><b>PHP {{$prog->pb_amount}}</b></h4></td>
 
                             </tr>
 
@@ -100,10 +102,9 @@
                           </table>
                           <br>
                            
-                          @endforeach 
                         <br>
-                        <input type="hidden" id="amount" name="amount" value="{{$down1->amount}}">
-                        <input type="hidden" id="subtotal" name="subtotal" value="{{$down1->initialtax}}">
+                        <input type="hidden" id="amount" name="amount" value="{{$prog1->amount}}">
+                        <input type="hidden" id="subtotal" name="subtotal" value="{{$prog1->initialtax}}">
 
                         </div>
                         <div class="clearfix">

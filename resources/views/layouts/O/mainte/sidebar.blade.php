@@ -61,6 +61,9 @@
             <li>
                 <a href="{{ route('task.index') }}"><i class="fa fa-calendar-o sidebar-nav-icon"></i>Tasks</a>
             </li>
+            <li>
+                <a href="{{ route('expenses.index') }}"><i class="fa fa-rub sidebar-nav-icon"></i>Expenses</a>
+            </li>
         </ul>
     </li>
     <li class="sidebar-header">

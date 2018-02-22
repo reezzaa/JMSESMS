@@ -93,6 +93,46 @@
           NProgress.done();
           ///////////////////////////////////////////
     }
+    function findExpPrice(val)
+    {
+        /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#miscprice').val('');
+          var a4;
+          $.get('setup/getExpPrice/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a4=0;a4<data.length;a4++)
+            {
+              $('#miscprice').val(data[a4].MiscValue);
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+    }
+    function findRateValue(val)
+    {
+        /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#value').val('');
+          var a4;
+          $.get('setup/getRateValue/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a4=0;a4<data.length;a4++)
+            {
+              $('#value').val(data[a4].RateValue);
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+    }
      var subtotal=0;
      var vatdue=0;
      var total=0;
@@ -193,48 +233,66 @@ function computetax()
        $('span#duplicate').hide();
        $('#price').val("");
        $('#task_from').val("");
-       $('#task_to').val("");
+       // $('#task_to').val("");
        $('#duration').val("");
       $('#addtask_modal').modal('show');
+    });
+  $('.addexpBtn').click(function(){
+      $('#misc').val('').trigger('chosen:updated');
+       $('span#duplicate').hide();
+       $('#miscprice').val("");
+       // $('#task_from').val("");
+       // $('#task_to').val("");
+       // $('#duration').val("");
+      $('#addexp_modal').modal('show');
+    });
+    $('.addrateBtn').click(function(){
+      $('#rate').val('').trigger('chosen:updated');
+       $('span#duplicate').hide();
+       $('#value').val("");
+       // $('#task_from').val("");
+       // $('#task_to').val("");
+       // $('#duration').val("");
+      $('#addrate_modal').modal('show');
     });
 
      var task = [];
      var price =[];
      var task_from =[];
-     var task_to =[];
+     // var task_to =[];
      var duration =[];
-     var min='';
-     var max='';
+     // var min='';
+     // var max='';
     $('#addtask').click(function(){
       var name = $('#task').val();
       var from = $('#task_from').val();
-      var to = $('#task_to').val();
+      // var to = $('#task_to').val();
       var dur = $('#duration').val();
 
-                    if(min =='')
-                    {
-                      min = from;
-                    } 
-                    else if(min>from)
-                    {
-                      min = from;
-                    }
-                    else
-                    {
-                      min = min;
-                    }
-                    if(max =='')
-                    {
-                      max = to;
-                    } 
-                    else if(max<to)
-                    {
-                      max = to;
-                    }
-                    else
-                    {
-                      max =max;
-                    }
+                    // if(min =='')
+                    // {
+                    //   min = from;
+                    // } 
+                    // else if(min>from)
+                    // {
+                    //   min = from;
+                    // }
+                    // else
+                    // {
+                    //   min = min;
+                    // }
+                    // if(max =='')
+                    // {
+                    //   max = to;
+                    // } 
+                    // else if(max<to)
+                    // {
+                    //   max = to;
+                    // }
+                    // else
+                    // {
+                    //   max =max;
+                    // }
               /////////////////start top loading//////////
               NProgress.start();
               ///////////////////////////////////////////
@@ -247,9 +305,9 @@ function computetax()
                 success:function(data){
                     task.push(name);
                     task_from.push(from);
-                    task_to.push(to);
+                    // task_to.push(to);
                     duration.push(dur);
-                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+data.total+'</td><td class="text-center">'+from+'</td><td class="text-center">'+to+'</td><td class="text-center"><button class="btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
+                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+data.total+'</td><td class="text-center">'+duration+'</td><td class="text-center">'+from+'</td><td class="text-center"><button class="btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
                      subtotal+=parseFloat(data.total);
                   $('#subtotal').text('₱ '+subtotal);
                   if($('#totaldue').text()!="")
@@ -280,7 +338,116 @@ function computetax()
           
 
     });
+    var miscdesc=[];
+    var miscvalue=[];
+    $('#addmisc').click(function(){
+      var desc = $('#misc').val();
+      var val = $('#miscprice').val();
+      // var to = $('#task_to').val();
+      // var dur = $('#duration').val();
 
+                 
+              /////////////////start top loading//////////
+              NProgress.start();
+              ///////////////////////////////////////////
+              var mod_url = 'setup/getMisc'+'/'+desc; 
+              var a='';
+              $.ajax({
+                type : 'get',
+                url  : mod_url,
+                dataType: 'json',
+                success:function(data){
+                    miscdesc.push(desc);
+                    miscvalue.push(val);
+                    
+                  $('#tblexp').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.MiscValue+'" id="input'+data.id+'"><td class="text-center">'+data.MiscDesc+'</td><td class="text-center">'+data.MiscValue+'</td><td class="text-center"></tr>');
+                     subtotal+=parseFloat(data.MiscValue);
+                  $('#subtotal').text('₱ '+subtotal);
+                  if($('#totaldue').text()!="")
+                  {
+                  computetax();
+
+                  }
+                  console.log(subtotal);
+
+                  $('#addexp_modal').modal('hide');
+                   /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                    },
+                error:function(data){
+                    $(function(){
+                $.bootstrapGrowl('<h4>Error!</h4> <p>Cannot Add this Expense!</p>', {
+                  type: 'warning',
+                  allow_dismiss: true
+                });
+              });
+                  /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                   
+                }
+              })
+          
+
+    });
+    var ratedesc=[];
+    var ratevalue=[];
+    $('#addrate').click(function(){
+      var desc = $('#rate').val();
+      var val = $('#value').val();
+      var initial=0;
+      // var to = $('#task_to').val();
+      // var dur = $('#duration').val();
+
+                 
+              /////////////////start top loading//////////
+              NProgress.start();
+              ///////////////////////////////////////////
+              var mod_url = 'setup/getRate'+'/'+desc; 
+              var a='';
+              $.ajax({
+                type : 'get',
+                url  : mod_url,
+                dataType: 'json',
+                success:function(data){
+                    ratedesc.push(desc);
+                    ratevalue.push(val);
+                    
+                  $('#tblfees').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.RateValue+'" id="input'+data.id+'"><td class="text-center">'+data.RateDesc+'</td><td class="text-center">'+data.RateValue+'</td><td class="text-center"></tr>');
+                     initial= data.RateValue/100 * subtotal;
+                     subtotal+=parseFloat(initial);
+                  $('#subtotal').text('₱ '+subtotal);
+                  if($('#totaldue').text()!="")
+                  {
+                  computetax();
+
+                  }
+                  console.log(data.RateValue);
+                  console.log(initial);
+                  console.log(subtotal);
+
+                  $('#addrate_modal').modal('hide');
+                   /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                    },
+                error:function(data){
+                    $(function(){
+                $.bootstrapGrowl('<h4>Error!</h4> <p>Cannot Add this Expense!</p>', {
+                  type: 'warning',
+                  allow_dismiss: true
+                });
+              });
+                  /////////////////stop top loading//////////
+                NProgress.done();
+                ///////////////////////////////////////////
+                   
+                }
+              })
+          
+
+    });
     
 
     $(this).on('click','.rem',function(){
@@ -297,12 +464,13 @@ function computetax()
       });
       task.pop();
       task_from.pop();
-      task_to.pop();
+      // task_to.pop();
       duration.pop();
       /////////////////start top loading//////////
       NProgress.done();
       ///////////////////////////////////////////
     });
+   
 
      $('#frm-insert').on('submit', function(e){
         e.preventDefault();
@@ -321,10 +489,10 @@ function computetax()
                 co_date: $('#co_date').val(),
                 task: task,
                 task_from: task_from,
-                task_to: task_to,
+                // task_to: task_to,
                 duration: duration,
-                min: min,
-                max: max,
+                miscdesc: miscdesc,
+                ratedesc: ratedesc,
                 progress: $('#progress').val(),
                 term: $('#term').val(),
                 termdate: $('#termdate').val(),
@@ -332,8 +500,8 @@ function computetax()
                 vatrate: $('#vatrate_val').val(),
                 newcost: newcost
             }
-            alert(min);
-            alert(max);
+            // alert(min);
+            // alert(max);
             $.ajax({
               type : 'post',
               url  : 'setup',
@@ -343,7 +511,7 @@ function computetax()
                  /////////////////stop top loading//////////
                 NProgress.done();
                 ///////////////////////////////////////////
-                window.location = 'contract';
+                window.location = '/pm/contract';
               },
               error:function(data){
                 /////////////////stop top loading//////////

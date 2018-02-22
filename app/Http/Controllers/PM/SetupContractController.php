@@ -13,10 +13,15 @@ use App\Contract;
 use App\ContractOrder;
 use App\ContractTask;
 use App\ProgressBill;
+use App\ProgressBillDetail;
 use App\Downpayment;
-use App\DueWT;
+use App\DueDetail;
+use App\Miscellaneous;
+use App\Rate;
+use App\ContractMisc;
+use App\ContractRate;
 use DateTime;
-use Carbon\carbon;;
+use Carbon\carbon;
 use DB;
 use Response;
 class SetupContractController extends Controller
@@ -55,8 +60,15 @@ class SetupContractController extends Controller
         ->where('status',1)
         ->orderby('TaxValue','ASC')
         ->get();
-
-        return view('layouts.PM.transact.setup.index',compact('client','task','service','mode','tax'));
+        $rate = Rate::where('todelete',1)
+        ->where('status',1)
+        ->orderby('id','ASC')
+        ->get();
+        $misc = Miscellaneous::where('todelete',1)
+        ->where('status',1)
+        ->orderby('id','ASC')
+        ->get();
+        return view('layouts.PM.transact.setup.index',compact('client','task','service','mode','tax','rate','misc'));
     }
 
     public function getContractPattern()
@@ -204,6 +216,13 @@ class SetupContractController extends Controller
     public function store(Request $request)
     {
         $contractID = $this->getID(); 
+         $u='';
+         $ov_dur='';
+         for ($u=0; $u < count($request->task) ; $u++) { 
+            $ov_dur+= $request->duration[$u];
+
+         }
+
            Contract::insert([
                 'id'=>$contractID,
                 'ClientID'=>$request->client,
@@ -217,7 +236,8 @@ class SetupContractController extends Controller
                 'termdate'=>$request->termdate,
                 'amount'=>$request->newcost,
                 'status'=>0,
-                'active'=>0
+                'active'=>0,
+                'over_dur'=>$ov_dur
                 ]);
            
            $co = new ContractOrder();
@@ -228,9 +248,23 @@ class SetupContractController extends Controller
 
            $i='';
 
-           $min=Carbon::parse($request->min);
-           $max=Carbon::parse($request->max);
-           $ov_dur= $min->diffInDays($max);
+           for ($i=0; $i < count($request->miscdesc) ; $i++) 
+           { 
+            $misc = new ContractMisc();
+            $misc->ContractID = $contractID;
+            $misc->MiscID = $request->miscdesc[$i];
+            $misc->save();
+           }
+
+           for ($i=0; $i < count($request->ratedesc) ; $i++) 
+           {
+            $rate = new ContractRate();
+            $rate->ContractID = $contractID;
+            $rate->RateID = $request->ratedesc[$i];
+            $rate->save(); 
+           }
+
+           
            // $datetime = new DateTime($min);
            // $datetime2 = new DateTime($max);
            // $interval = $datetime2->diff($datetime);
@@ -240,33 +274,27 @@ class SetupContractController extends Controller
            
                 for ($i=0; $i < count($request->task) ; $i++) { 
                     
-                    $to_add = Carbon::parse($request->task_to[$i]);
-
+                    
+                    $from = Carbon::parse($request->task_from[$i]);
                     $task = new ContractTask();
                     $task->ContractID = $contractID;
                     $task->ServID = $request->task[$i];
                     $task->from = $request->task_from[$i];
-                    $task->to = $request->task_to[$i];
-                    $task->to_addDay = $to_add->addDay();
+                    $task->to = $from->addDays($request->duration[$i]);
+                    $task->to_addDay = Carbon::parse($task->to)->addDay();
                     $task->status = 0;
+                    $task->active = 1;
+                    $task->wt = ($request->duration[$i]/$ov_dur)*100;
                     $task->save();
-                    
-                    $due = new DueWT();
-                    $due->TaskID = $task->id;
-                    $due->wt = ($request->duration[$i]/$ov_dur)*100;
-                    $due->save();
-                }             
-                for ($i=0; $i < count($request->progress) ; $i++) { 
-                    $mode = new ProgressBill();
-                    $mode->ContractID = $contractID;
-                    $mode->ModeID = $request->progress[$i];
-                    $mode->status = 0;
-                    $mode->amount = 0;
-                    $mode->RecID = 1;
-                    $mode->RetID = 1;
-                    $mode->save();
-                }
 
+                    $updtask = new DueDetail();
+                    $updtask->TaskID = $task->id;
+                    $updtask->progress = 0;
+                    $updtask->date = Carbon::now();
+                    $updtask->percent = 0;
+                    $updtask->save();
+                    
+                }           
                 $down = new Downpayment();
                 $down->ContractID = $contractID;
                 $down->amount = $request->newcost * 30/100;
@@ -274,9 +302,53 @@ class SetupContractController extends Controller
                 $down->taxvalue = $down->amount * $request->vatrate/100;
                 $down->initialtax =$down->amount - $down->taxvalue;
                 $down->save();
+
+                   $lastvalue=0;
+                   $initial = ""; //compute 
+                   $comret =""; //retention
+                   $comrec = "";//recoupment from downpayment
+                   $final=""; //initial less retention and recoupment
+                   $getlastvalue=0;
+                   $initPB=''; //initial vatable amount
+                   $taxPB='';  //tax amount
+                for ($i=0; $i < count($request->progress) ; $i++) { 
+                    $mode = new ProgressBill();
+                    $mode->ContractID = $contractID;
+                    $mode->Mode= $request->progress[$i];
+                    $mode->status = 0;
+                   
+
+                    $getlastvalue=($request->progress[$i]-$lastvalue);
+                    $initial=($request->newcost*$getlastvalue)/100;
+
+                    $comrec=($down->amount*$getlastvalue)/100;
+                    $comret=($initial*10)/100;
+
+                    $final= $initial-($comret+$comrec);
+
+                    $taxPB = ($final * $request->vatrate)/100;
+                    $initPB = $final-$taxPB;
+                    $lastvalue=$request->progress[$i];
+
+                    $mode->amount = $final;
+                    $mode->RecID = 1;
+                    $mode->RetID = 1;
+                    $mode->save();
+
+                    $mode_detail = new ProgressBillDetail();
+                    $mode_detail->PB_ID = $mode->id;
+                    $mode_detail->recValue = $comrec;
+                    $mode_detail->retValue = $comret;
+                    $mode_detail->initial = $initial;
+                    $mode_detail->initialtax = $initPB;
+                    $mode_detail->taxValue = $taxPB;
+                    $mode_detail->save();
+                }
+
+               
                 
         \Session::flash('flash_add_success','Contract Added!');
-        return redirect()->route('contract.index');
+        return redirect('/pm/contract');
     }
 
     /**
@@ -351,6 +423,34 @@ class SetupContractController extends Controller
         $ser = ServTask::join('tblservicesoffered','tblservicesoffered.id','tblservtask.ServOffID')
         ->where('tblservtask.id',$id)
         ->select('tblservtask.*','tblservicesoffered.ServiceOffName')
+        ->first();
+        // dd($ser);
+        return Response($ser);
+    }
+    public function getExpPrice($id)
+    {
+        $matprice = Miscellaneous::where('id',$id)->get();
+        
+        return Response($matprice);
+    }
+    public function getMisc($id)
+    {
+        $ser = Miscellaneous::where('id',$id)
+        ->select('tblmiscellaneous.*')
+        ->first();
+        // dd($ser);
+        return Response($ser);
+    }
+    public function getRateValue($id)
+    {
+        $matprice = Rate::where('id',$id)->get();
+        
+        return Response($matprice);
+    }
+    public function getRate($id)
+    {
+        $ser = Rate::where('id',$id)
+        ->select('tblrate.*')
         ->first();
         // dd($ser);
         return Response($ser);

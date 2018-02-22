@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Contract;
 use App\Downpayment;
+use App\ProgressBill;
 use Carbon\carbon;
 use App\ServiceInvoiceHeader;
 use App\Bank;
@@ -345,7 +346,15 @@ class CollectionController extends Controller
         
         $getdown = Contract::join('tbldownpayment','tbldownpayment.ContractID','tblcontract.id')
         ->select('tbldownpayment.id')
+        ->where('tbldownpayment.status',0)
         ->where('tbldownpayment.ContractID',$id)
+        ->first();
+
+        $getprog = Contract::join('tblprogressbill','tblprogressbill.ContractID','tblcontract.id')
+        ->select('tblprogressbill.id')
+        ->where('tblprogressbill.ContractID',$id)
+        ->where('tblprogressbill.status',0)
+        ->orderBy('tblprogressbill.Mode','ASC')
         ->first();
         // dd($getdown)
 
@@ -353,10 +362,19 @@ class CollectionController extends Controller
         $updcont->active = 1;
         $updcont->save();
 
-        $upddown = Downpayment::find($getdown->id);
-        $upddown->status = 1;
-        $upddown->save();
-
+        if($getdown==null)
+        {
+            $updprog = ProgressBill::find($getprog->id);
+            $updprog->status = 1;
+            $updprog->save(); 
+        }
+        else
+        {
+            $upddown = Downpayment::find($getdown->id);
+            $upddown->status = 1;
+            $upddown->save();  
+        } 
+        
         $updpay = Payment::find($request->or);
         $updpay->isclear = 1;
         $updpay->save();

@@ -64,27 +64,27 @@
           NProgress.done();
          ///////////////////////////////////////////
     };
-    function showmisc()
-    {
-      /////////////////stop top loading//////////
-      NProgress.start();
-      ///////////////////////////////////////////
-        $.ajax({
-          type : 'get',
-          url  : "{{ route('bdmisc.index') }}",
-          dataType : 'html',
-          success:function(data)
-          {
-              $('.table-responsive').html(data);
+    // function showmisc()
+    // {
+    //   /////////////////stop top loading//////////
+    //   NProgress.start();
+    //   ///////////////////////////////////////////
+    //     $.ajax({
+    //       type : 'get',
+    //       url  : "{{ route('bdmisc.index') }}",
+    //       dataType : 'html',
+    //       success:function(data)
+    //       {
+    //           $('.table-responsive').html(data);
 
-              // $('[data-toggle="tooltip"]').tooltip();
-              $('#title').html('<strong>Miscellaneous Fee</strong>  <i role="button" class="gi gi-circle_info" data-toggle="tooltip" data-placement="bottom" title="Rate!"></i>');
-          }
-        })
-         /////////////////stop top loading//////////
-          NProgress.done();
-         ///////////////////////////////////////////
-    };
+    //           // $('[data-toggle="tooltip"]').tooltip();
+    //           $('#title').html('<strong>Miscellaneous Fee</strong>  <i role="button" class="gi gi-circle_info" data-toggle="tooltip" data-placement="bottom" title="Rate!"></i>');
+    //       }
+    //     })
+    //      /////////////////stop top loading//////////
+    //       NProgress.done();
+    //      ///////////////////////////////////////////
+    // };
     function showfee()
     {
       /////////////////stop top loading//////////
@@ -285,9 +285,9 @@
               <li>
                 <a  type="button" onclick="showrate()"><strong>Rate</strong></a>
               </li>
-              <li>
+              <!-- <li>
                 <a type="button" onclick="showmisc()"><strong>Miscellaneous Fee</strong></a>
-              </li>
+              </li> -->
               <li>
                 <a type="button" onclick="showfee()"><strong>Additional Fee</strong></a>
               </li>

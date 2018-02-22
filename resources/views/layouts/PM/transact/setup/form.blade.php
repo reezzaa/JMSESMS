@@ -59,18 +59,44 @@
             <div class="panel-body">
                  
 
-                <table id="" class="table table-vcenter table-striped table-bordered table-hover">
+                <table id="" class="table table-vcenter table-striped table-borderless table-hover">
                   <thead>
                     <tr>
                       <th class="text-center">Service</th>
                       <th class="text-center" >Task</th>
                       <th class="text-center" >Cost</th>
-                      <th class="text-center" >From</th>
-                      <th class="text-center" >To</th>
+                      <th class="text-center" >Duration</th>
+                      <th class="text-center" >Starting Date</th>
                       <th></th>
                     </tr>
                   </thead>
                  <tbody id="tbltask">
+                    
+                 </tbody>
+                </table>
+                <hr>
+                <table id="" class="table table-vcenter table-striped table-borderless table-hover">
+                  <thead>
+                    <tr>
+                      <th class="text-center">Expenses</th>
+                      <th class="text-center">Cost</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                 <tbody id="tblexp">
+                    
+                 </tbody>
+                </table>
+                <hr>
+                <table id="" class="table table-vcenter table-striped table-borderless table-hover">
+                  <thead>
+                    <tr>
+                      <th class="text-center">Miscellaneous Fees </th>
+                      <th class="text-center">Value</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                 <tbody id="tblfees">
                     
                  </tbody>
                 </table>
@@ -105,7 +131,7 @@
                                       </div>
                                       
                                     </div>
-                                    <div class="row">
+                                    <!-- <div class="row"> -->
                                       <div class="col-md-9">
                                         <div class="form-group">
                                           <div>
@@ -130,7 +156,7 @@
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
+                                    <!-- </div> -->
                                       <div class="col-md-4">
                                         <div class="form-group">
                                           <div>
@@ -140,12 +166,12 @@
                                         </div>
                                       </div>
                                        <div class="form-group col-md-8">
-                                          <label class="control-label" for="example-daterange1">Task Period <span class="text-danger">*</span></label>
-                                          <div class="input-group input-daterange" data-date-format="yyyy-mm-dd">
-                                                  <input type="text" id="task_from" name="task_from" class="form-control text-center val" placeholder="From" required="required">
-                                                  <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
-                                                  <input type="text" id="task_to" name="task_to" class="form-control text-center val" placeholder="To" required="required">
-                                          </div>
+                                          <label class="control-label" for="example-daterange1">Starting Date <span class="text-danger">*</span></label>
+                                          <!-- <div class="input-group input-daterange" data-date-format="yyyy-mm-dd"> -->
+                                                  <input type="text" id="task_from" name="task_from" class="form-control text-center val input-datepicker" placeholder="From" required="required" data-date-format="yyyy-mm-dd">
+                                                 <!--  <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
+                                                  <input type="text" id="task_to" name="task_to" class="form-control text-center val" placeholder="To" required="required"> -->
+                                          <!-- </div> -->
                                         
                                       </div>
                                    <hr>
@@ -157,8 +183,106 @@
                               </div>
                             </div>
                           </div>
+                          <div id="addexp_modal" class="modal fade add-spec-modal" tabindex="-1" role="dialog" aria-labelledby="AddSpecModal" aria-hidden="true" data-backdrop="static">
+                            <div class="modal-dialog modal-md">
+                              <div class="modal-content">
+                                <div class="block">
+                                  <div class="block-title themed-background">
+                                    <div class="block-options pull-right">
+                                        <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                                    </div>
+                                    <h3 class="themed-background" style="color:white;"><strong>Add Fees and Expenses </strong></h3>
+                                  </div>
+                                    
+                                    <!-- <div class="row"> -->
+                                      <div class="col-md-9">
+                                        <div class="form-group">
+                                          <div>
+                                            <label for="material">Select </label> <span class="text-danger">*</span>
+                                            <select id="misc" name="misc" onchange="findExpPrice(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Select Task">
+                                              <option></option>
+                                               @foreach($misc as $misc)
+                                              <option value="{{$misc->id}}">{{$misc->MiscDesc}}</option>
+                                              @endforeach
+                                              
+                                            </select>
+                                            <span id="duplicate" class="help-block animation-slideDown">
+                                                  Duplicate Material Classification Name
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-3">
+                                        <div class="form-group">
+                                          <div>
+                                            <label for="price">Cost</label>
+                                            {!! Form::text('text',null ,['id'=>'miscprice','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <!-- </div> -->
+                                     
+                                   <hr>
+                                    <div class="col-md-offset-10">
+                                        <a id="addmisc" class="btn btn-primary btn-alt">Add </a>
+                                    </div><br>
+                                    <div class="clearfix"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="addrate_modal" class="modal fade add-spec-modal" tabindex="-1" role="dialog" aria-labelledby="AddSpecModal" aria-hidden="true" data-backdrop="static">
+                            <div class="modal-dialog modal-md">
+                              <div class="modal-content">
+                                <div class="block">
+                                  <div class="block-title themed-background">
+                                    <div class="block-options pull-right">
+                                        <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+                                    </div>
+                                    <h3 class="themed-background" style="color:white;"><strong>Add Fees and Expenses </strong></h3>
+                                  </div>
+                                    
+                                    <!-- <div class="row"> -->
+                                      <div class="col-md-9">
+                                        <div class="form-group">
+                                          <div>
+                                            <label for="material">Select </label> <span class="text-danger">*</span>
+                                            <select id="rate" name="rate" onchange="findRateValue(this.value)" style="width: 250px;" class="select-chosen" data-placeholder="Select Task">
+                                              <option></option>
+                                               @foreach($rate as $rate)
+                                              <option value="{{$rate->id}}">{{$rate->RateDesc}}</option>
+                                              @endforeach
+                                              
+                                            </select>
+                                            <span id="duplicate" class="help-block animation-slideDown">
+                                                  Duplicate Material Classification Name
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-3">
+                                        <div class="form-group">
+                                          <div>
+                                            <label for="value">Value</label>
+                                            {!! Form::text('text',null ,['id'=>'value','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <!-- </div> -->
+                                     
+                                   <hr>
+                                    <div class="col-md-offset-10">
+                                        <a id="addrate" class="btn btn-primary btn-alt">Add </a>
+                                    </div><br>
+                                    <div class="clearfix"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
               <div class="pull-right">
                   <a id="" class="btn btn-md btn-default addtaskBtn" data-placement="top" data-toggle="tooltip" title="Add Task"><i class="fa fa-plus"></i> Add Task</a> 
+                  <a id="" class="btn btn-md btn-default addexpBtn" data-placement="top" data-toggle="tooltip" title="Add Miscellaneous Fees & Expenses"><i class="fa fa-plus"></i> Add Expenses</a> 
+                  <a id="" class="btn btn-md btn-default addrateBtn" data-placement="top" data-toggle="tooltip" title="Add Miscellaneous Fees & Expenses"><i class="fa fa-plus"></i> Add Fees</a> 
                 <button class="btn btn-primary nextBtn" type="button">Next</button>
               </div>
             </div>
@@ -177,7 +301,7 @@
                   <div class="col-sm-12 form-inline">
                        <select id="progress" name="progress[]" class="select-chosen" data-placeholder="Choose.." style="width: 250px;" multiple>
                             @foreach($mode as $mode)
-                            <option value="{{$mode->id}}">{{$mode->ModeValue}} %</option>
+                            <option value="{{$mode->ModeValue}}">{{$mode->ModeValue}} %</option>
                             @endforeach
                         </select>
                       </div>
@@ -215,22 +339,22 @@
                 
                 </div>
               <table class="table table-vcenter">
-                   <tr class="">
+                                    <tr class="">
                                         <td colspan="4" class="text-right"><span class="h4">SUBTOTAL</span></td>
-                                        <td class="text-right"><span class="h4" id="subtotal" ></span></td>
+                                        <td colspan="4" class="text-right"><span class="h4" id="subtotal" >0.00</span></td>
                                     </tr>
                                     <tr class="">
                                         <td colspan="4" class="text-right"><span class="h4">VAT RATE</span></td>
-                                        <td class="text-right"><span class="h4" id="vatrate"></span></td>
+                                        <td colspan="4" class="text-right"><span class="h4" id="vatrate">0.00</span></td>
                                         <input type="hidden" id="vatrate_val">
                                     </tr>
                                     <tr class="">
                                         <td colspan="4" class="text-right"><span class="h4">VAT DUE</span></td>
-                                        <td class="text-right"><span class="h4" id="vatdue"></span></td>
+                                        <td colspan="4" class="text-right"><span class="h4" id="vatdue">0.00</span></td>
                                     </tr>
                                     <tr class="active">
                                         <td colspan="4" class="text-right"><span class="h3"><strong>TOTAL DUE</strong></span></td>
-                                        <td class="text-right"><span class="h3" id="totaldue"><strong></strong></span></td>
+                                        <td colspan="4" class="text-right"><span class="h3" id="totaldue">0.00<strong></strong></span></td>
                                     </tr>
                 </table>
               

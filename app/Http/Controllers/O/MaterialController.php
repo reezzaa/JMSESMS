@@ -13,6 +13,7 @@ use App\MaterialPrice;
 use App\GroupUOM;
 use App\DetailUOM;
 use App\MatPrice;
+use App\Supplier;
 use Response;
 use DB;
 use Carbon\carbon;
@@ -25,15 +26,20 @@ class MaterialController extends Controller
 
     public function index()
     {
-        return view('layouts.O.mainte.material.index', ['mattype'=> MaterialType::where('status','=',1)->where('todelete','=',1)->get(),'groupuom'=> GroupUOM::where('status','=',1)->where('todelete','=',1)->get()]);
+        $supp= Supplier::where('status','=',1)
+        ->where('todelete','=',1)
+        ->select('id as supp_id','SuppDesc')
+        ->get();
+        return view('layouts.O.mainte.material.index', ['supp'=>$supp,'mattype'=> MaterialType::where('status','=',1)->where('todelete','=',1)->get(),'groupuom'=> GroupUOM::where('status','=',1)->where('todelete','=',1)->get()]);
     }
     public function readByAjax()
     {
         $material = Material::join('tblMaterialClass', 'tblMaterial.MatClassID', 'tblMaterialClass.id')
             ->join('tblMaterialType', 'tblMaterialClass.MatTypeID', 'tblMaterialType.id')
             ->join('tblDetailUOM', 'tblMaterial.MatUOM', 'tblDetailUOM.id')
+            ->join('tblsupplier', 'tblMaterial.SuppID', 'tblsupplier.id')
             ->leftjoin('tblmatdate','tblmatdate.MatID','tblMaterial.id')
-            ->select('tblMaterial.id as matID','tblMaterial.*','tblMaterialClass.MatClassName','tblDetailUOM.*','tblMaterialType.*')
+            ->select('tblMaterial.id as matID','tblMaterial.*','tblMaterialClass.MatClassName','tblDetailUOM.*','tblMaterialType.*','tblsupplier.*')
             ->orderby('tblMaterial.id')
             ->where('tblMaterial.todelete','=',1)
             ->get();
@@ -46,8 +52,9 @@ class MaterialController extends Controller
         $class = MaterialClass::where('status','=',1)->where('todelete','=',1)->get(); 
         $guom = GroupUOM::where('status','=',1)->where('todelete','=',1)->get(); 
         $duom = DetailUOM::where('status','=',1)->where('todelete','=',1)->get(); 
+        $sup= Supplier::where('status','=',1)->where('todelete','=',1)->get();
          
-        return view('layouts.O.mainte.material.table', compact('material','type','class','guom','duom'));
+        return view('layouts.O.mainte.material.table', compact('material','type','class','guom','duom','sup'));
     }
 
     public function getMatClass($id)
@@ -80,6 +87,7 @@ class MaterialController extends Controller
             ->where('MaterialColor', '=', $request->MaterialColor )
             ->where('MaterialDimension', '=', $request->MaterialDimension )
             ->where('MaterialUnitPrice', '=', $request->MaterialUnitPrice )
+            ->where('SuppID','=',$request->SuppID)
             ->where('todelete','=',1)
             ->get();
 
@@ -94,6 +102,7 @@ class MaterialController extends Controller
             $updmat->MaterialColor = $request->MaterialColor;
             $updmat->MaterialDimension = $request->MaterialDimension;
             $updmat->MaterialUnitPrice = $request->MaterialUnitPrice;
+            $updmat->SuppID =$request->SuppID;
             $updmat->status =1;
             $updmat->todelete = 1;
             $updmat->date = Carbon::now();
@@ -114,8 +123,9 @@ class MaterialController extends Controller
         $material = Material::join('tblMaterialClass', 'tblMaterial.MatClassID', 'tblMaterialClass.id')
             ->join('tblMaterialType', 'tblMaterialClass.MatTypeID', 'tblMaterialType.id')
             ->join('tblDetailUOM', 'tblMaterial.MatUOM', 'tblDetailUOM.id')
+            ->join('tblsupplier', 'tblMaterial.SuppID', 'tblsupplier.id')
             ->join('tblGroupUOM','tblGroupUOM.id','tblDetailUOM.GroupUOMID')
-            ->select('tblMaterial.id as matID','tblMaterial.*','tblMaterialClass.MatClassName','tblMaterialType.id as mattypeID','tblMaterialType.MatTypeName','tblGroupUOM.id as groupID','tblGroupUOM.GroupUOMText','tblDetailUOM.DetailUOMText')
+            ->select('tblMaterial.id as matID','tblMaterial.*','tblMaterialClass.MatClassName','tblMaterialType.id as mattypeID','tblMaterialType.MatTypeName','tblGroupUOM.id as groupID','tblGroupUOM.GroupUOMText','tblDetailUOM.DetailUOMText','tblsupplier.*')
             ->orderby('tblMaterial.id')
             ->where('tblMaterial.todelete','=',1)
             ->where('tblMaterial.id',$classID)
@@ -144,10 +154,12 @@ class MaterialController extends Controller
             $updmat->MaterialColor = $request->MaterialColor;
             $updmat->MaterialDimension = $request->MaterialDimension;
             $updmat->MaterialUnitPrice = $request->MaterialUnitPrice;
+            $updmat->SuppID = $request->SuppID;
             $updmat->date = Carbon::now();
             $updmat->save();
 
          $specdescAdd = Material::where('MaterialUnitPrice', $request->MaterialUnitPrice )
+            ->where('SuppID', $request->SuppID)
             ->where('date', $request->date)
             ->where('id',$matID)
             ->where('todelete','=',1)

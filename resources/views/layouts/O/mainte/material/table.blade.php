@@ -6,6 +6,7 @@
       <th class="text-center">Material Name</th>
       <th class="text-center">UOM</th>
       <th class="text-center">Price</th>
+      <th class="text-center">Supplier</th>
       <th style="width: 60px;" class="text-center"></th>
       <th style="width: 175px;" class="text-center">Controls</th>
     </tr>
@@ -28,6 +29,9 @@
         <td class="text-center">
            ₱ {{ $u->MaterialUnitPrice }}  <br>
            <i> {{\Carbon\Carbon::parse($u->date)->toDayDateTimeString()}}</i>
+        </td>
+        <td class="text-center">
+            {{ $u->SuppDesc }}
         </td>
         <td class="text-center">
           <label class="switch switch-primary">

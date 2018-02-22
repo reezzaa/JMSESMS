@@ -11,6 +11,10 @@ use App\Equipment;
 use App\Supplier;
 use App\Bank;
 use App\ServicesOffered;
+use App\Miscellaneous;
+use App\Rate;
+use App\SpecRate;
+use App\MatPrice;
 class MaintenanceSeeder extends Seeder
 {
     /**
@@ -27,6 +31,11 @@ class MaintenanceSeeder extends Seeder
 	      'todelete'=>1,
 	      'status'=>1,
             ]);
+      SpecRate::create([
+          'SpecID'=>1,
+          'date'=>'2017-10-02',
+          'up_rpd'=>200,
+         ]);
     	Specialization::create([
            'SpecDesc'=>'Safety Officer',
 	      'rpd'=>'418',
@@ -34,6 +43,11 @@ class MaintenanceSeeder extends Seeder
 	      'todelete'=>1,
 	      'status'=>1,
             ]);
+      SpecRate::create([
+          'SpecID'=>2,
+          'date'=>'2018-01-02',
+          'up_rpd'=>418,
+         ]);
     	Specialization::create([
            'SpecDesc'=>'RT Technician',
 	      'rpd'=>'420',
@@ -41,6 +55,11 @@ class MaintenanceSeeder extends Seeder
 	      'todelete'=>1,
 	      'status'=>1,
             ]);
+      SpecRate::create([
+          'SpecID'=>3,
+          'date'=>'2017-11-02',
+          'up_rpd'=>420,
+         ]);
     	Specialization::create([
            'SpecDesc'=>'Supervisor',
 	      'rpd'=>'480',
@@ -48,6 +67,11 @@ class MaintenanceSeeder extends Seeder
 	      'todelete'=>1,
 	      'status'=>1,
             ]);
+      SpecRate::create([
+          'SpecID'=>4,
+          'date'=>'2018-01-20',
+          'up_rpd'=>480,
+         ]);
     	Specialization::create([
            'SpecDesc'=>'Semi-Skilled Worker',
 	      'rpd'=>'150',
@@ -55,6 +79,11 @@ class MaintenanceSeeder extends Seeder
 	      'todelete'=>1,
 	      'status'=>1,
             ]);
+      SpecRate::create([
+          'SpecID'=>5,
+          'date'=>'2018-01-20',
+          'up_rpd'=>150,
+         ]);
          GroupUOM::create([
            'GroupUOMText'=> 'Length',
       		'status'=> 1,
@@ -110,6 +139,16 @@ class MaintenanceSeeder extends Seeder
 		   'status'=>1,
 		   'todelete'=>1,
             ]);
+         Supplier::create([
+           'SuppDesc'=>'JJJ',
+          'todelete'=>1,
+          'status'=>1,
+            ]);
+         Supplier::create([
+           'SuppDesc'=>'Supplier A',
+          'todelete'=>1,
+          'status'=>1,
+            ]);
          MaterialType::create([
            'MatTypeName'=>'Wood',
      		'todelete'=>1,
@@ -162,11 +201,17 @@ class MaintenanceSeeder extends Seeder
 		    'MaterialSize'=>'',
 		    'MaterialColor'=>'',
 		    'MaterialDimension'=>'',
-		    'MaterialUnitPrice'=>1000,
+        'MaterialUnitPrice'=>1000,
+		    'SuppID'=>1,
 		    'todelete'=>1,
         'status'=>1,
 		    'date'=>'2018-02-01',
             ]);
+         MatPrice::create([
+          'MatID'=>1,
+          'date'=>'2018-02-01',
+          'up_mat'=>1000,
+         ]);
          Material::create([
            'MatClassID'=>2,
 		    'MatUOM'=>3,
@@ -176,10 +221,16 @@ class MaintenanceSeeder extends Seeder
 		    'MaterialColor'=>'',
 		    'MaterialDimension'=>'4 x 4',
 		    'MaterialUnitPrice'=>500,
+        'SuppID'=>2,
 		    'todelete'=>1,
 		    'status'=>1,
         'date'=>'2018-02-01',
             ]);
+         MatPrice::create([
+          'MatID'=>2,
+          'date'=>'2018-02-01',
+          'up_mat'=>500,
+         ]);
          Material::create([
            'MatClassID'=>3,
 		    'MatUOM'=>5,
@@ -189,10 +240,16 @@ class MaintenanceSeeder extends Seeder
 		    'MaterialColor'=>'Brown',
 		    'MaterialDimension'=>'',
 		    'MaterialUnitPrice'=>1000,
+        'SuppID'=>1,
 		    'todelete'=>1,
 		    'status'=>1,
         'date'=>'2018-02-01',
             ]);
+         MatPrice::create([
+          'MatID'=>3,
+          'date'=>'2018-02-01',
+          'up_mat'=>1000,
+         ]);
          Material::create([
            'MatClassID'=>3,
 		    'MatUOM'=>5,
@@ -202,10 +259,16 @@ class MaintenanceSeeder extends Seeder
 		    'MaterialColor'=>'Green',
 		    'MaterialDimension'=>'',
 		    'MaterialUnitPrice'=>1000,
+        'SuppID'=>2,
 		    'todelete'=>1,
 		    'status'=>1,
         'date'=>'2018-02-01',
             ]);
+         MatPrice::create([
+          'MatID'=>4,
+          'date'=>'2018-02-01',
+          'up_mat'=>1000,
+         ]);
          Material::create([
            'MatClassID'=>4,
 		    'MatUOM'=>2,
@@ -215,10 +278,16 @@ class MaintenanceSeeder extends Seeder
 		    'MaterialColor'=>'',
 		    'MaterialDimension'=>'',
 		    'MaterialUnitPrice'=>500,
+        'SuppID'=>1,
 		    'todelete'=>1,
 		    'status'=>1,
         'date'=>'2018-02-01',
             ]);
+         MatPrice::create([
+          'MatID'=>5,
+          'date'=>'2018-02-01',
+          'up_mat'=>500,
+         ]);
          Equipment::create([
            'EquipName'=>'Welding Machines',
       		'EquipTypeDesc'=>'Machine',
@@ -239,16 +308,7 @@ class MaintenanceSeeder extends Seeder
      		 'status'=>1,
      		 'rent'=>1,
             ]);
-         Supplier::create([
-           'SuppDesc'=>'JJJ',
-      		'todelete'=>1,
-      		'status'=>1,
-            ]);
-         Supplier::create([
-           'SuppDesc'=>'Supplier A',
-      		'todelete'=>1,
-      		'status'=>1,
-            ]);
+         
         Bank::create([
            'BankName'=>'Metrobank',
       		'todelete'=>1,
@@ -313,6 +373,30 @@ class MaintenanceSeeder extends Seeder
            'ServiceOffName'=>'Mobilization',
       		'todelete'=>1,
       		'status'=>1,
+            ]);
+    Miscellaneous::create([
+           'MiscDesc'=>'Transportation',
+           'MiscValue'=>'5000',
+          'todelete'=>1,
+          'status'=>1,
+            ]);
+    Miscellaneous::create([
+           'MiscDesc'=>'Allowance',
+           'MiscValue'=>'7000',
+          'todelete'=>1,
+          'status'=>1,
+            ]);
+    Rate::create([
+           'RateDesc'=>'Power Consumption',
+           'RateValue'=>'20',
+          'todelete'=>1,
+          'status'=>1,
+            ]);
+    Rate::create([
+           'RateDesc'=>'Water Consumption',
+           'RateValue'=>'15',
+          'todelete'=>1,
+          'status'=>1,
             ]);
     }
 }

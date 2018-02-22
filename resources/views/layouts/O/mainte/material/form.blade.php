@@ -82,7 +82,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-4 col-md-offset-2">
+  <div class="col-md-4">
     <div class="form-group">
       <div>
         <label for="matdimen" >Dimension</label>
@@ -93,6 +93,23 @@
           allow :    '-./"', // Specify characters to allow
         });
       </script>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <div>
+        <label for="supplier">Supplier</label> <span class="text-danger">*</span>
+        <select id="supplier" name="supplier" style="width: 250px;" class="select-chosen" data-placeholder="Select Supplier">
+          <option></option>
+          @foreach($supp as $supps)
+          <option value="{{ $supps->supp_id }}">{{ $supps->SuppDesc }}
+          </option>
+          @endforeach
+        </select>
+      </div>
+       <span id="duplicates" class="help-block animation-slideDown">
+          Duplicate Material Classification
+        </span>
     </div>
   </div>
   <div class="col-md-4">
