@@ -29,17 +29,28 @@ class CollectionController extends Controller
     public function readByAjax($id)
     {
         $colle = Contract::join('tblserviceinvoiceheader','tblserviceinvoiceheader.ContractID','tblcontract.id')
-        ->join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
         ->leftjoin('tblpayment','tblpayment.InvID','tblserviceinvoiceheader.id')
-        ->select('tblserviceinvoiceheader.*','tblserviceinvoiceheader.id as inv','tblserviceinvoiceheader.date as s_date','tblserviceinvoicedetail.*','tblpayment.*','tblpayment.date as p_date')
+        ->select('tblserviceinvoiceheader.*','tblserviceinvoiceheader.id as inv','tblserviceinvoiceheader.date as s_date','tblpayment.*','tblpayment.date as p_date')
         ->where('tblcontract.id',$id)
         ->get();
 
+        $detail =DB::table('tblserviceinvoiceheader')
+        ->join('tblcontract','tblcontract.id','tblserviceinvoiceheader.ContractID')
+        ->join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
+        ->groupby('tblserviceinvoiceheader.id','tblserviceinvoicedetail.desc')
+        ->select('tblserviceinvoicedetail.desc','tblserviceinvoiceheader.id as serv',DB::raw('SUM(tblserviceinvoicedetail.amount) as total' ))
+        ->where('tblcontract.id',$id)
+        // ->where('tblserviceinvoiceheader.id','Inv0000023')
+        ->get();
+
+       // dd($detail);
+        
+
         $date = Carbon::now();
-        foreach ($colle as $key ) {
-                     $key->amount=number_format($key->amount,2);      
+        foreach ($detail as $key ) {
+                     $key->total=number_format($key->total,2);      
                     }       
-        return view('layouts.BD.transact.collection.table',compact('colle','date'));
+        return view('layouts.BD.transact.collection.table',compact('colle','date','detail'));
 
     }
 
@@ -204,7 +215,6 @@ class CollectionController extends Controller
         $payment->remarks = $request->remarks;
         $payment->cheque_no = $request->cheque_no;
         $payment->BankID = $request->bank;
-        $payment->validity = $val_date;
         $payment->isclear = 0;
         $payment->save();
 
@@ -222,7 +232,7 @@ class CollectionController extends Controller
         $updcont->save();
 
 
-        return redirect()->route('bd.printOR',$orid);
+        return redirect()->route('bd.printAckReceipt',$orid);
 
 
     }
@@ -242,7 +252,6 @@ class CollectionController extends Controller
         $payment->remarks = $request->remarks;
         $payment->cheque_no = null;
         $payment->BankID = null;
-        $payment->validity = null;
         $payment->isclear = 1;
         $payment->save();
 
@@ -260,7 +269,7 @@ class CollectionController extends Controller
         $updcont->status = 1;
         $updcont->save();
 
-        return redirect()->route('bd.printOR',$orid);
+        return redirect()->route('bd.printAckReceipt',$orid);
     }
 
     /**
@@ -275,8 +284,33 @@ class CollectionController extends Controller
         $coll = Contract::where('id',$id)
         ->first();
 
-        return view('layouts.BD.transact.collection.index',compact('coll'));
+       $bank = Bank::where('status',1)->where('todelete',1)->get();
+
+
+        return view('layouts.BD.transact.collection.index',compact('coll','bank'));
         
+    }
+    public function printAckReceipt($id)
+    {
+        $getdata = Payment::join('tblserviceinvoiceheader','tblserviceinvoiceheader.id','tblpayment.InvID')
+        ->join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
+        ->join('tblcontract','tblcontract.id','tblserviceinvoiceheader.ContractID')
+        ->join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
+        // ->join('tbldownpayment','tbldownpayment.ContractID','tblcontract.id')
+        ->join('tblbank','tblbank.id','tblpayment.BankID')
+        ->select('tblclient.strCompClientName','tblserviceinvoicedetail.amount','tblserviceinvoiceheader.id as inv','tblpayment.cheque_no','tblpayment.date as v_date','tblpayment.BankID','tblbank.BankName')
+        ->where('tblpayment.OrID',$id)
+        ->get();
+
+        foreach ($getdata as $key ) {
+                     $key->amount=number_format($key->amount,2);
+                    } 
+         $pdf = PDF::loadView('layouts.BD.transact.collection.print_ac',compact('getdata'))->setPaper('letter','portrait');      
+                
+         $pdfName="myPDF.pdf";
+                $location=public_path("docs/$pdfName");
+                $pdf->save($location); 
+        return $pdf->stream();   
     }
 
     public function printOR($id)
@@ -286,24 +320,30 @@ class CollectionController extends Controller
         ->join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
         ->join('tblcontract','tblcontract.id','tblserviceinvoiceheader.ContractID')
         ->join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
-        ->join('tbldownpayment','tbldownpayment.ContractID','tblcontract.id')
+        // ->join('tbldownpayment','tbldownpayment.ContractID','tblcontract.id')
         ->join('tblbank','tblbank.id','tblpayment.BankID')
-        ->select('tblclient.strCompClientName','tblclient.strCompClientTIN','tblclient.strCompClientAddress','tblclient.strCompClientCity','tblclient.strCompClientProv','tblserviceinvoicedetail.amount','tblserviceinvoiceheader.id as inv','tblserviceinvoicedetail.subtotal','tbldownpayment.initialtax','tbldownpayment.taxValue','tblpayment.cheque_no','tblpayment.date as v_date','tblpayment.BankID','tblbank.BankName')
+        ->select('tblclient.strCompClientName','tblclient.strCompClientTIN','tblclient.strCompClientAddress','tblclient.strCompClientCity','tblclient.strCompClientProv','tblserviceinvoicedetail.amount','tblserviceinvoiceheader.id as inv','tblserviceinvoicedetail.subtotal','tblpayment.cheque_no','tblpayment.date as v_date','tblpayment.BankID','tblbank.BankName')
         ->where('tblpayment.OrID',$id)
         ->get();
 
+        $tax = 0;
+        foreach ($getpayment as $v) {
+            # code...
+            $tax = $v->amount - $v->subtotal;
+        }
+
         $utilities = CompanyUtil::all();
+                     $tax=number_format($tax,2);      
 
          foreach ($getpayment as $key ) {
                      $key->amount=number_format($key->amount,2);
                      $key->subtotal=number_format($key->subtotal,2);
-                     $key->taxValue=number_format($key->taxValue,2);      
                     }       
-        $pdf = PDF::loadView('layouts.BD.transact.collection.print',compact('getpayment','utilities','id'))->setPaper('letter','portrait');      
+        $pdf = PDF::loadView('layouts.BD.transact.collection.print',compact('getpayment','tax','utilities','id'))->setPaper('letter','portrait');      
                 
          $pdfName="myPDF.pdf";
-                // $location=public_path("docs/$pdfName");
-                // $pdf->save($location); 
+                $location=public_path("docs/$pdfName");
+                $pdf->save($location); 
         return $pdf->stream();   
 
 
@@ -316,7 +356,9 @@ class CollectionController extends Controller
         $proc = ServiceInvoiceHeader::join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
         ->select('tblserviceinvoiceheader.*','tblserviceinvoicedetail.*')
         ->where('tblserviceinvoiceheader.id',$id)
-        ->get();
+        ->first();
+
+        
 
         return view('layouts.BD.transact.collection.collect',compact('proc'));
     }
@@ -337,13 +379,16 @@ class CollectionController extends Controller
        ->where('tblserviceinvoiceheader.id',$id)
        ->first();
 
+        $chec =0;
+        $chec = number_format($cheque->amount,2); 
        $bank = Bank::where('status',1)->where('todelete',1)->get();
 
-       return view('layouts.BD.transact.collection.byCheque',compact('cheque','bank'));
+       return view('layouts.BD.transact.collection.byCheque',compact('cheque','bank','chec'));
     }
     public function update(Request $request, $id)
     {
         
+
         $getdown = Contract::join('tbldownpayment','tbldownpayment.ContractID','tblcontract.id')
         ->select('tbldownpayment.id')
         ->where('tbldownpayment.status',0)
@@ -357,29 +402,52 @@ class CollectionController extends Controller
         ->orderBy('tblprogressbill.Mode','ASC')
         ->first();
         // dd($getdown)
+        $getinv = Payment::where('OrID',$request->or)
+        ->select('InvID')
+        ->first();
+
+        $check_mode = ServiceInvoiceHeader::where('id',$getinv->InvID)->where('mode',1)->first();
 
         $updcont = Contract::find($id);
         $updcont->active = 1;
         $updcont->save();
-
-        if($getdown==null)
+        if($check_mode==null)
         {
-            $updprog = ProgressBill::find($getprog->id);
-            $updprog->status = 1;
-            $updprog->save(); 
+            $updpay = Payment::find($request->or);
+            $updpay->isclear = 1;
+            $updpay->save();
         }
         else
         {
-            $upddown = Downpayment::find($getdown->id);
-            $upddown->status = 1;
-            $upddown->save();  
-        } 
-        
-        $updpay = Payment::find($request->or);
-        $updpay->isclear = 1;
-        $updpay->save();
+            if($getdown==null && $getprog!=null)
+            {
+                $updprog = ProgressBill::find($getprog->id);
+                $updprog->status = 1;
+                $updprog->invoice = $getinv->InvID;
+                $updprog->save(); 
+            }
+            elseif($getdown!=null)
+            {
+                $upddown = Downpayment::find($getdown->id);
+                $upddown->status = 1;
+                $upddown->invoice = $getinv->InvID;
+                $upddown->save(); 
+
+            } 
+            
+            $updpay = Payment::find($request->or);
+            $updpay->isclear = 1;
+            $updpay->save();
+            
+        }
 
         return Response($updpay);
+        // return redirect()->route('bd.printOR',$request->or);
+
+
+    }
+    public function updIncur(Request $request)
+    {
 
     }
 
@@ -389,8 +457,24 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function bouncePayment($id)
     {
         //
+        $pay = Payment::where('OrID',$id)
+        ->get();
+        foreach ($pay as $key ) {
+                     $key->amountpaid=number_format($key->amountpaid,2);
+                    }       
+        return Response($pay);
+        
+    }
+    public function bouncePost(Request $request)
+    {
+        $bnc = Payment::find($request->b_or);
+        $bnc->cheque_no = $request->cheque_no;
+        $bnc->BankID = $request->bank;
+        $bnc->save();
+
+        return redirect()->route('bd.printAckReceipt',$request->b_or);
     }
 }

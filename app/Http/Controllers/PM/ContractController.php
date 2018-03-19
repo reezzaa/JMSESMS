@@ -11,6 +11,21 @@ use Carbon\carbon;
 use App\ServTask;
 use App\Incurrences;
 use App\ServicesOffered;
+use App\Fee;
+use App\Equipment;
+use App\Miscellaneous;
+use App\Rate;
+use App\Material;
+use App\TaskWorker;
+use App\TaskMaterial;
+use App\TaskEquip;
+use App\ContractMisc;
+use App\ContractRate;
+use App\Specialization;
+use App\Initial;
+use PDF;
+use App\FinalProj;
+use App\CompanyUtil;
 use DB;
 use Response;
 class ContractController extends Controller
@@ -98,8 +113,12 @@ class ContractController extends Controller
         $inc->method='S';
         $inc->desc= $request->name;
         $inc->amount= $request->total;
+        $inc->invoice= null;
         $inc->save();
        
+        $findPrice = Contract::find($request->ContractID);
+        $findPrice->amount -= $request->total;
+        $findPrice->save();
         return Response($bankDel);
 
 
@@ -128,8 +147,9 @@ class ContractController extends Controller
         ->join('tblservtask','tblservtask.id','tblcontracttask.ServID')
         // ->join('tblservmaterial','tblservmaterial.ServID','tblservtask.id')
         // ->join('tblstocks','stocks.ServID','tblservtask.id')
-        ->select('tblservtask.ServTask','tblservtask.duration','tblcontracttask.from as task_from','tblcontracttask.to as task_to','tblcontracttask.*','tblduedetail.date as p_date','tblduedetail.progress as p_prog','tblduedetail.percent','tblcontracttask.wt','tblcontracttask.active as task_active')
+        ->select('tblservtask.ServTask','tblservtask.duration','tblcontracttask.from as task_from','tblcontracttask.to as task_to','tblcontracttask.*','tblduedetail.date as p_date','tblduedetail.progress as p_prog','tblduedetail.percent','tblcontracttask.wt','tblcontracttask.active as task_active','tblduedetail.date as d_date')
         ->where('tblcontract.id',$id)
+        ->where('tblcontracttask.active','!=',2)
         ->orderby('tblcontracttask.from','ASC')
         ->whereRaw('tblduedetail.date = (SELECT MAX(tblduedetail.date) FROM tblduedetail WHERE tblduedetail.TaskID = tblcontracttask.id)')
         ->get();
@@ -189,9 +209,32 @@ class ContractController extends Controller
         $ov = Contract::where('id',$id)
         ->select('over_dur')
         ->first();
+        
+        $addfee = Fee::where('status',1)
+                        ->where('todelete',1)
+                        ->get();
+        $equip = Equipment::where('tblEquipment.status',1)
+        ->where('tblEquipment.todelete',1)
+        ->get(); 
 
+        $rate = Rate::where('todelete',1)
+        ->where('status',1)
+        ->orderby('id','ASC')
+        ->get();
+        $misc = Miscellaneous::where('todelete',1)
+        ->where('status',1)
+        ->orderby('id','ASC')
+        ->get();
+        $check_init = Contract::join('tblinitial','tblinitial.ContractID','tblcontract.id')
+        ->where('tblcontract.id',$id)
+        ->count('tblcontract.id');
 
-        return view('layouts.PM.transact.contract.contract',compact('cont','o_task','id','o_contname','o_contto','o_contfrom','ov_dur','o_wt','o_com','task','service','ov'));
+        $check = Contract::where('status',2)
+        ->where('id',$id)
+        ->count('id');
+
+        
+        return view('layouts.PM.transact.contract.contract',compact('cont','o_task','id','o_contname','o_contto','o_contfrom','ov_dur','o_wt','o_com','task','service','ov','addfee','equip','rate','misc','check','check_init'));
     }
 
       public function storeTask(Request $request)
@@ -263,7 +306,12 @@ class ContractController extends Controller
         $inc->method='A';
         $inc->desc= $findServ->ServTask;
         $inc->amount= $request->price;
+        $inc->invoice= null;
         $inc->save();
+
+        $findPrice = Contract::find($request->ContractID);
+        $findPrice->amount += $request->price;
+        $findPrice->save();
  
 
         return Response($task);
@@ -367,11 +415,246 @@ class ContractController extends Controller
 
     }
 
-    public function removeTask(Request $request)
-    {  
-    }
-    public function destroy($id)
+    public function getNewTaskJob($id)
     {
-        //
+        $newjob = ContractTask::join('tblservtask','tblservtask.id','tblcontracttask.ServID')
+        ->join('tblservworker','tblservworker.ServID','tblservtask.id')
+        ->join('tblspecialization','tblspecialization.id','tblservworker.SpecID')
+        ->select('tblspecialization.*','tblspecialization.id as specid')
+        ->where('tblcontracttask.id',$id)
+        ->get();
+
+        return Response($newjob);
     }
+    public function getNewTaskMat($id)
+    {
+        $newjob = ContractTask::join('tblservtask','tblservtask.id','tblcontracttask.ServID')
+        ->join('tblservmaterial','tblservmaterial.ServID','tblservtask.id')
+        ->join('tblmaterial','tblmaterial.id','tblservmaterial.MatID')
+        ->select('tblmaterial.*','tblmaterial.id as matid')
+        ->where('tblcontracttask.id',$id)
+        ->get();
+
+        return Response($newjob);
+    }
+
+    public function getTaskMatPrice($id)
+    {
+        $mat = Material::where('id',$id)
+        ->get();
+
+        return Response($mat);
+    }
+    public function getTaskEPrice($id)
+    {
+        $equi = Equipment::where('id',$id)
+        ->get();
+
+        return Response($equi);
+    }
+
+    public function newJob(Request $request)
+    {
+       
+        $postjob = new TaskWorker();
+        $postjob->TaskID = $request->TaskID;
+        $postjob->SpecID = $request->SpecID;
+        $postjob->FeeID = $request->FeeID;
+        $postjob->quantity = $request->quantity;
+        $postjob->status = 0;
+        $postjob->feeamount = (($request->rpd * $request->quantity)* $request->getfee)/100;
+        $postjob->total= ($request->rpd * $request->quantity) + $postjob->feeamount;
+        $postjob->save();
+
+        $inc = new Incurrences();
+        $inc->TaskID= $request->TaskID;
+        $inc->date= Carbon::now();
+        $inc->status=0;
+        $inc->method='I';
+        $inc->desc= $request->name;
+        $inc->amount= $postjob->total;
+        $inc->invoice= null;
+        $inc->save();
+
+        $findPrice = Contract::find($request->ContractID);
+        $findPrice->amount += $postjob->total;
+        $findPrice->save();
+       
+
+        return Response($postjob);
+
+    }
+    public function newMat(Request $request)
+    {
+       
+        $postmat = new TaskMaterial();
+        $postmat->TaskID = $request->TaskID;
+        $postmat->MatID = $request->MatID;
+        $postmat->FeeID = $request->FeeID;
+        $postmat->quantity = $request->quantity;
+        $postmat->status = 0;
+        $postmat->feeamount = (($request->price * $request->quantity) * $request->getfee)/100;
+        $postmat->total= ($request->price * $request->quantity) + $postmat->feeamount;
+        $postmat->save();
+
+        $inc = new Incurrences();
+        $inc->TaskID= $request->TaskID;
+        $inc->date= Carbon::now();
+        $inc->status=0;
+        $inc->method='I';
+        $inc->desc= $request->name;
+        $inc->amount= $postmat->total;
+        $inc->invoice=null;
+        $inc->save();
+
+        $findPrice = Contract::find($request->ContractID);
+        $findPrice->amount += $postmat->total;
+        $findPrice->save();
+
+        return Response($postmat);
+
+    }
+    public function newEquip(Request $request)
+    {
+        $postequip = new TaskEquip();
+        $postequip->TaskID = $request->TaskID;
+        $postequip->EquipID = $request->EquipID;
+        $postequip->status = 0;
+        $postequip->save();
+
+        $inc = new Incurrences();
+        $inc->TaskID= $request->TaskID;
+        $inc->date= Carbon::now();
+        $inc->status=0;
+        $inc->method='I';
+        $inc->desc= $request->name;
+        $inc->amount= $postequip->total;
+        $inc->invoice= null;
+        $inc->save();
+
+        $findPrice = Contract::find($request->ContractID);
+        $findPrice->amount += $postequip->total;
+        $findPrice->save();
+
+        return Response($postequip);
+
+    }
+
+    public function findRPD($id)
+    {
+        $rpd = Specialization::where('id',$id)
+                    ->where('status',1)
+                    ->where('todelete',1)
+                    ->get();
+        return Response($rpd);
+    }
+    public function newMisc(Request $request)
+    {
+       
+        $postmisc = new ContractRate();
+        $postmisc->ContractID = $request->ContractID;
+        $postmisc->RateID = $request->RateID;
+        $postmisc->status = 0;
+        $postmisc->save();
+        return Response($postmisc);
+
+
+    }
+    public function newExp(Request $request)
+    {
+        $postexp = new ContractMisc();
+        $postexp->ContractID = $request->ContractID;
+        $postexp->MiscID = $request->MiscID;
+        $postexp->status = 0;
+        $postexp->save();
+
+        return Response($postexp);
+
+    }
+    public function findFee($id)
+    {
+        $fee = Fee::where('id',$id)
+        ->select('FeeValue')
+        ->get();
+
+        return Response($fee);
+    }
+    public function turnover(Request $request)
+    {
+        $init = new Initial();
+        $init->ContractID = $request->ContractID;
+        $init->officialstartdate = $request->officialstartdate;
+        $init->start = $request->start;
+        $init->target = $request->target;
+        $init->actual = $request->actual;
+        $init->save();
+
+        // $updstat = Contract::find($request->ContractID);
+        // $updstat->status=2;
+        // $updstat->save();
+
+        return Response($init);
+    }
+    public function closing(Request $request)
+    {
+        $stat=0;
+        if($request->officialenddate < $request->enddate) 
+        {
+        $stat = 3;
+        }
+        elseif($request->officialenddate == $request->enddate)
+        {
+        $stat = 1;
+
+        }
+        else
+        {
+        $stat = 2;
+
+        }
+
+        $fin = new FinalProj();
+        $fin->ContractID = $request->ContractID;
+        $fin->officialenddate = $request->officialenddate;
+        $fin->enddate = $request->enddate;
+        $fin->status = $stat;
+        $fin->save();
+
+
+        $updstat = Contract::find($request->ContractID);
+        $updstat->status=3;
+        $updstat->save();
+
+        return Response($fin);
+    }
+    public function printTurnoverReport($id)
+    {
+        $print = Contract::join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
+        ->join('tblinitial','tblinitial.ContractID','tblcontract.id')
+        ->join('tblfinal','tblfinal.ContractID','tblcontract.id')
+        ->select('tblClient.strCompClientRepresentative','tblcontract.name','tblcontract.location','tblinitial.*','tblfinal.*')
+        ->where('tblcontract.id',$id)
+        ->first();
+
+        $utilities = CompanyUtil::select('strCompanyName')->first();
+
+        $pdf = PDF::loadView('layouts.PM.transact.contract.print',compact('print','utilities','id'))->setPaper('letter','portrait'); 
+                $pdfName="myPDF.pdf";
+                $location=public_path("docs/$pdfName");
+                $pdf->save($location); 
+                return $pdf->stream();  
+    }
+    public function updateHistory($id)
+    {
+        $update = DueDetail::where('TaskID',$id)
+        // ->where('tblduedetail.date','DESC')
+        ->get();
+        // dd($update);
+        foreach ($update as $key ) {
+            Carbon::parse($key->date)->toFormattedDateString();
+        }
+
+        return Response($update);
+    }
+
 }

@@ -17,6 +17,7 @@ use App\ServWFee;
 use DB;
 use App\ServWorker;
 use App\ServMaterial;
+use App\Stocks;
 use App\ServEquipment;
 use App\ServTask;
 use Carbon\carbon;
@@ -109,8 +110,13 @@ class TasksController extends Controller
             $test->MatID = $request->material[$i];
             $test->quantity = $request->materialqty[$i];
             $test->todelete = 1;
-            $test->total = $getTotalMat;
+            $test->total = $request->cost[$i];
             $test->save();
+
+            $sto = new Stocks();
+            $sto->ServMatID = $test->id;
+            $sto->stocks = $test->quantity;
+            $sto->save();
 
 
         }

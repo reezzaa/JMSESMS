@@ -98,6 +98,200 @@ function findTask(val)
           NProgress.done();
           ///////////////////////////////////////////
     }
+
+
+   function findTaskJob(val)
+   {
+    /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#task_job').empty().trigger('chosen:updated');
+         var opt;
+        var a;
+        var newSelect = document.getElementById("task_job");
+         $.get('getNewTaskJob/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+              opt = new Option(data[a].SpecDesc ,data[a].specid);
+              newSelect.appendChild(opt);
+
+            }
+              $('#task_job').trigger('chosen:updated');
+              findRPD(data[0].specid);
+
+          }
+        });
+
+    /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+   }
+   function findRPD(val)
+    {
+        /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#rpd').val('');
+          var a4;
+          $.get('findRPD/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a4=0;a4<data.length;a4++)
+            {
+              $('#rpd').val(data[a4].rpd);
+              $('#job_name').val("ADDED: "+ data[a4].SpecDesc);
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+    }
+   function findTaskMat(val)
+   {
+    /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#task_mat').empty().trigger('chosen:updated');
+         var opt;
+        var a;
+        var newSelect = document.getElementById("task_mat");
+         $.get('getNewTaskMat/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+              opt = new Option(data[a].MaterialName ,data[a].matid);
+              newSelect.appendChild(opt);
+
+            }
+              $('#task_mat').trigger('chosen:updated');
+              findMatPrice(data[0].matid);
+
+          }
+        });
+
+    /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+   }
+   function findMatPrice(val)
+   {
+    /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+       
+        var a;
+         $.get('getTaskMatPrice/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+            
+              $('#matprice').val(data[a].MaterialUnitPrice);
+              $('#mat_name').val("ADDED: "+data[a].MaterialName);
+            }
+
+          }
+        });
+
+    /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+   }
+   function findEPrice(val)
+   {
+    /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+       
+        var a;
+         $.get('getTaskEPrice/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+            
+              $('#equipprice').val(data[a].EquipPrice);
+              $('#equip_name').val("ADDED: "+data[a].EquipName);
+            }
+
+          }
+        });
+
+    /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+   }
+
+    function findExpPrice(val)
+    {
+        /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+        $('#miscprice').val('');
+          var a4;
+          $.get('/pm/setup/getExpPrice/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a4=0;a4<data.length;a4++)
+            {
+              $('#miscprice').val(data[a4].MiscValue);
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+    }
+     function findFee(val)
+    {
+      /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+          var a;
+           $('#wfee').val("");
+          $.get('findFee/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+              $('#wfee').val(data[a].FeeValue);
+              console.log
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+
+    }
+    function findMFee(val)
+    {
+      /////////////////start top loading//////////
+        NProgress.start();
+        ///////////////////////////////////////////
+          var a;
+           $('#mfee').val("");
+           
+          $.get('findFee/' + val, function (data) {
+          if(data.length != 0)
+          {
+            for(a=0;a<data.length;a++)
+            {
+              $('#mfee').val(data[a].FeeValue);
+
+            }
+          }
+        })
+          /////////////////stop top loading//////////
+          NProgress.done();
+          ///////////////////////////////////////////
+
+    }
+    
 </script>
 @endsection
 @section('sidebar')
@@ -124,13 +318,13 @@ function findTask(val)
   <div class="content-header">
       <div class="header-section">
         <h4>
-            <i class="hi hi-list"> </i> Manage Contract <br>
+            <i class="hi hi-list"> </i> Contract Management <br>
         </h4>
       </div>
   </div>
   <ol class="breadcrumb breadcrumb-top">
       <li><a href="{{ route('pm.home') }}"><i class="fa fa-home"></i></a></li>
-      <li><a>Manage Contract</a></li>
+      <li><a>Contract Management</a></li>
       <li><a>{{$id}}</a></li>
   </ol>
     <div class="block">
@@ -158,14 +352,44 @@ function findTask(val)
          </div>
          <br>
                 
-              <div class="btn-group col-md-offset-10">
+              <div class="btn-group col-md-12">
+                <h4 class="col-md-7 col-md-offset-0" style="color: green"><strong>Overall Progress: {{$o_com}}%</strong></h4>
+                @if($check_init==0)
+                  @if($o_com == 100)
+                   <button  id="turnover" class="btn btn-default"><i class=""></i> Start Progress Inspection</button>
+                   @else
+                   <button  id="turnover" class="btn btn-default disabled"><i class=""></i> Start Progress Inspection</button>
+                   @endif
+                @elseif($check_init!=0)
+                    @if($check==0)
+                   <button  id="closing" class="btn btn-default disabled"><i class=""></i> Final Inspection</button>
+                    @else
+                   <button  id="closing" class="btn btn-default"><i class=""></i> Final Inspection</button>
+                    @endif
+                @endif
+
                  <button  id="add_task" class="btn btn-default "><i class="fa fa-calendar-o"></i> Add Task </button>
+                 <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> Add Resources</button>
+                    <ul class="dropdown-menu dropdown-custom">
+                      <li>
+                        <a id="add_job">Job</a>
+                        <a id="add_mat">Material</a>
+                        <a id="add_equip">Equipment</a>
+                      </li>
+                      <li class="divider"></li>
+                      <li>
+                        <!-- <a id="add_misc">Miscellaneous Fees</a> -->
+                        <!-- <a id="add_exp">Expenses</a> -->
+                      </li>
+                  </ul>
+                 </div>
               </div>
         
           
           <hr>
         
-       <table  class="table table-vcenter table-striped table-bordered table-hover">
+       <table id="7cols-datatable" class="table table-vcenter table-striped table-bordered table-hover">
                               <thead>
                               <tr>
                                 <th class="text-center">Task</th>
@@ -179,7 +403,7 @@ function findTask(val)
                               </tr>
                               </thead>
                               <tbody>
-                                <tr class="active" >
+                                <!-- <tr class="active" >
                                   <td class="text-center"><h5><b></b></h5></td>
                                   <td class="text-center"><h5><b>{{\Carbon\Carbon::parse($o_contfrom)->toFormattedDateString()}}</b></h5></td>
                                   <td class="text-center"><h5><b>{{\Carbon\Carbon::parse($o_contto)->toFormattedDateString()}}</b></h5></td>
@@ -194,9 +418,8 @@ function findTask(val)
                                   </td>
                                   <td class="text-center"><h5><b></b></h5></td>
                                   <td class="text-center"><h5><b></b></h5></td>
-                                </tr>
+                                </tr> -->
                                 @foreach($o_task as $t)
-                                @if($t->task_active !=2)
                               <tr>
                                 <td class="text-center">
                                     {{ $t ->ServTask}}
@@ -211,13 +434,15 @@ function findTask(val)
                                    {{ $t ->duration}} day/s
                                 </td>
                                 <td class="text-center">
-                                   {{$t->wt}} %                           
+                                   {{$t->wt}} %                        
                                </td>
                                 <td class="text-center">
                                    @if($t->p_prog=='')
                                    0%
                                    @else
                                    {{$t->p_prog}} %   
+                                   <br>
+                                   <b>As Of {{\Carbon\Carbon::parse($t->d_date)->toFormattedDateString()}}</b>
                                    @endif                              
                                  </td>
                                  <td class="text-center">
@@ -231,83 +456,35 @@ function findTask(val)
                                       @if($t->percent==100)
                                       <span class="label label-info ">Finished</span>
                                        @else     
-                                      <span class="label label-info">Ahead</span>
+                                      <span class="label label-info">Ahead of Schedule</span>
                                       @endif
                                     @elseif($t->status==3)
                                       @if($t->percent==100)
                                       <span class="label label-danger ">Finished</span>
                                        @else     
-                                      <span class="label label-danger">Delayed</span>
+                                      <span class="label label-danger">Behind Schedule</span>
                                       @endif
-                                    
+                                    @else
+                                      <span class="label label-default ">Pending for action</span>
+
 
                                     @endif
                                    </td>
 
                                 <td class="text-center">
                                   <button class="btn btn-sm btn-info upd" value="{{$t->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Update"><span class="gi gi-pencil"></span></button>
-                                  <button class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" data-placement="top" data-original-title="View"><span class="gi gi-eye_open"></span></button>
+                                  <button class="btn btn-sm btn-alt btn-default his" value="{{$t->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Update History"><span class="fa fa-history"></span></button>
                                   <button class="btn btn-sm btn-danger del" value="{{$t->id}}" data-toggle="tooltip" data-placement="top" data-original-title="Remove Task"> <span class="gi gi-bin"></button>
                                   </td>
                               </tr>
-                              @elseif($t->task_active==2)
-                              <tr style="opacity: .5">
-                                <td class="text-center">
-                                    {{ $t ->ServTask}}
-                                </td>
-                                <td class="text-center">
-                                  {{\Carbon\Carbon::parse($t->task_from)->toFormattedDateString()}}
-                                </td>
-                                <td class="text-center">
-                                    {{\Carbon\Carbon::parse($t->task_to)->toFormattedDateString()}}
-                                </td>
-                                <td class="text-center">
-                                   {{ $t ->duration}} day/s
-                                </td>
-                                <td class="text-center">
-                                   {{$t->wt}} %                           
-                               </td>
-                                <td class="text-center">
-                                   @if($t->p_prog=='')
-                                   0%
-                                   @else
-                                   {{$t->p_prog}} %   
-                                   @endif                              
-                                 </td>
-                                 <td class="text-center">
-                                    @if(($t->status==1))
-                                      @if($t->p_prog==100)
-                                      <span class="label label-primary ">Finished</span>
-                                       @else     
-                                      <span class="label label-primary">On Schedule</span>
-                                        @endif
-                                    @elseif($t->status==2)
-                                      @if($t->p_prog==100)
-                                      <span class="label label-info ">Finished</span>
-                                       @else     
-                                      <span class="label label-info">Ahead</span>
-                                      @endif
-                                    @elseif($t->status==3)
-                                      @if($t->p_prog==100)
-                                      <span class="label label-danger ">Finished</span>
-                                       @else     
-                                      <span class="label label-danger">Delayed</span>
-                                      @endif
-                                    @endif
-                                   </td>
-
-                                <td class="text-center">
-                                  
-                                  </td>
-                              </tr>
-                              @endif
+                            
                                 @endforeach
                               
                               </tbody>
                             </table>
     <br>
     </div>
-
+    @include('layouts.PM.transact.contract.incurrences')
     <div id="show_modal" class="modal fade show_modal" tabindex="-1" role="dialog" aria-labelledby="EditSupplierModal" aria-hidden="true" data-backdrop="static">
       <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -451,6 +628,7 @@ function findTask(val)
                     <h3><b id="del_classname" ></b>??</h3>
                   </p>
                   <input type="hidden" id="durar">
+                  <input type="hidden" id="name">
                   <input type="hidden" id="total">
                   <input type="hidden" id="ov_rem" value="{{$ov->over_dur}}">
                 <div class="pull-right">
@@ -464,7 +642,96 @@ function findTask(val)
       </div>
     </div>
 </div>
-   
+       <div id="initial_modal" class="modal fade del_modal" tabindex="-1" role="dialog" aria-labelledby="DeleteSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="block">
+            <div class="block-title themed-background">
+              <div class="block-options pull-right">
+                  <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+              </div>
+              <h3 class="themed-background" style="color:white;"><strong>Progress Inspection</strong></h3>
+            </div>
+             {!!Form::open(['url'=>'/pm/contract/turnover','method'=>'POST','id'=>'frm-init'])!!}
+                   <div class="form-group">
+                      <label for="">Official Date of Start <span class="text-danger">*</span></label>
+                      <input type="text" id="off_date" name="off_date" class="form-control text-center val input-datepicker" placeholder="date" required="required" data-date-format="yyyy-mm-dd">
+                   </div>
+                   <div class="form-group">
+                      <label for="">Date of Inspection </label>
+                       <input type="text" id="ins_date" name="ins_date" class="form-control text-center val input-datepicker" placeholder="date" required="required" data-date-format="yyyy-mm-dd">
+                   </div>
+                   <div class="form-group">
+                      <label for="">Target % Completion <span class="text-danger">*</span></label>
+                      <input type="text" id="targ" name="targ" class="form-control" value="100">
+                   </div>
+                   <div class="form-group">
+                      <label for="">Actual % Completion <span class="text-danger">*</span></label>
+                      <input type="text" id="actual" name="actual" class="form-control" value="100">
+                   </div>
+                <div class="pull-right">
+                  <button type="submit" class="btn btn-primary" >Proceed</button>
+              </div>
+              <div class="clearfix"></div>
+            {!!Form::close()!!}
+          </div>
+        </div>
+      </div>
+    </div>
+           <div id="final_modal" class="modal fade del_modal" tabindex="-1" role="dialog" aria-labelledby="DeleteSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="block">
+            <div class="block-title themed-background">
+              <div class="block-options pull-right">
+                  <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+              </div>
+              <h3 class="themed-background" style="color:white;"><strong>Final Inspection</strong></h3>
+            </div>
+             {!!Form::open(['url'=>'contract','method'=>'POST','id'=>'frm-fin'])!!}
+                   <div class="form-group">
+                      <label for="">Date of Final Inspection <span class="text-danger">*</span></label>
+                      <input type="text" id="fin_date" name="fin_date" class="form-control text-center val input-datepicker" placeholder="date" required="required" data-date-format="yyyy-mm-dd">
+                   </div>
+                   <div class="form-group">
+                      <label for="">Actual Date of Completion </label>
+                      <input type="text" id="act_date" name="act_date" class="form-control text-center val input-datepicker" placeholder="date" required="required" data-date-format="yyyy-mm-dd">
+                   </div>
+                <div class="pull-right">
+                  <button type="submit" class="btn btn-primary" > Proceed</button>
+              </div>
+              <div class="clearfix"></div>
+            {!!Form::close()!!}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="history_modal" class="modal fade del_modal" tabindex="-1" role="dialog" aria-labelledby="DeleteSupplierModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="block">
+            <div class="block-title themed-background">
+              <div class="block-options pull-right">
+                  <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
+              </div>
+              <h3 class="themed-background" style="color:white;"><strong>Update History</strong></h3>
+            </div>
+                   <table class="table table-hover table-striped table-vcenter">
+                    <thead>
+                       <tr>
+                       <th class="text-center">Date Updated</th>
+                       <th class="text-center">Progress Percentage</th>
+                     </tr>
+                    </thead>
+                    <tbody id="area">
+                      
+                    </tbody>
+                   </table>
+              <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 @endsection
 
 
@@ -479,6 +746,7 @@ function findTask(val)
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
       $('.upd').on('click',function(){
         NProgress.start();
         var classID = $(this).val();
@@ -523,33 +791,24 @@ function findTask(val)
               })          
            e.stopPropagation();
       });
-        $(this).on('click','#add_task',function(){
+     $(this).on('click','#add_task',function(){
       NProgress.start();
             $('#addtask_modal').modal('show');
        /////////////////stop top loading//////////
               NProgress.done();
         ///////////////////////////////////////////
     });
-    var ov= $('#ov').val();
-    // var task_from = $('#task_from').val();
-    // var task_to = $('#task_to').val();
 
-   //  if(min>task_from)
-   //   {
-   //      min = task_from;
-   //   } 
-   // else
-   //   {
-   //      min = min;
-   //    }
-   //  if(max>task_to)
-   //   {
-   //      max = task_to;
-   //   } 
-   // else
-   //   {
-   //      max = max;
-   //    }
+     //hide
+      $('span#duplicate').hide();
+      $('span#duplicate1').hide();
+      $('span#duplicate2').hide();
+      $('span#duplicate3').hide();
+
+
+
+    var ov= $('#ov').val();
+
    
 
     $('#frm-insert-task').on('submit',function(e){
@@ -591,6 +850,7 @@ function findTask(val)
       $.get( classe + '/edit', function (data) {
             $('#deleteID').text(data.con_id);
             $('#del_classname').text(data.ServTask);
+            $('#name').val("REMOVED: "+data.ServTask);
             $('#durar').val(data.duration);
             $('#total').val(data.total);
             $('#del_modal').modal('show');
@@ -610,7 +870,7 @@ function findTask(val)
               ContractID: lastPart,
               taskid: $('#deleteID').text(),
               ov_rem: $('#ov_rem').val(),
-              name: $('#del_classname').text(),
+              name: $('#name').val(),
               zero: "0",
               total: $('#total').val(),
               dura: $('#durar').val()
@@ -630,6 +890,287 @@ function findTask(val)
             })
            e.stopPropagation();
         }); 
+
+      $('#add_job').on('click',function(){
+      NProgress.start();
+        $('#new_task').val('').trigger('chosen:updated');  
+        $('#task_job').val('').trigger('chosen:updated'); 
+        $('#workerqty').val('');
+        $('#addworkfee').val('').trigger('chosen:updated'); 
+        $('#addworker_modal').modal('show');
+        NProgress.done();
+    });
+
+    $('#frm-newjob').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        TaskID: $('#new_task').val(),
+        SpecID: $('#task_job').val(),
+        FeeID: $('#addworkfee').val(),
+        rpd: $('#rpd').val(),
+        getfee: $('#wfee').val(),
+        name: $('#job_name').val(),
+        quantity: $('#workerqty').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/newJob/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#addworker_modal').modal('hide');
+                swal("Success","Job Added!", "success");
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+    $('#add_mat').on('click',function(){
+      NProgress.start();
+        $('#new_mtask').val('').trigger('chosen:updated');  
+        $('#task_mat').val('').trigger('chosen:updated'); 
+        $('#price').val('');
+        $('#matqty').val('');
+        $('#addmatfee').val('').trigger('chosen:updated'); 
+        $('#addmat_modal').modal('show');
+        NProgress.done();
+    });
+    $('#frm-newmat').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        TaskID: $('#new_mtask').val(),
+        MatID: $('#task_mat').val(),
+        FeeID: $('#addmatfee').val(),
+        price: $('#matprice').val(),
+        getfee: $('#mfee').val(),
+        name: $('#mat_name').val(),
+        quantity: $('#matqty').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/newMat/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#addmat_modal').modal('hide');
+                swal("Success","Material Added!", "success");
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+
+    $('#add_equip').on('click',function(){
+      NProgress.start();
+        $('#new_etask').val('').trigger('chosen:updated');  
+        $('#task_equip').val('').trigger('chosen:updated'); 
+        $('#equipprice').val('');
+        $('#addequip_modal').modal('show');
+        NProgress.done();
+    });
+    $('#frm-newequip').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        TaskID: $('#new_etask').val(),
+        name: $('#equip_name').val(),
+        EquipID: $('#task_equip').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/newEquip/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#addequip_modal').modal('hide');
+                swal("Success","Equipment Added!", "success");
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+    $('#add_misc').on('click',function(){
+      NProgress.start();
+        $('#rate').val('').trigger('chosen:updated'); 
+        $('#addrate_modal').modal('show');
+        NProgress.done();
+    });
+    $('#frm-newmisc').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        RateID: $('#rate').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/newMisc/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#addmisc_modal').modal('hide');
+                swal("Success","Miscellaneous Fee Added!", "success");
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+    $('#add_exp').on('click',function(){
+      NProgress.start();
+        $('#misc').val('').trigger('chosen:updated'); 
+        $('#miscprice').val('');
+        $('#addexp_modal').modal('show');
+        NProgress.done();
+    });
+    $('#frm-newexp').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        MiscID: $('#misc').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/newExp/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#addexp_modal').modal('hide');
+                swal("Success","Expense Added!", "success");
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+
+    $(this).on('click','#turnover',function(){
+      $('#off_date').val('');
+      $('#ins_date').val('');
+      $('#initial_modal').modal('show');
+    });
+    $('#frm-init').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        officialstartdate: $('#off_date').val(),
+        start: $('#ins_date').val(),
+        target: $('#targ').val(),
+        actual: $('#actual').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/turnover/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#initial_modal').modal('hide');
+                window.location.reload();
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+    $(this).on('click','#closing',function(){
+      $('#fin_date').val('');
+      $('#act_date').val('');
+      $('#final_modal').modal('show');
+    });
+    $('#frm-fin').on('submit',function(e){
+      e.preventDefault();
+      var ddata = {
+        ContractID: lastPart,
+        officialenddate: $('#fin_date').val(),
+        enddate: $('#act_date').val()
+      }
+      console.log(ddata);
+      NProgress.start();
+
+        $.ajax({
+                type : 'post',
+                url  : '/pm/contract/closing/'+lastPart,
+                data : ddata,
+                dataType: 'json',
+                success:function(data){
+                $('#final_modal').modal('hide');
+                window.open('/pm/contract/printTurnover/'+lastPart);
+
+                },
+                
+              })
+      NProgress.done();
+
+    });
+
+    $(this).on('click','.his',function(){
+      var classID = $(this).val();
+          var a,b=0;
+          // $('#myId').val(classID);
+
+         /////////////////top loading//////////
+          NProgress.start();
+          /////////////////////////////////////
+          $.ajax({
+          type : 'get',
+          url  : '/pm/contract/updateHistory/'+classID,
+          dataType: 'json',
+          success:function(data){
+            for(a=0;a<data.length;a++)
+            {
+                document.getElementById("area").innerHTML += '<tr><td class="text-center"><strong>'+data[a].date+'</strong></td><td class="text-center"><strong>'+data[a].percent+' %</strong></td></tr>';
+
+            }
+            
+                $('#history_modal').modal('show');
+            
+          }
+          });
+
+           /////////////////stop top loading//////////
+            NProgress.done();
+            ///////////////////////////////////////////
+          $('#area').empty();
+    });
+
+
+
+
+
+
 
     });
  </script>

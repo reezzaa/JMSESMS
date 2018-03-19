@@ -152,7 +152,9 @@
                                         <div class="form-group">
                                           <div>
                                             <label for="price">Cost</label>
-                                            {!! Form::text('text',null ,['id'=>'price','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+
+                                            {!! Form::text('text',null ,['id'=>'o_price','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                            <input type="hidden" id="price">
                                           </div>
                                         </div>
                                       </div>
@@ -216,7 +218,8 @@
                                         <div class="form-group">
                                           <div>
                                             <label for="price">Cost</label>
-                                            {!! Form::text('text',null ,['id'=>'miscprice','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                            {!! Form::text('text',null ,['id'=>'o_miscprice','placeholder'=>'0', 'class' => 'form-control', 'maxlength'=>'30','disabled'=>'disabled']) !!}
+                                            <input type="hidden" id="miscprice">
                                           </div>
                                         </div>
                                       </div>
@@ -296,7 +299,7 @@
             <div class="panel-body">
                 <div class="row">
                   <div class="form-group col-md-6">
-                        <label for="strFormPayment" class="col-sm-4 text-center">Mode of Payment</label>         
+                        <label for="strFormPayment" class="col-sm-8 text-center">Progress Percentage for Billing <span class="text-danger">*</span></label>         
 
                   <div class="col-sm-12 form-inline">
                        <select id="progress" name="progress[]" class="select-chosen" data-placeholder="Choose.." style="width: 250px;" multiple>
@@ -341,7 +344,8 @@
               <table class="table table-vcenter">
                                     <tr class="">
                                         <td colspan="4" class="text-right"><span class="h4">SUBTOTAL</span></td>
-                                        <td colspan="4" class="text-right"><span class="h4" id="subtotal" >0.00</span></td>
+                                        <td colspan="4" class="text-right"><span class="h4" id="o_subtotal" >0.00</span></td>
+                                        <input type="hidden" id="subtotal">
                                     </tr>
                                     <tr class="">
                                         <td colspan="4" class="text-right"><span class="h4">VAT RATE</span></td>

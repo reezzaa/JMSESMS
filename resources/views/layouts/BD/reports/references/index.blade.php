@@ -45,7 +45,7 @@
     {{ Form::open(['target' => '_blank','url'=>'bd/references/printReferencesofBilling']) }}
                
                 <div class="row">
-                 <div class="col-md-4 col-md-offset-1">
+                 <div class="col-md-4 col-md-offset-3">
                     <label for="quotation">Choose Contract </label> 
                         <select name="project" id="project" class='form-control select-chosen ' data-placeholder='Choose'>
                         <option value=""></option>
@@ -54,7 +54,7 @@
                         @endforeach
                       </select> 
                  </div>
-                  <div class="col-md-6">
+                  <!-- <div class="col-md-6">
                     <label for="quotation">Select Date Range</label> 
 
                                    <div class="input-group" data-date-format="yyyy-mm-dd">
@@ -63,7 +63,7 @@
                                       <input type="date" id="to" name="to" class="form-control text-center " placeholder="Through">
                                   </div>
                                </div>
-
+ -->
                     
                 </div>
                 <br>

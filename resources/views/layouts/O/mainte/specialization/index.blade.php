@@ -43,14 +43,14 @@
   <div class="content-header">
       <div class="header-section">
         <h4>
-            <i class="fa fa-wrench"> </i> Skills Maintenance<br>
+            <i class="fa fa-wrench"> </i> Job Maintenance<br>
         </h4>
       </div>
   </div>
   <ol class="breadcrumb breadcrumb-top">
       <li><a href="{{ route('o.home') }}"><i class="fa fa-home"></i></a></li>
       <li><a href="javascript:void(0)">Maintenance</a></li>
-      <li><a href="javascript:void(0)">Skills</a></li>
+      <li><a href="javascript:void(0)">Job</a></li>
   </ol>
   <div class="block">
     <div id="add_modal" class="modal fade add-spec-modal" tabindex="-1" role="dialog" aria-labelledby="AddSpecModal" aria-hidden="true" data-backdrop="static">
@@ -61,12 +61,12 @@
               <div class="block-options pull-right">
                   <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
               </div>
-              <h3 class="themed-background" style="color:white;"><strong>Add Skill</strong></h3>
+              <h3 class="themed-background" style="color:white;"><strong>Add Job</strong></h3>
             </div>
 
             {!! Form::open(['url'=>'skill', 'method'=>'POST', 'id'=>'frm-insert']) !!}
               <div class="form-group">
-                  <label for="specname">Skill Description</label><span class="text-danger">*</span> 
+                  <label for="specname">Job Description</label><span class="text-danger">*</span> 
                 <div class="col-md-offset-1">
                   {!! Form::text('specname',null ,['id'=>'specname','placeholder'=>'Skill Name', 'class' => 'form-control', 'maxlength'=>'40']) !!}
                   <span id="duplicate" class="help-block animation-slideDown">
@@ -201,13 +201,13 @@
                     success:function(data){
                       readByAjax();
                       $(".modal").modal('hide');
-                      swal("Success","Skill Added!", "success");
+                      swal("Success","Job Added!", "success");
                     },
                     error:function(data){
                       /////////////////stop top loading//////////
                       NProgress.done();
                       ///////////////////////////////////////////
-                       $('span#duplicate').text("Duplicate Skill Description");
+                       $('span#duplicate').text("Duplicate Job Description");
                        $('span#duplicate').show();
                     }
                   })
@@ -270,7 +270,7 @@
                   {
                     if(selfName == $('#SpecDesc').val() && rpds == $('#rpds').val() && da == $('#specdates').val())
                     {
-                      swal("Info", "Same Specialization Info", "info");
+                      swal("Info", "Same Job Info", "info");
                     }
                     else
                     {
@@ -293,13 +293,13 @@
                         success:function(data){
                           readByAjax();
                           $(".modal").modal('hide');
-                          swal("Success","Skill Edited!", "success");
+                          swal("Success","Job Edited!", "success");
                         },
                         error:function(data){
                           /////////////////stop top loading//////////
                           NProgress.done();
                           ///////////////////////////////////////////
-                           $('span#duplicate').text("Duplicate Skill Description");
+                           $('span#duplicate').text("Duplicate Job Description");
                            $('span#duplicate').show();
                         }
                       })

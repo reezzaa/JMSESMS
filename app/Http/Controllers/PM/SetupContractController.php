@@ -253,6 +253,7 @@ class SetupContractController extends Controller
             $misc = new ContractMisc();
             $misc->ContractID = $contractID;
             $misc->MiscID = $request->miscdesc[$i];
+            $misc->status=1;
             $misc->save();
            }
 
@@ -261,6 +262,7 @@ class SetupContractController extends Controller
             $rate = new ContractRate();
             $rate->ContractID = $contractID;
             $rate->RateID = $request->ratedesc[$i];
+            $rate->status =1;
             $rate->save(); 
            }
 

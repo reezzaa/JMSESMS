@@ -44,14 +44,14 @@
   <div class="content-header">
       <div class="header-section">
         <h4>
-            <i class="fa fa-wrench"> </i> Services Offered Maintenance<br>
+            <i class="fa fa-wrench"> </i> Services Maintenance<br>
         </h4>
       </div>
   </div>
   <ol class="breadcrumb breadcrumb-top">
       <li><a href="{{ route('o.home') }}"><i class="fa fa-home"></i></a></li>
       <li><a href="javascript:void(0)">Maintenance</a></li>
-      <li><a>Services Offered</a></li>
+      <li><a>Services </a></li>
   </ol>
   <div class="block">
     <div id="add_modal" class="modal fade add-matclass-modal" tabindex="-1" role="dialog" aria-labelledby="AddMatClassModal" aria-hidden="true" data-backdrop="static">
@@ -68,10 +68,10 @@
             {!! Form::open(['url'=>'serviceOff', 'method'=>'POST', 'id'=>'frm-insert']) !!}
                 <div class="form-group">
                 <label for="servname" > 
-                  Service Name
+                  Service Description
                 <span class="text-danger">*</span> 
                 </label>
-                {!! Form::text('servname',null ,['id'=>'servname','placeholder'=>'Service Name', 'class' => 'form-control', 'maxlength'=>'30'])
+                {!! Form::text('servname',null ,['id'=>'servname','placeholder'=>'Service Description', 'class' => 'form-control', 'maxlength'=>'30'])
                 !!}
                 <span id="duplicate" class="help-block animation-slideDown">
                       Duplicate Material Classification Name
@@ -151,13 +151,13 @@
               success:function(data){
                 readByAjax();
                 $(".modal").modal('hide');
-                swal("Success","Services Offered Added!", "success");
+                swal("Success","Service Added!", "success");
               },
               error:function(data){
                 /////////////////stop top loading//////////
                 NProgress.done();
                 ///////////////////////////////////////////
-                 $('span#duplicate').text("Duplicate Service Name");
+                 $('span#duplicate').text("Duplicate Service Description");
                  $('span#duplicate').show();
               }
             })
@@ -198,7 +198,7 @@
           {
             if(selfName == $('#servnames').val())
             {
-              swal("Info", "Same Service Offered Name", "info");
+              swal("Info", "Same Service Description", "info");
             }
             else
             {
@@ -217,13 +217,13 @@
                 success:function(data){
                   readByAjax();
                   $(".modal").modal('hide');
-                  swal("Success","Service Offered Edited!", "success");
+                  swal("Success","Service Edited!", "success");
                 },
                 error:function(data){
                   /////////////////stop top loading//////////
                 NProgress.done();
                 ///////////////////////////////////////////
-                   $('span#duplicate').text("Duplicate Service Offered Name");
+                   $('span#duplicate').text("Duplicate Service Description");
                    $('span#duplicate').show();
                 }
               })

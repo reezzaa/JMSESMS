@@ -95,7 +95,7 @@ class MaintenanceSeeder extends Seeder
       		'todelete' => 1,
             ]);
          GroupUOM::create([
-           'GroupUOMText'=> 'Pieces',
+           'GroupUOMText'=> 'Not Applicable',
       		'status'=> 1,
       		'todelete' => 1,
             ]);
@@ -120,7 +120,7 @@ class MaintenanceSeeder extends Seeder
             ]);
          DetailUOM::create([
            'GroupUOMID'=>3,
-		   'DetailUOMText'=>'pieces',
+		   'DetailUOMText'=>'N/A',
 		   'UOMUnitSymbol'=>'pc',
 		   'status'=>1,
 		   'todelete'=>1,

@@ -293,15 +293,10 @@
           /////////////////////////////////////
           $.ajax({
           type : 'get',
-          url  : url+'/'+classID,
+          url  : '/bd/stock/openStock/'+classID,
           dataType: 'json',
           success:function(data){
-            for(a=0;a<1;a++)
-            {
-                document.getElementById("name").innerHTML += '<strong>'+data[a].MaterialName+'</strong>';
-                $('#show_stock_modal').modal('show');
-
-            }
+            
              for(a=0;a<data.length;a++)
             {
               if(data[a].method == 'IN')
@@ -320,7 +315,6 @@
            /////////////////stop top loading//////////
             NProgress.done();
             ///////////////////////////////////////////
-          $('#name').empty();
           $('#area').empty();
 
 

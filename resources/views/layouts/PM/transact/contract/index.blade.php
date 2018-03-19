@@ -54,13 +54,13 @@ function readByAjax()
   <div class="content-header">
       <div class="header-section">
         <h4>
-            <i class="hi hi-list"> </i> Manage Contract <br>
+            <i class="hi hi-list"> </i> Contract Management <br>
         </h4>
       </div>
   </div>
   <ol class="breadcrumb breadcrumb-top">
       <li><a href="{{ route('pm.home') }}"><i class="fa fa-home"></i></a></li>
-      <li><a>Manage Contract</a></li>
+      <li><a>Contract Management</a></li>
   </ol>
     <div class="block">
       <div class="table-responsive">
@@ -69,6 +69,11 @@ function readByAjax()
     <br>
     </div>
    
+@endsection
+@section('addbtn')
+<a href="{{ route('setup.index')}}" class="float"  data-toggle="tooltip" data-placement="left" title="Setup Contract">
+    <i class="fa fa-plus my-float"></i>
+  </a>
 @endsection
 
 

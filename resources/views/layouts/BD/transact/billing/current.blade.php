@@ -1,24 +1,16 @@
  <div class="block" id="current">
                           <table class="table table-borderless">
-                          @foreach($utilities as $utilities)
 
                             <td class="col-md-2">
-                                  <img src="{{url('images', $utilities->strCompanyLogo)}}" style="width:100px;" class="col-md-offset-3">
+                                  
                             </td>
                             <td class="col-md-8 text-center">
                                
-                                            <strong style="font-family: 'Bodoni Black';font-size: 200%;"> {{ $utilities->strCompanyName }}</strong>  
+                                            <strong style="font-family: 'Bodoni Black';font-size: 200%;">MACHINE SHOP & ENGINEERING SERVICES</strong>  
                                         <br>
-                                            <b>{{ $utilities->strCompanyAddress }}
-                                            <br>
-                                            {{ $utilities->strGeneralManagerName }} - Proprietor
-                                          <br>
-                                            Email: {{ $utilities->strCompanyEmail }}
-                                          <br>
-                                            VAT Reg. TIN {{ $utilities->strCompanyTIN }}</b>
+                                           
                             </td>
                             
-                              @endforeach
                             <td class="col-md-2"><br><br>
                               <p style="font-size: 150%;" id="invid"><b>{{$invoiceid}}</b></p>
                             </td>
@@ -65,7 +57,7 @@
                               </td>
                               <td style="height: 500px" class="text-center">
                                 <br><br>
-                                <h4>PHP {{$down->initialtax}}</h4>
+                                <h4>PHP {{$down->down_amount}}</h4>
 
                               </td>
                             </tr>
@@ -87,7 +79,7 @@
                           <table class="table table-borderless">
                             <tr>
                               <td class="col-md-10" style="text-align: right;"><b>Prepared By:</b></td>
-                              <td class="col-md-2"> {{Auth::user()->fname}} {{Auth::user()->lname}}</td>
+                              <td class="col-md-2"> </td>
                             </tr>
                             <tr>
                               <td class="col-md-10" style="text-align: right;"><b>Received By:</b></td>

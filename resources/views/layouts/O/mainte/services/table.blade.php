@@ -1,7 +1,7 @@
 <table id="matClass-datatable" class="table table-vcenter table-striped table-condensed table-bordered table-hover">
   <thead>
     <tr>
-      <th class="text-center">Service Offered Name</th>
+      <th class="text-center">Service Description</th>
       <th style="width: 60px;" class="text-center"></th>
       <th style="width: 200px;" class="text-center">Controls</th>
     </tr>
@@ -54,7 +54,7 @@
 
               {!! Form::open(['url'=>'serviceOff','method'=>'PUT','id'=>'frm-upd']) !!}
                 <div class="form-group">
-                    <label for="servnames">Service Offered Name <span class="text-danger">*</span> </label>
+                    <label for="servnames">Service Description <span class="text-danger">*</span> </label>
                     {!!Form::text('servnames' , null,['id'=>'servnames', 'class'=>'form-control', 'maxLength'=>'30'])!!}
                     <span id="duplicate" class="help-block animation-slideDown">
                     Duplicate Material Type Name

@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Jomar's Machine Shop and Engineering Services Management System (JMSESMS)</title>
+        <title> Machine Shop and Engineering Services Management System (JMSESMS)</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
-         <link rel="shortcut icon" href="img/favicon.ico">
              <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/plugins.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">

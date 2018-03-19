@@ -37,26 +37,18 @@
   </head>
   <body><br><br>
     <table class="table-borderless">
-                          @foreach($utilities as $utilities)
 
                             <td class="col-md-1">
-                                  <th><img src="images/{{$utilities->strCompanyLogo}}" alt=""></th>
+                                  <th style="width:100px;height: 100px">&nbsp;</th>
                                   
                             </td>
                             <td class="col-md-9 text-center">
                                
-                                            <strong style="font-family: 'Bodoni Black';font-size: 120%;"> {{ $utilities->strCompanyName }}</strong>  
+                                            <strong style="font-family: 'Bodoni Black';font-size: 120%;"> MACHINE SHOP & ENGINEERING SERVICES</strong>  
                                         <br>
-                                            <b style="font-size: 60%">{{ $utilities->strCompanyAddress }}</b>
-                                            <br>
-                                           <b style="font-size: 60%">{{ $utilities->strGeneralManagerName }} - Proprietor</b> 
-                                          <br>
-                                           <b style="font-size: 60%">Email:{{ $utilities->strCompanyEmail }}</b> 
-                                          <br>
-                                          <b  style="font-size: 60%"> VAT Reg. TIN {{ $utilities->strCompanyTIN }}</b>
+                                           
                             </td>
                             
-                              @endforeach
                             <td class="col-md-2"><br><br>
                               <p style="font-size: 100%;"><b>{{$id}}</b></p>
                             </td>
@@ -96,7 +88,7 @@
 
                               </td>
                               <td  class="hes" style="height: 300px" class="text-center">
-                                  <h4>PHP {{$print->subtotal}}</h4>
+                                  <h4>PHP {{$print->s_amount}}</h4>
 
                               </td>
                             </tr>
@@ -123,7 +115,7 @@
                             </tr>
                             <tr>
                               <td style="text-align: right;padding: 8px"><b>Prepared By:</b></td>
-                              <td> {{Auth::user()->fname}} {{Auth::user()->lname}}</td>
+                              <td></td>
                             </tr>
                             <tr>
                               <td style="text-align: right;padding: 8px"><b>Received By:</b></td>

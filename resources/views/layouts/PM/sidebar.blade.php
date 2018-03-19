@@ -18,11 +18,20 @@
          <span class="sidebar-header-title">Transaction</span>
      </li>
     <li >
-        <a href="{{ route('setup.index') }}"><i class="gi gi-adjust_alt sidebar-nav-icon"></i>Setup Contract</a>
+        <a  href="{{ route('contract.index') }}"><i class="hi hi-list sidebar-nav-icon"></i>Contract Management</a>
+    </li>
+    <li class="sidebar-header">
+        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"></a></span>
+         <span class="sidebar-header-title">Reports</span>
+     </li> 
+     
+    <li >
+        <a href="{{ route('progressreport.index') }}"><i class="fa fa-file-pdf-o sidebar-nav-icon"></i>Progress Report</a>
     </li>
     <li >
-        <a  href="{{ route('contract.index') }}"><i class="hi hi-list sidebar-nav-icon"></i>Manage Contracts</a>
+        <a href="{{ route('stockusagereport.index') }}"><i class="fa fa-file-pdf-o sidebar-nav-icon"></i>Stock Usage Report</a>
     </li>
+    
    <!--  <li class="sidebar-header">
        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="hi hi-list"></i></a></span>
         <span class="sidebar-header-title">Lists</span>
@@ -41,10 +50,10 @@
         <a href=""><i class="fa fa-files-o sidebar-nav-icon"></i>Status Report</a>
     </li> -->
     <li class="sidebar-header">
-        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="fa fa-child"></i></a></span>
-         <span class="sidebar-header-title">User Account</span>
+        <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="fa fa-search"></i></a></span>
+         <span class="sidebar-header-title">Queries</span>
      </li>
     <li >
-        <a href=""><i class="fa fa-cog sidebar-nav-icon"></i>Manage Accounts</a>
+        <a href="{{ route('contractqueries.index')}}"><i class="fa fa-search sidebar-nav-icon"></i>Contract</a>
     </li>
 </ul>

@@ -19,10 +19,18 @@
                                     {{ $t ->inv}}
                                 </td>
                                 <td class="text-center">
-                                    {{ $t ->desc}}
+                                    @foreach($detail as $d)
+                                      @if($t->inv==$d->serv)
+                                        {{$d->desc}} <br>
+                                      @endif
+                                    @endforeach
                                 </td>
                                 <td class="text-center">
-                                   ₱ {{ $t ->amount}}
+                                   @foreach($detail as $d)
+                                      @if($t->inv==$d->serv)
+                                        ₱ {{$d->total}} <br>
+                                      @endif
+                                    @endforeach
                                 </td>
                                 <td class="text-center">
                                      {{\Carbon\Carbon::parse($t->date)->toFormattedDateString()}}
@@ -32,7 +40,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if($t->status==0)
-                                     <label class="label label-danger">Not Paid</label>
+                                     <label class="label label-danger">Unpaid</label>
                                     @else
                                       @if($t->isclear==0)
                                         <label class="label label-success">Paid</label>
@@ -51,13 +59,18 @@
                                          <label class="label label-danger">Overdue</label>
                                         @endif
                                     @else
-                                       @if($t->duedate >= $t->date)
+                                     @if($t->isclear==0)
+                                        <span></span> 
+                                      @else
+                                         @if($t->duedate >= $t->date)
                                           {{$t->OrID}} <br>
                                        <p style="color: green"> {{\Carbon\Carbon::parse($t->p_date)->toFormattedDateString()}}</p>
                                         @else
                                            {{$t->OrID}} <br>
                                        <p style="color: red"> {{\Carbon\Carbon::parse($t->p_date)->toFormattedDateString()}}</p>
                                         @endif
+                                      @endif
+                                      
                                     @endif
                                   
                                 </td>

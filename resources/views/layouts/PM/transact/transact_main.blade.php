@@ -4,10 +4,9 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <title>
-      @yield('title', 'Jomar Machine Shop and Engineering Services Management System (JMSESMS)')
+      @yield('title', 'Machine Shop and Engineering Services Management System (JMSESMS)')
     </title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/plugins.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
@@ -23,7 +22,33 @@
     <script src="{{asset('js/vendor/javascript.js')}}"></script>
 
     @yield('head')
-   
+   <style>
+      .float{
+                    position:fixed;
+                    width:60px;
+                    height:60px;
+                    bottom:40px;
+                    right:40px;
+                    background-color:#577162;
+                    color:#FFFFFF;
+                    border-radius:50px;
+                    text-align:center;
+                    box-shadow: 2px 2px 3px #999;
+            }
+            .my-float{
+                    font-size:24px;
+                    margin-top:18px;
+            }
+            a.float + div.label-container {
+              visibility: hidden;
+              opacity: 0;
+              transition: visibility 0s, opacity 0.5s ease;
+            }
+            a.float:hover + div.label-container{
+              visibility: visible;
+              opacity: 1;
+            }
+   </style>
   </head>
    <body >
           <!-- Preloader -->
@@ -113,7 +138,9 @@
                 <!-- Page content -->
                 <div id="page-content">
                     @yield('content')
+                    
                 </div>
+
                 <!-- END Page Content -->
 
                 <!-- Footer -->
@@ -128,6 +155,7 @@
   <a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
      @yield('addbtn')
 
+
     <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/plugins.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
@@ -135,8 +163,8 @@
     <script src="{{ asset('js/pages/formsValidation.js') }}"></script>
     <script src="{{ asset('js/pages/formsWizard.js') }}"></script>
     <script src="{{ asset('js/pages/tablesDatatables.js') }}"></script>
-    <!-- <script src="{{ asset('js/pages/index.js') }}"></script> -->
-    <!-- <script>$(function(){ Index.init(); });</script> -->
+
+     
     @yield('script')
     </body>
 </html>

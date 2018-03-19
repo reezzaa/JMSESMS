@@ -30,10 +30,14 @@
 
         </td>
         <td class="text-center">
-              @if($u->active==0)
+              @if($u->status==0)
                   <label class="label label-danger">No Downpayment</label>
-              @elseif($u->active==1)
-                  <label class="label label-primary">Paid Downpayment</label>
+              @elseif($u->status==1)
+                  <label class="label label-primary">On Going</label>
+              @elseif($u->status==2)
+                  <label class="label label-warning">For Final Inspection</label>
+              @elseif($u->status==1)
+                  <label class="label label-success">Terminated</label>
               @endif
         </td>
         <td class="text-center">

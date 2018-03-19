@@ -4,7 +4,7 @@
       <th class="text-center">Service</th>
       <th class="text-center">Task</th>
       <th class="text-center">Price</th>
-      <th class="text-center">Duration</th>
+      <th class="text-center">Duration(days)</th>
       <th style="width: 60px;" class="text-center"></th>
       <th style="width: 200px;" class="text-center">Controls</th>
     </tr>

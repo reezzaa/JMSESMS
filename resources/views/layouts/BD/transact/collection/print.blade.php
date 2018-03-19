@@ -77,7 +77,7 @@
               </tr>
               <tr>
                 <td class="he">VAT Amount</td>
-                <td class="he">{{$gp->taxValue}}</td>
+                <td class="he">{{$tax}}</td>
               </tr>
               <tr>
                 <td class="he">Total Amount</td>
@@ -126,23 +126,13 @@
         </td>
         <td>
           <table>
-             @foreach($utilities as $utilities)
-                      <td class="col-md-1">
-                              <th><img src="images/{{$utilities->strCompanyLogo}}" alt=""></th>  
-                            </td>
+                      
                       <td class="col-md-9 text-center">
-                               
-                                            <strong style="font-family: 'Bodoni Black';font-size: 100%;"> {{ $utilities->strCompanyName }}</strong>  
+                               <br><br>
+                                            <strong style="font-family: 'Bodoni Black';font-size: 100%;text-indent: 10%"> MACHINE SHOP & ENGINEERING SERVICES</strong>  
                                         <br>
-                                            <b style="font-size: 60%">{{ $utilities->strCompanyAddress }}</b>
-                                            <br>
-                                           <b style="font-size: 60%">{{ $utilities->strGeneralManagerName }} - Proprietor</b> 
-                                          <br>
-                                           <b style="font-size: 60%">Email:{{ $utilities->strCompanyEmail }}</b> 
-                                          <br>
-                                          <b  style="font-size: 60%"> VAT Reg. TIN {{ $utilities->strCompanyTIN }}</b>
+                                           
                       </td> 
-               @endforeach
                <td class="col-md-2"><br><br>
                         <p style="font-size: 80%;"><b>{{$id}}</b></p>
                 </td>
@@ -161,7 +151,7 @@
                 </tr>
                 <tr>
                   <td class="hue">
-                    <p style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVED from {{$getp->strCompClientName}} with TIN {{$getp->strCompClientTIN}} and address at {{$getp->strCompClientAddress}} {{$getp->strCompClientCity}}, {{$getp->strCompClientProv}} engaged in a business style of <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, the sum of <u> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </u>(P {{$getp->amount}}) in partial/ full payment for {{$getp->inv}}. </p>
+                    <p style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVED from {{$getp->strCompClientName}} with TIN {{$getp->strCompClientTIN}} and address at {{$getp->strCompClientAddress}} {{$getp->strCompClientCity}}, {{$getp->strCompClientProv}} engaged in a business style of <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, the sum of <u> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </u>(P {{$getp->amount}}) in  full payment for {{$getp->inv}}. </p>
                   </td>
                 </tr>
                 <tr>

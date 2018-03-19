@@ -7,7 +7,7 @@
         <!-- <img src="img/login_bg.png" alt="Login Full Background" class="full-bg animation-pulseSlow"> -->
         <div id="login-container" class="animation-fadeInLeft">
             <div class="login-title text-center">
-                <h1> <strong>JMSESMS</strong><br><br> <strong>Login as OPERATIONS </strong></h1>
+                <h1> <strong>MSESMS</strong><br><br> <strong>Login as OPERATIONS </strong></h1>
                 
               <form class="form-horizontal form-borderless" method="POST" id="form-login" action="{{ route('o.login.submit') }}">
                         {{ csrf_field() }}

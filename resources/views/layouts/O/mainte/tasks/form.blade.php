@@ -100,14 +100,14 @@
                                       <div class="block-options pull-right">
                                           <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
                                       </div>
-                                      <h3 class="themed-background" style="color:white;"><strong>Assign Skills</strong></h3>
+                                      <h3 class="themed-background" style="color:white;"><strong>Assign Jobs</strong></h3>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-8">
                                           <div class="form-group">
                                             <div>
-                                              <label for="specname">Skills Description</label> <span class="text-danger">*</span>
-                                              <select id="specname" name="specname" style="width: 250px;" onchange="findRPD(this.value)" class="select-chosen hehe" data-placeholder="Select Skill">
+                                              <label for="specname">Jobs Description</label> <span class="text-danger">*</span>
+                                              <select id="specname" name="specname" style="width: 250px;" onchange="findRPD(this.value)" class="select-chosen hehe" data-placeholder="Select Jobs">
                                                 <option></option>
                                                 <option value=""></option>
                                                  @foreach($spec as $spec)

@@ -43,7 +43,7 @@
           <div class="row">
               <!-- Main Title (hidden on small devices for the statistics to fit) -->
               <div class="col-md-4 col-lg-6 hidden-xs hidden-sm">
-                  <h1>Welcome <strong>{{ Auth::user()->fname }} {{ Auth::user()->mname }} {{ Auth::user()->lname }} {{ Auth::user()->suffix }}</strong><br><small></small></h1>
+                  <h1>Welcome <strong>Budget Department</strong><br><small></small></h1>
               </div>
               <!-- END Main Title -->
 

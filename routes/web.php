@@ -84,7 +84,26 @@ Route::prefix('pm')->group(function(){
 	Route::get('/contract/findTaskbyNone','PM\ContractController@findTaskbyNone');
 	Route::get('/contract/getTaskPrice/{id}','PM\ContractController@getTaskPrice');
 	Route::post('/contract/storeTask/{id}','PM\ContractController@storeTask')->name('pm.storeTask');
-	// Route::post('/contract/removeTask/{id}','PM\ContractController@removeTask');
+	Route::get('/contract/getNewTaskJob/{id}','PM\ContractController@getNewTaskJob')->name('pm.getNewTaskJob');
+	Route::post('/contract/newJob/{id}','PM\ContractController@newJob');
+	Route::get('/contract/getNewTaskMat/{id}','PM\ContractController@getNewTaskMat')->name('pm.getNewTaskMat');
+	Route::get('/contract/getTaskMatPrice/{id}','PM\ContractController@getTaskMatPrice')->name('pm.getTaskMatPrice');
+	Route::post('/contract/newMat/{id}','PM\ContractController@newMat');
+	Route::get('/contract/getTaskEPrice/{id}','PM\ContractController@getTaskEPrice')->name('pm.getTaskEPrice');
+	Route::post('/contract/newEquip/{id}','PM\ContractController@newEquip');
+	Route::post('/contract/newMisc/{id}','PM\ContractController@newMisc');
+	Route::post('/contract/newExp/{id}','PM\ContractController@newExp');
+	Route::get('/contract/findFee/{id}','PM\ContractController@findFee')->name('pm.findFee');
+	Route::get('/contract/findRPD/{id}','PM\ContractController@findRPD')->name('pm.findRPD');
+	Route::post('/contract/turnover/{id}','PM\ContractController@turnover');
+	Route::post('/contract/closing/{id}','PM\ContractController@closing');
+	Route::get('/contract/updateHistory/{id}','PM\ContractController@updateHistory');
+	Route::get('/contract/printTurnover/{id}','PM\ContractController@printTurnoverReport')->name('pm.printTurnover');
+
+	Route::resource('/progressreport','PM\ProgressReportController');
+	Route::post('/progressreport/printProgress','PM\ProgressReportController@printProgress');
+	Route::resource('/stockusagereport','PM\StockReportController');
+	Route::post('/stockusagereport/printStockUsage','PM\StockReportController@printStockUsage');
 
 
 
@@ -144,21 +163,28 @@ Route::prefix('bd')->group(function(){
 	Route::resource('/billing','BD\BillingController');
 	Route::get('/readByAjax2/{id}','BD\BillingController@readByAjax')->name('bd.bill');
 	Route::get('/printInvoice/{id}','BD\BillingController@printInvoice')->name('bd.printInvoice');
+	Route::get('/printInvoiceInc/{id}','BD\BillingController@printInvoiceInc')->name('bd.printInvoiceInc');
 	Route::post('/progressbilling','BD\BillingController@storeProgBill')->name('bd.bill.progress');
+	Route::post('/turnover/{id}','BD\BillingController@Turnover')->name('bd.turnover');
 
 	Route::resource('/stock','BD\StockController');
-	Route::post('/stock/{id}/storeThis',['as'=>'stock.storeThis','uses'=>'BD\StockController@storeThis']);
+	Route::post('/stock/storeThis/{id}','BD\StockController@storeThis');
 	Route::post('/stock/{id}/storeThat',['as'=>'stock.storeThat','uses'=>'BD\StockController@storeThat']);
 	Route::get('/stock/getSupp/{id}','BD\StockController@getSupp');
 	Route::get('/stock/getSuppPrice/{id}','BD\StockController@getSuppPrice');
+	Route::get('/stock/task/{id}','BD\StockController@task')->name('stock.task');
+	Route::get('/stock/openStock/{id}','BD\StockController@openStock')->name('stock.openStock');
 
 
 	Route::resource('/collection','BD\CollectionController');
 	Route::get('/readByAjax3/{id}','BD\CollectionController@readByAjax')->name('bd.collect');
 	Route::post('/collectcash','BD\CollectionController@collectcash')->name('bd.collect.cash');
 	Route::get('/printOR/{id}','BD\CollectionController@printOR')->name('bd.printOR');
+	Route::get('/printAckReceipt/{id}','BD\CollectionController@printAckReceipt')->name('bd.printAckReceipt');
+	Route::post('/bouncePost','BD\CollectionController@bouncePost')->name('bd.bouncepost');
 
 	Route::prefix('collection')->group(function(){
+		Route::get('/bouncePayment/{id}','BD\CollectionController@bouncePayment')->name('bd.bouncePayment');
 
 		Route::get('/process/{id}','BD\CollectionController@process')->name('bd.process');
 		Route::get('/process/byCash/{id}','BD\CollectionController@byCash')->name('bd.cash');
@@ -167,6 +193,10 @@ Route::prefix('bd')->group(function(){
 	});
 	Route::resource('/references','BD\ReferencesReportController');
 	Route::post('/references/printReferencesofBilling','BD\ReferencesReportController@printReferencesofBilling')->name('bd.printReferencesofBilling');
+	Route::resource('/collectionreports','BD\CollectionReportController');
+	Route::post('/collectionreports/printCollection','BD\CollectionReportController@printCollection');
+	Route::resource('/soareports','BD\SOAReportController');
+	Route::post('/soareports/printSOA','BD\SOAReportController@printSOA');
 
 });
 
@@ -346,4 +376,8 @@ Route::prefix('o')->group(function(){
 
 
 });
-
+Route::prefix('queries')->group(function(){
+	Route::resource('/contractqueries', 'QUERIES\ContractController');
+	Route::resource('/orqueries', 'QUERIES\ORController');
+	Route::resource('/invoicequeries', 'QUERIES\InvoiceController');
+});

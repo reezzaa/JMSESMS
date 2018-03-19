@@ -715,6 +715,8 @@ function mcheck()
       });
       //Additional Fee for Materials
       $(this).on('click','#matfee',function(){
+            $('span#duplicates').hide();
+
         $('#addmatfee_modal').modal('show');
       });
        var matfeeval="";

@@ -13,7 +13,7 @@
               $('.table-responsive').html(data);
 
               // $('[data-toggle="tooltip"]').tooltip();
-              $('#title').html('<strong>Mode of Payment</strong> <i role="button" class="gi gi-circle_info" data-toggle="tooltip" data-placement="bottom" title="Rate!"></i>');
+              $('#title').html('<strong>Progress Percentage for Billing</strong> <i role="button" class="gi gi-circle_info" data-toggle="tooltip" data-placement="bottom" title="Rate!"></i>');
           }
         })
          /////////////////stop top loading//////////
@@ -25,7 +25,7 @@
    {!! Form::open(['url'=>'paymentmode', 'method'=>'POST', 'id'=>'frm-insert']) !!}
                       <div class="col-md-12">
                           <div class="form-group">
-                          <label for="paymentmode" class="col-md-3">Mode Value <span class="text-danger">*</span></label> 
+                          <label for="paymentmode" class="col-md-3">Progress Percentage <span class="text-danger">*</span></label> 
                          <div class="col-md-7">
                             {!! Form::text('paymentmode', null,  ['id'=>'paymentmode','class'=>'form-control', 'placeholder'=>'e.g 99999, etc.']) !!}
                          </div>
@@ -56,7 +56,7 @@
  <table id="form-datatable" class="table table-vcenter table-striped table-condensed table-bordered table-hover">
     <thead>
       <tr>
-        <th class="text-center">Mode Value</th>
+        <th class="text-center">Progress Percentage</th>
         <th style="width: 60px;" class="text-center"></th>
         <th style="width: 200px;" class="text-center">Controls</th>
       </tr>
@@ -105,12 +105,12 @@
                 <div class="block-options pull-right">
                     <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
                 </div>
-                <h3 class="themed-background" style="color:white;"><strong>Edit Mode of Payment</strong></h3>
+                <h3 class="themed-background" style="color:white;"><strong>Edit Progress Percentage for Billing</strong></h3>
               </div>
 
               {!! Form::open(['url'=>'{{ route(o.utilities.paymentmode)}}','method'=>'PUT','id'=>'frm-upd']) !!}
               <div class="form-group">
-                 <label for="paymentmodes">Mode Value</label> 
+                 <label for="paymentmodes">Progress Percentage</label> 
                  <span class="text-danger">*</span> 
                   {!! Form::text('paymentmodes', null,  ['id'=>'paymentmodes','class'=>'form-control', 'placeholder'=>'e.g 99999, etc.']) !!}
                   <span id="duplicate1" class="help-block animation-slideDown">
@@ -146,7 +146,7 @@
             <div class="block-options pull-right">
                 <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
             </div>
-            <h3 class="themed-background" style="color:white;"><strong>Delete Mode of Payment</strong></h3>
+            <h3 class="themed-background" style="color:white;"><strong>Delete Progress Percentage for Billing</strong></h3>
           </div>
            {!!Form::open(['url'=>'{{ route(o.utilities.mode.del)}}','method'=>'PUT','id'=>'frm-del'])!!}
                 <p><h4>Are you sure you want to delete</h4>

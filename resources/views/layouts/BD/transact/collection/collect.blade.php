@@ -119,15 +119,13 @@ function compute()
         <li><a href="{{ route('bd.home') }}"><i class="fa fa-home"></i></a></li>
         <li><a href="javascript:void(0)">Transaction</a></li>
         <li><a href="{{ route('billingcollection.index')}}">Billing & Collection</a></li>
-        <li><a >Collection</a></li>
+        <li><a href="{{ route('collection.show', $proc->ContractID)}}" >Collection</a></li>
         <li><a >Process Payment</a></li>
     </ol>
        <div class="block full">
-                        @foreach($proc as $proc)
                         <div class="block-title themed-background">
                             <h2 style="color:white"><strong>{{$proc->desc}}</strong></h2>
                         </div>
-                       @endforeach
                        
                       <div class="row">
                         <div class="col-md-2">

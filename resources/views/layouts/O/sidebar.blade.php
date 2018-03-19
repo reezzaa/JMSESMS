@@ -14,7 +14,7 @@
         <i class="gi gi-adjust_alt sidebar-nav-icon"></i>Maintenance</a>
         <ul>
             <li>
-                <a href="{{ route('skill.index') }}"><i class="fa fa-lightbulb-o sidebar-nav-icon"></i>Skills</a>
+                <a href="{{ route('skill.index') }}"><i class="fa fa-lightbulb-o sidebar-nav-icon"></i>Job</a>
             </li>
             <li>
               <a href="#" class="sidebar-nav-submenu"><i class="fa fa-angle-left sidebar-nav-indicator"></i>
@@ -56,17 +56,17 @@
                 <a href=""><i class="fa fa-files-o sidebar-nav-icon"></i>Price Adjustment</a>
             </li> -->
             <li>
-                <a href="{{ route('serviceOff.index') }}"><i class="gi gi-hand_saw sidebar-nav-icon"></i>Services Offered</a>
+                <a href="{{ route('serviceOff.index') }}"><i class="gi gi-hand_saw sidebar-nav-icon"></i>Services </a>
             </li>
             <li>
-                <a href="{{ route('task.index') }}"><i class="fa fa-calendar-o sidebar-nav-icon"></i>Tasks</a>
+                <a href="{{ route('task.index') }}"><i class="fa fa-calendar-o sidebar-nav-icon"></i>Service Tasks</a>
             </li>
             <li>
                 <a href="{{ route('expenses.index') }}"><i class="fa fa-rub sidebar-nav-icon"></i>Expenses</a>
             </li>
         </ul>
     </li>
-    <li class="sidebar-header">
+    <!-- <li class="sidebar-header">
         <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="gi gi-settings"></i></a></span>
          <span class="sidebar-header-title">Transaction</span>
      </li>
@@ -79,7 +79,7 @@
      </li>
     <li >
         <a href="{{ route('o.stockadjustment.queries') }}"><i class="fa fa-search sidebar-nav-icon"></i>Stocks </a>
-    </li>
+    </li> -->
     <!-- <li>
                 <a href="#" class="sidebar-nav-submenu"><i class="fa fa-angle-left sidebar-nav-indicator"></i>
                 <i class="gi gi-user sidebar-nav-icon"></i>Client</a>
@@ -106,11 +106,11 @@
     <li>
         <a href=""><i class="fa fa-files-o sidebar-nav-icon"></i>Equipment</i></a>
     </li> -->
-    <li class="sidebar-header">
+    <!-- <li class="sidebar-header">
         <span class="sidebar-header-options clearfix"><a href="javascript:void(0)"><i class="fa fa-child"></i></a></span>
          <span class="sidebar-header-title">User Account</span>
      </li>
     <li >
         <a href=""><i class="fa fa-cog sidebar-nav-icon"></i>Manage Accounts</a>
     </li>
-</ul>
+ --></ul>

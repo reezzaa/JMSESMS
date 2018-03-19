@@ -276,12 +276,12 @@
             <h3 class="themed-background" style="color:white"><strong>System Utilities</strong></h3>
             </div> 
               <ul class="nav nav-pills nav-stacked">
-              <li>
+              <!-- <li>
                 <a type="button" onclick="companyinfo()"><strong>Company Information</strong></a>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <a  type="button" onclick="smartcounter()"><strong>Smart Counter Values</strong></a>
-              </li>
+              </li> -->
               <li>
                 <a  type="button" onclick="showrate()"><strong>Rate</strong></a>
               </li>
@@ -292,17 +292,17 @@
                 <a type="button" onclick="showfee()"><strong>Additional Fee</strong></a>
               </li>
               <li>
-                <a type="button" onclick="showpaymentmode()"><strong>Mode of Payment</strong></a>
+                <a type="button" onclick="showpaymentmode()"><strong>Progress Percentage for Billing</strong></a>
               </li>
               <li>
                 <a type="button" onclick="showtax()"><strong>VAT Rate</strong></a>
               </li>
-              <li>
+             <!--  <li>
                 <a type="button" onclick="showret()"><strong>Retention</strong></a>
               </li>
               <li>
                 <a type="button" onclick="showrec()"><strong>Recoupment</strong></a>
-              </li>
+              </li> -->
             </ul>
             <br>
        </div>

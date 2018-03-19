@@ -89,7 +89,7 @@
                                        <button value="{{ $check->conid }}" id="process_progbill" class="btn btn-info" disabled="disabled">Process Progress Billing</button>
                                        @endif
                                      @else
-                                       @if($count_incur == 0)
+                                       @if($cont_stat != 0)
                                        <button value="{{ $check->conid }}" id="turnover" class="btn btn-info">Approve Project 
                                        Turnover</button>
                                        @else
@@ -100,15 +100,15 @@
                                      @if($count_incur == 0)
                                      <button value="{{ $check->conid }}" id="process_incbill" disabled="disabled" class="btn btn-default">Process Incurrences Billing</button>
                                      @else
-                                     <button value="{{ $check->conid }}" id="process_incbill" class="btn btn-default">Process Incurrences Billing</button>
+                                     <button type="submit" value="{{ $check->conid }}" id="process_incbill" class="btn btn-default">Process Incurrences Billing</button>
                                      @endif
                                     
                                    </div>
                                 </div>
                                </div> <br>
                                <div class="row">
-                                   <p class="col-md-offset-1"><strong>Status: </strong> <label class="label label-success">Paid Downpayment</label>&nbsp;
-                                    @foreach($getpaidpb as $ppb)<label class="label label-success">Paid {{$ppb->Mode}}% Progress Bill</label>&nbsp;@endforeach
+                                   <p class="col-md-offset-1"><strong>Status: </strong> <b ><u>Paid Downpayment</u></b>&nbsp;
+                                    @foreach($getpaidpb as $ppb) <b><u>Paid {{$ppb->Mode}}% Progress Bill&nbsp;</u></b>@endforeach
                                     @if($prog == null)
                                     <span></span>
                                     @else      
@@ -118,39 +118,10 @@
                                 @endif
                                 @endforeach
                                
-                              <div class="row">
-                                <div class="table-responsive col-md-10">    
+                                <div class="table-responsive">    
                                 @include('layouts.BD.transact.billing.table')
                           </div>
-                          <div class="col-md-2 pull-left"> 
-                            <br><br><br>
-                            @foreach($tasktable as $ta)
-                            <div class="btn-group">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" class="btn btn-alt btn-default dropdown-toggle"> Actions <span class="caret"></span></a>
-                                        <ul class="dropdown-menu dropdown-custom text-left">
-                                            <li>
-                                                <a><i class="gi gi-eye_open"></i> View</a>
-                                                
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a> Skill</a>
-                                                <a >Material</a>
-                                                <a >Equipment</a>
-                                                <a >Fees & Expenses</a>
-
-                                            </li>
-                                             <li class="divider"></li>
-                                            <li>
-                                                <a  href="/bd/stock/{{$ta->task_id}}" id="stock"> Adjust Stocks</a>
-                                                
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <br>
-                            @endforeach
-                          </div>
-                            </div>
+                          
                     </div>
                     <!-- END Working Tabs Block -->
          
@@ -252,6 +223,55 @@
       e.preventDefault();
      
     });
+    var checkbox;
+    
+     $('#process_incbill').on('click',function(e){
+        /////////////////start top loading//////////
+        // NProgress.start();
+        ///////////////////////////////////////////
+          e.preventDefault();
+            var ddata = $('#frm-incur').serialize();
+            // alert($('.check').val());
+
+            console.log(ddata);
+            $.ajax({
+              type : 'put',
+              url  : '/bd/billing/'+lastPart,
+              data : ddata,
+              dataType: 'json',
+              success:function(data){
+                $(".modal").modal('hide');
+                // swal("Removed!", "", "success");
+                // NProgress.done();
+                // window.location.reload();
+                window.open('/bd/printInvoiceInc/'+data.InvID);
+              }
+            })
+           e.stopPropagation();
+        });
+        $('#turnover').on('click',function(e){
+        /////////////////start top loading//////////
+        // NProgress.start();
+        ///////////////////////////////////////////
+          e.preventDefault();
+          var ddata = {
+            ContractID: lastPart
+          }
+            console.log(ddata);
+            $.ajax({
+              type : 'post',
+              url  : '/bd/turnover/'+lastPart,
+              data : ddata,
+              dataType: 'json',
+              success:function(data){
+                // $(".modal").modal('hide');
+                // swal("Removed!", "", "success");
+                // NProgress.done();
+                window.location.reload();
+              }
+            })
+           e.stopPropagation();
+        }); 
       
       
     //select all checkboxes

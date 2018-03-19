@@ -1,6 +1,6 @@
 <!-- Brand -->
 <a href="{{ route('o.home') }}" class="sidebar-brand">
-    <i class="gi gi-flash"></i><strong>JMSESMS</strong>
+    <i class="gi gi-flash"></i><strong>MSESMS</strong>
 </a>
 <!-- END Brand -->
 
@@ -8,10 +8,10 @@
 <div class="sidebar-section sidebar-user clearfix">
     <div class="sidebar-user-avatar">
         <a href="javascript:void(0)">
-            <img src="{{asset('img/favicon.ico')}}" alt="avatar">
+            <img src="{{asset('img/mechanic.png')}}" alt="avatar">
         </a>
     </div>
-    <div class="sidebar-user-name"><input type="hidden" id="userid" value="{{Auth::user()->id}}">{{ Auth::user()->fname }} {{ Auth::user()->mname }} {{ Auth::user()->lname }} {{ Auth::user()->suffix }}</div>
+    <div class="sidebar-user-name"><input type="hidden" id="userid" value="{{Auth::user()->id}}">Operations</div>
     <div class="sidebar-user-links">
    
         <a href="javascript:void(0)" data-toggle="tooltip" title="Profile"><i class="gi gi-user"></i></a>

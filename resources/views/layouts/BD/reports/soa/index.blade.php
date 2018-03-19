@@ -32,25 +32,25 @@
   <div class="content-header">
     <div class="header-section">
       <h4>
-          <i class="gi gi-sort"> </i> References of Billing <br>
+          <i class="gi gi-sort"> </i> Statement of Accounts <br>
       </h4>
     </div>
   </div>
     <ol class="breadcrumb breadcrumb-top">
         <li><a href="{{ route('bd.home') }}"><i class="fa fa-home"></i></a></li>
         <li><a href="javascript:void(0)">Reports</a></li>
-        <li><a>References of Billing</a></li>
+        <li><a>Statement of Account</a></li>
     </ol>
     <div class="block">
-    {{ Form::open(['target' => '_blank','url'=>'bd/references/printReferencesofBilling']) }}
+    {{ Form::open(['target' => '_blank','url'=>'bd/soareports/printSOA']) }}
                
                 <div class="row">
                  <div class="col-md-4 col-md-offset-1">
                     <label for="quotation">Choose Client </label> 
-                        <select name="project" id="project" class='form-control select-chosen ' data-placeholder='Choose'>
+                        <select name="client" id="client" class='form-control select-chosen ' required="required" data-placeholder='Choose'>
                         <option value=""></option>
-                        @foreach($contracts as $contracts)
-                          <option value="{{$contracts->conid}}">{{$contracts->name}}</option>
+                        @foreach($client as $client)
+                          <option value="{{$client->strCompClientID}}">{{$client->strCompClientName}}</option>
                         @endforeach
                       </select> 
                  </div>

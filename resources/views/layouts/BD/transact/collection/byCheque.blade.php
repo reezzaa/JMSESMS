@@ -5,7 +5,7 @@
                   </div>
                 
               <div class="row">
-              <label for="" class="col-md-4"><h5><strong>Amount Due: <label id="due">{{$cheque->amount}}</label></strong></h5></label> 
+              <label for="" class="col-md-12"><h5><strong>Amount Due: <label id="due">₱ {{$chec}}</label></strong></h5></label> 
               <input type="hidden" id="amtt" name="amtt" value="{{$cheque->amount}}">
             </div>
              <div class="row col-md-12">
@@ -18,7 +18,7 @@
                       </script>         
             </div>
             <div class="row">
-               <div class="col-md-6">
+               <div class="col-md-12">
                   <label for="" class="text-center"><h5><strong>Bank <span class="text-danger">*</span></strong></h5></label>
                   <select name="bank" id="bank" class="form-control">
                     @foreach($bank as $bank)
@@ -26,10 +26,7 @@
                     @endforeach
                   </select>       
               </div>
-              <div class="col-md-6">
-                  <label for="" class="text-center"><h5><strong>Validity(days) <span class="text-danger">*</span></strong></h5></label>
-                   <input type="number" id="val" name="val" class="form-control" value="3">            
-              </div>
+              
             </div>
             <hr>
             <label class="control-label" for="example-textarea-input">Remarks </label>

@@ -1,24 +1,14 @@
  <div class="block" id="current">
                           <table class="table table-borderless">
-                          @foreach($utilities as $utilities)
-
-                            <td class="col-md-2">
-                                  <img src="{{url('images', $utilities->strCompanyLogo)}}" style="width:100px;" class="col-md-offset-3">
+                          <td class="col-md-2">
+                                  
                             </td>
                             <td class="col-md-8 text-center">
                                
-                                            <strong style="font-family: 'Bodoni Black';font-size: 200%;"> {{ $utilities->strCompanyName }}</strong>  
+                                            <strong style="font-family: 'Bodoni Black';font-size: 200%;">MACHINE SHOP & ENGINEERING SERVICES</strong>  
                                         <br>
-                                            <b>{{ $utilities->strCompanyAddress }}
-                                            <br>
-                                            {{ $utilities->strGeneralManagerName }} - Proprietor
-                                          <br>
-                                            Email: {{ $utilities->strCompanyEmail }}
-                                          <br>
-                                            VAT Reg. TIN {{ $utilities->strCompanyTIN }}</b>
+                                           
                             </td>
-                            
-                              @endforeach
                             <td class="col-md-2"><br><br>
                               <p style="font-size: 150%;" id="invid"><b>{{$invoiceid}}</b></p>
                             </td>
@@ -58,16 +48,14 @@
                                 <br><br>
                                 <h4 class="text-center"><b> {{$prog->Mode}} % Progress Billing for the {{$prog->name}}</b></h4>
                                 <input type="hidden" id="desc" name="desc" value="{{$prog->Mode}} % Progress Billing for the {{$prog->name}}">
-                                <br><h5 class="col-md-offset-3"><b>Total Contract Amount: </b> PHP {{$prog->amount}}</h5>
                                 <br><h5 class="col-md-offset-1"><b>THIS PAYMENT: {{$prog->Mode}} % </b> PHP {{$prog->initial}}</h5>
                                 <br><h5 class="col-md-offset-1"><b> LESS: 10% Retention </b> PHP {{$prog->retValue}}</h5>
                                 <br><h5 class="col-md-offset-1"><b> LESS: 30% Recoupment </b> PHP {{$prog->recValue}}</h5>
-                                <br><br><h5 class="col-md-offset-2"><b>This Payment: <u>PHP {{$prog->pb_amount}}</u></b></h5>
                                 
                               </td>
                               <td style="height: 500px" class="text-center">
                                 <br><br>
-                                <h4>PHP {{$prog->initialtax}}</h4>
+                                <h4>PHP {{$prog->pb_amount}}</h4>
 
                               </td>
                             </tr>
@@ -89,7 +77,7 @@
                           <table class="table table-borderless">
                             <tr>
                               <td class="col-md-10" style="text-align: right;"><b>Prepared By:</b></td>
-                              <td class="col-md-2"> {{Auth::user()->fname}} {{Auth::user()->lname}}</td>
+                              <td class="col-md-2"></td>
                             </tr>
                             <tr>
                               <td class="col-md-10" style="text-align: right;"><b>Received By:</b></td>

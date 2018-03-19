@@ -1,6 +1,19 @@
 @extends('layouts.PM.transact.transact_main')
 @section('head')
 <script>
+  function addCommas(nStr)
+  {
+    nStr +='';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length>1 ? '.' + x[1]:'';
+    var rgx = /(\d+)(\d{3})/;
+    while(rgx.test(x1))
+    {
+      x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+  }
  function findTask(val)
       {
         $('#task').empty().trigger('chosen:updated');
@@ -85,6 +98,7 @@
             for(a4=0;a4<data.length;a4++)
             {
               $('#price').val(data[a4].total);
+              $('#o_price').val(addCommas(data[a4].total));
               $('#duration').val(data[a4].duration);
             }
           }
@@ -106,6 +120,7 @@
             for(a4=0;a4<data.length;a4++)
             {
               $('#miscprice').val(data[a4].MiscValue);
+              $('#o_miscprice').val(addCommas(data[a4].MiscValue));
             }
           }
         })
@@ -140,14 +155,15 @@
 function computetax()
     {
     var getRate=  $('#vat').text();
-    vatdue= subtotal*(getRate/100);
-    $('#vatdue').text('₱ '+vatdue);
+    vatdue= (subtotal*(getRate/100)).toFixed(2);
+
+    $('#vatdue').text('₱ '+ addCommas(vatdue));
     $('#vatrate').text(getRate+' %');
     $('#vatrate_val').val(getRate);
     total = parseFloat(subtotal)+parseFloat(vatdue);
     newcost = (Math.round((total * 1000)/10)/100).toFixed(2);
 
-    $('#totaldue').text('₱ '+newcost);
+    $('#totaldue').text('₱ '+ addCommas(newcost));
     }
 
 
@@ -307,9 +323,10 @@ function computetax()
                     task_from.push(from);
                     // task_to.push(to);
                     duration.push(dur);
-                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+data.total+'</td><td class="text-center">'+duration+'</td><td class="text-center">'+from+'</td><td class="text-center"><button class="btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
+                  $('#tbltask').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.total+'" id="input'+data.id+'"><td class="text-center">'+data.ServiceOffName+'</td><td class="text-center">'+data.ServTask+'</td><td class="text-center">'+addCommas(data.total)+'</td><td class="text-center">'+duration+'</td><td class="text-center">'+from+'</td><td class="text-center"><button class="btn-danger rem" value="'+data.id+'"><i class="fa fa-times"></i></button></td></tr>');
                      subtotal+=parseFloat(data.total);
-                  $('#subtotal').text('₱ '+subtotal);
+                  $('#o_subtotal').text('₱ '+addCommas(subtotal));
+                  $('#subtotal').val(subtotal);
                   if($('#totaldue').text()!="")
                   {
                   computetax();
@@ -360,9 +377,9 @@ function computetax()
                     miscdesc.push(desc);
                     miscvalue.push(val);
                     
-                  $('#tblexp').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.MiscValue+'" id="input'+data.id+'"><td class="text-center">'+data.MiscDesc+'</td><td class="text-center">'+data.MiscValue+'</td><td class="text-center"></tr>');
+                  $('#tblexp').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.MiscValue+'" id="input'+data.id+'"><td class="text-center">'+data.MiscDesc+'</td><td class="text-center">'+addCommas(data.MiscValue)+'</td><td class="text-center"></tr>');
                      subtotal+=parseFloat(data.MiscValue);
-                  $('#subtotal').text('₱ '+subtotal);
+                  $('#o_subtotal').text('₱ '+addCommas(subtotal));
                   if($('#totaldue').text()!="")
                   {
                   computetax();
@@ -414,10 +431,10 @@ function computetax()
                     ratedesc.push(desc);
                     ratevalue.push(val);
                     
-                  $('#tblfees').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.RateValue+'" id="input'+data.id+'"><td class="text-center">'+data.RateDesc+'</td><td class="text-center">'+data.RateValue+'</td><td class="text-center"></tr>');
+                  $('#tblfees').append('<tr id="'+data.id+'"><input type="hidden" value="'+data.RateValue+'" id="input'+data.id+'"><td class="text-center">'+data.RateDesc+'</td><td class="text-center">'+data.RateValue+'% </td><td class="text-center"></tr>');
                      initial= data.RateValue/100 * subtotal;
                      subtotal+=parseFloat(initial);
-                  $('#subtotal').text('₱ '+subtotal);
+                  $('#o_subtotal').text('₱ '+addCommas(subtotal));
                   if($('#totaldue').text()!="")
                   {
                   computetax();
@@ -458,7 +475,7 @@ function computetax()
       var getvalue = $('#input'+getID+'').val();
       // alert(getvalue);
       subtotal=subtotal-getvalue;
-      $('#subtotal').text('₱ '+subtotal);
+      $('#o_subtotal').text('₱ '+addCommas(subtotal));
       computetax();
       $('#'+getID+'').slideUp('slow', function () {$(this).remove()
       });

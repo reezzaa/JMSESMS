@@ -8,6 +8,6 @@ class Stocks extends Model
 {
     //
     public $timestamps = false;
-    public $primaryKey = 'MatID';
+    public $primaryKey = 'ServMatID';
     protected $table = 'tblstocks';
 }

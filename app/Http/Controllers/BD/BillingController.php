@@ -15,6 +15,7 @@ use App\Contract;
 use App\ContractTask;
 use App\Downpayment;
 use App\ProgressBill;
+use App\Incurrences;
 use Carbon\carbon;
 use PDF;
 use Response;
@@ -194,14 +195,15 @@ class BillingController extends Controller
         ->orderby('tblcontracttask.id','ASC')
         ->get();
         // dd($tasktable);
-        // $paid_incur = DB::table('tblcontract')
-        // ->join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
-        // ->leftjoin('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
-        // ->where('tblcontract.id',$id)
-        // ->groupby('tblcontracttask.id','tblservtask.total')
-        // ->where('tblincurrences.status',1)
-        // ->select(DB::raw('(SUM(tblincurrences.amount) + tblservtask.total) as paidamount'),'tblcontracttask.id as pt_id')
-        // ->get();
+        
+        $incurtable = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        ->join('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
+        ->select('tblincurrences.*')
+        ->where('tblcontract.id',$id)
+        ->orderby('tblincurrences.date','ASC')
+        ->get();
+
+        dd($incurtable);
 
         $incur = DB::table('tblcontract')
         ->join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
@@ -254,6 +256,7 @@ class BillingController extends Controller
                 $bill->date=$Targ;
                 $bill->status=0;
                 $bill->duedate=$getTarg;
+                $bill->mode=1;
                 $bill->save();
             }
             elseif($request->termdate=='month')
@@ -267,6 +270,7 @@ class BillingController extends Controller
                     $bill->date=$Targ;
                     $bill->status=0;
                     $bill->duedate=$getTarg;
+                    $bill->mode=1;
                     $bill->save();
 
                 }
@@ -279,6 +283,7 @@ class BillingController extends Controller
                     $bill->date=$Targ;
                     $bill->status=0;
                     $bill->duedate=$getTarg;
+                $bill->mode=1;
                     $bill->save();
                 }
             }
@@ -293,6 +298,7 @@ class BillingController extends Controller
                     $bill->date=$Targ;
                     $bill->status=0;
                     $bill->duedate=$getTarg;
+                $bill->mode=1;
                     $bill->save();
 
                 }
@@ -305,6 +311,7 @@ class BillingController extends Controller
                     $bill->date=$Targ;
                     $bill->status=0;
                     $bill->duedate=$getTarg;
+                $bill->mode=1;
                     $bill->save();
                 }
             }   
@@ -342,7 +349,7 @@ class BillingController extends Controller
         ->join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
         ->join('tblprogressdetail','tblprogressdetail.PB_ID','tblprogressbill.id')
         ->where('tblserviceinvoiceheader.id',$id)
-        // ->where('tblprogressbill.status',0)
+        ->where('tblprogressbill.status',0)
         ->orderby('tblprogressbill.Mode','ASC')
         ->select('tblclient.strCompClientName','tblclient.strCompClientAddress','tblclient.strCompClientCity','tblclient.strCompClientProv','tblclient.strCompClientTIN','tblcontract.term','tblcontract.termdate','tblcontract.amount as c_amount','tblserviceinvoiceheader.*','tblserviceinvoiceheader.date as s_date','tblserviceinvoicedetail.*','tblserviceinvoicedetail.amount as s_amount','tblprogressdetail.*','tblprogressbill.Mode')
         ->first();
@@ -375,8 +382,8 @@ class BillingController extends Controller
                      
                 
                 $pdfName="myPDF.pdf";
-                // $location=public_path("docs/$pdfName");
-                // $pdf->save($location); 
+                $location=public_path("docs/$pdfName");
+                $pdf->save($location); 
                 return $pdf->stream();   
     }
 
@@ -433,6 +440,7 @@ class BillingController extends Controller
 
         $prog1= ProgressBill::join('tblprogressdetail','tblprogressdetail.PB_ID','tblprogressbill.id')
         ->select('tblprogressbill.amount','tblprogressdetail.initialtax')
+        ->where('tblprogressbill.status',0)
         ->where('ContractID',$id)
         ->orderBy('Mode','ASC')
         ->first();
@@ -443,6 +451,7 @@ class BillingController extends Controller
         
         $getpaidpb = Contract::join('tblprogressbill','tblprogressbill.ContractID','tblcontract.id')
         ->select('tblprogressbill.Mode')
+        ->where('tblprogressbill.ContractID',$id)
         ->where('tblprogressbill.status',1)
         ->get();
         $date = Carbon::now();
@@ -464,12 +473,16 @@ class BillingController extends Controller
         // ->groupby('tblcontracttask.id')
         ->count('tblincurrences.id');
 
+        $cont_stat = Contract::where('status',1)
+        ->where('tblcontract.id',$id)
+        ->count('tblcontract.id');
+
         $tasktable = DB::table('tblcontract')
         ->join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
         ->leftjoin('tblduedetail','tblduedetail.TaskID','tblcontracttask.id')
         ->join('tblservtask','tblservtask.id','tblcontracttask.ServID')
-        ->leftjoin('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
-        ->select('tblservtask.ServTask','tblservtask.total as s_total','tblservtask.id as serv_id','tblcontracttask.from as task_from','tblcontracttask.to as task_to','tblcontracttask.*','tblduedetail.progress','tblcontracttask.wt','tblcontracttask.id as task_id','tblduedetail.percent','tblcontracttask.status as ct_status','tblincurrences.method')
+        // ->leftjoin('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
+        ->select('tblservtask.ServTask','tblservtask.total as s_total','tblservtask.id as serv_id','tblcontracttask.from as task_from','tblcontracttask.to as task_to','tblcontracttask.*','tblduedetail.progress','tblcontracttask.wt','tblcontracttask.id as task_id','tblduedetail.percent','tblcontracttask.status as ct_status')
         ->where('tblcontract.id',$id)
         ->whereRaw('tblduedetail.date = (SELECT MAX(tblduedetail.date) FROM tblduedetail WHERE tblduedetail.TaskID = tblcontracttask.id)')
         ->orderby('tblcontracttask.id','ASC')
@@ -489,15 +502,52 @@ class BillingController extends Controller
         ->join('tblservtask','tblservtask.id','tblcontracttask.ServID')
         ->leftjoin('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
         ->where('tblcontract.id',$id)
+        // ->where('tblincurrences.method','!=','I')
         // ->where('tblincurrences.status',0)
-        ->groupby('tblcontracttask.id','tblservtask.total','tblincurrences.status')
-        ->select(DB::raw('SUM(tblincurrences.amount) as incur_amount'),DB::raw('(SUM(tblincurrences.amount) + tblservtask.total) as paidamount'),'tblcontracttask.id as t_id','tblincurrences.status')
+        ->groupby('tblcontracttask.id','tblincurrences.id','tblservtask.total','tblincurrences.status','tblincurrences.method','tblincurrences.desc')
+        ->select(DB::raw('SUM(tblincurrences.amount) as incur_amount'),DB::raw('(SUM(tblincurrences.amount) + tblservtask.total) as paidamount'),'tblcontracttask.id as t_id','tblincurrences.id as i_id','tblincurrences.status','tblincurrences.method','tblincurrences.desc')
         ->get();
-        
-        
 
-        // dd($count_incur);
+        $incurtable = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        ->join('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
+        ->join('tblservtask','tblservtask.id','tblcontracttask.ServID')
+        ->select('tblincurrences.*','tblincurrences.id as i_id','tblservtask.ServTask')
+        ->where('tblcontract.id',$id)
+        ->where('tblincurrences.method','I')
+        ->orderby('tblincurrences.date','ASC')
+        ->get();
 
+        // dd($incurtable);
+
+
+        // $check_job = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        // ->leftjoin('tbltaskworker','tbltaskworker.TaskID','tblcontracttask.id')
+        // ->where('tbltaskworker.status',0)
+        // ->where('tblcontracttask.id',1)
+        // ->sum('tbltaskworker.total');
+
+        //  $check_mat = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        // ->leftjoin('tbltaskmat','tbltaskmat.TaskID','tblcontracttask.id')
+        // ->where('tbltaskmat.status',0)
+        // ->where('tblcontracttask.id',1)
+        // ->sum('tbltaskmat.total');
+
+        // $check_equip = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        // ->leftjoin('tbltaskequip','tbltaskequip.TaskID','tblcontracttask.id')
+        // ->leftjoin('tblequipment','tblequipment.id','tbltaskequip.EquipID')
+        // ->where('tbltaskequip.status',0)
+        // ->where('tblcontracttask.id',1)
+        // ->sum('tblequipment.EquipPrice');
+
+        // $check_misc = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        // ->leftjoin('tblcontractmisc','tblcontractmisc.ContractID','tblcontract.id')
+        // ->leftjoin('tblmiscellaneous','tblmiscellaneous.id','tblcontractmisc.MiscID')
+        // ->where('tblcontractmisc.status',0)
+        // ->where('tblcontracttask.id',1)
+        // ->sum('tblmiscellaneous.MiscValue');
+
+       // $check_res=  $check_job + $check_mat + $check_equip + $check_misc;
+// dd($check_res, $check_job, $check_mat,$check_equip,$check_misc);
         foreach ($tasktable as $key ) {
              $key->s_total=number_format($key->s_total,2);
 
@@ -505,11 +555,17 @@ class BillingController extends Controller
             }
         foreach ($incur as $hehe ) {
              $hehe->incur_amount=number_format($hehe->incur_amount,2);
+             $hehe->paidamount=number_format($hehe->paidamount,2);
+
+             // $key->progress = ($key->progress/$key->wt)*100;
+            }
+        foreach ($incurtable as $ic ) {
+             $ic->amount=number_format($ic->amount,2);
 
              // $key->progress = ($key->progress/$key->wt)*100;
             }
 
-        return view('layouts.BD.transact.billing.index', compact('contract','down','date','utilities','invoiceid','down1','id','com','prog','prog1','getpaidpb','count_incur','tasktable','incur'));
+        return view('layouts.BD.transact.billing.index', compact('contract','cont_stat','down','date','utilities','invoiceid','down1','id','com','prog','prog1','getpaidpb','count_incur','tasktable','incur','incurtable'));
     }
 
     /**
@@ -532,7 +588,175 @@ class BillingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $var = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        ->join('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
+        ->select('tblincurrences.id as i_id','tblcontract.term','tblcontract.termdate')
+        ->where('tblcontract.id',$id)
+        ->get();
+
+        $getTerm = Contract::select('tblcontract.term','tblcontract.termdate')
+        ->where('tblcontract.id',$id)
+        ->first();
+
+            $invoiceid = $this->getID();
+
+            $Targ =Carbon::now();
+            $getTarg = Carbon::parse($Targ);
+
+            if($getTerm->termdate=='days')
+            {
+                $getTarg->addDays($getTerm->term);
+                $bill = new ServiceInvoiceHeader();
+                $bill->id=$invoiceid;
+                $bill->ContractID=$id;
+                $bill->date=$Targ;
+                $bill->status=0;
+                $bill->duedate=$getTarg;
+                $bill->mode=2;
+                $bill->save();
+            }
+            elseif($getTerm->termdate=='month')
+            {
+                if($getTerm->term==1)
+                {
+                    $getTarg->addMonth();
+                    $bill = new ServiceInvoiceHeader();
+                    $bill->id=$invoiceid;
+                    $bill->ContractID=$id;
+                    $bill->date=$Targ;
+                    $bill->status=0;
+                    $bill->duedate=$getTarg;
+                $bill->mode=2;
+                    $bill->save();
+
+                }
+                elseif($getTerm->term>1)
+                {
+                    $getTarg->addMonths($getTerm->term);
+                    $bill = new ServiceInvoiceHeader();
+                    $bill->id=$invoiceid;
+                    $bill->ContractID=$id;
+                    $bill->date=$Targ;
+                    $bill->status=0;
+                    $bill->duedate=$getTarg;
+                $bill->mode=2;
+                    $bill->save();
+                }
+            }
+            elseif($getTerm->termdate=='year')
+            {
+                if($getTerm->term==1)
+                {
+                    $getTarg->addYear();
+                    $bill = new ServiceInvoiceHeader();
+                    $bill->id=$invoiceid;
+                    $bill->ContractID=$id;
+                    $bill->date=$Targ;
+                    $bill->status=0;
+                    $bill->duedate=$getTarg;
+                $bill->mode=2;
+                    $bill->save();
+
+                }
+                elseif($getTerm->term>1)
+                {
+                    $getTarg->addYears($getTerm->term);
+                    $bill = new ServiceInvoiceHeader();
+                    $bill->id=$invoiceid;
+                    $bill->ContractID=$id;
+                    $bill->date=$Targ;
+                    $bill->status=0;
+                    $bill->duedate=$getTarg;
+                $bill->mode=2;
+                    $bill->save();
+                }
+            }   
+
+        foreach ($var as $var) {
+           $incurr = Incurrences::find($var->i_id);
+           $incurr->invoice = $invoiceid;
+           $incurr->save();
+
+           if(in_array($var->i_id, $request->check))
+           {
+                $incurr->status=1;
+                $incurr->save();
+
+                $updtask = ContractTask::find($incurr->TaskID);
+                if($incurr->active==0 && $incurr->method!='S')
+                {
+                    $updtask->active = 1;
+                    $updtask->save();
+                }
+                elseif($incurr->active==1 && $incurr->method!='S')
+                {
+                    $updtask->active=1;
+                    $updtask->save();
+                }
+                else
+                {
+                    $updtask->active=2;
+                    $updtask->save();
+                }
+                
+                $subtotal = $incurr->amount -($incurr->amount*12/100);
+
+                $billdetail= new ServiceInvoiceDetail();
+                $billdetail->InvID=$invoiceid;
+                $billdetail->amount=$incurr->amount;
+                $billdetail->subtotal=$subtotal;
+                $billdetail->desc=$incurr->desc;
+                $billdetail->save();
+
+           }
+        }
+        return Response($billdetail);
+
+    }
+    public function printInvoiceInc($id)
+    {
+        // $serv = ServiceInvoiceHeader::select('tblserviceinvoiceheader.*')->get();
+        $header = ServiceInvoiceHeader::join('tblcontract','tblcontract.id','tblserviceinvoiceheader.ContractID')
+        ->join('tblclient','tblclient.strCompClientID','tblcontract.ClientID')
+        ->select('tblclient.strCompClientName','tblclient.strCompClientAddress','tblclient.strCompClientCity','tblclient.strCompClientProv','tblclient.strCompClientTIN','tblcontract.term','tblcontract.termdate','tblserviceinvoiceheader.*','tblserviceinvoiceheader.date as s_date')
+        ->where('tblserviceinvoiceheader.id',$id)
+        ->get();
+
+        $printIncurrences = ServiceInvoiceHeader::join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
+        ->where('tblserviceinvoiceheader.id',$id)
+        ->select('tblserviceinvoiceheader.*','tblserviceinvoicedetail.*','tblserviceinvoicedetail.InvID as de_id')
+        ->get();
+        // $check = Contract::join('tblcontracttask','tblcontracttask.ContractID','tblcontract.id')
+        // ->join('tblincurrences','tblincurrences.TaskID','tblcontracttask.id')
+        // ->join('tblserviceinvoiceheader','tblserviceinvoiceheader.ContractID','tblcontract.id')
+        // ->select('tblincurrences.method','tblserviceinvoiceheader.id')
+        // ->where('tblincurrences.method','S')
+        // ->get();
+        // dd($check);
+        $total=ServiceInvoiceHeader::join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
+        ->where('tblserviceinvoiceheader.id',$id)
+        ->sum('tblserviceinvoicedetail.amount');
+        $subtotal=ServiceInvoiceHeader::join('tblserviceinvoicedetail','tblserviceinvoicedetail.InvID','tblserviceinvoiceheader.id')
+        ->where('tblserviceinvoiceheader.id',$id)
+        ->sum('tblserviceinvoicedetail.subtotal');
+        $utilities = CompanyUtil::all();
+        $tax=0;
+        foreach ($printIncurrences as $key ) {
+            
+            $tax+=$key->subtotal * 12/100;
+        }
+        
+             $total=number_format($total,2);
+             $subtotal=number_format($subtotal,2);
+             $tax=number_format($tax,2);
+
+
+        $pdf = PDF::loadView('layouts.BD.transact.billing.printInc',compact('header','printIncurrences','total','subtotal','tax','utilities','id'))->setPaper('letter','portrait'); 
+                
+        $pdfName="myPDF.pdf";
+        $location=public_path("docs/$pdfName");
+        $pdf->save($location); 
+        return $pdf->stream();
     }
 
     /**
@@ -541,9 +765,15 @@ class BillingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+   public function Turnover(Request $request)
     {
-        //
+
+        $turnover = Contract::find($request->ContractID);
+        $turnover->status=2;
+        $turnover->save();
+        // dd($turnover);
+        return Response($turnover);
     }
+  
   
 }

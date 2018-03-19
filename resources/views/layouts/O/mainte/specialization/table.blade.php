@@ -1,7 +1,7 @@
 <table id="specialization-datatable" class="table table-vcenter table-striped table-condensed table-bordered table-hover">
   <thead>
     <tr>
-      <th class="text-center">Skill</th>
+      <th class="text-center">Job</th>
       <th class="text-center">Rate/Hour</th>
       <th class="text-center">Effectivity Date</th>
       <th style="width: 60px;" class="text-center"></th>
@@ -83,13 +83,13 @@
                       <div class="block-options pull-right">
                           <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
                       </div>
-                      <h3 class="themed-background" style="color:white;"><strong>Edit Skill</strong></h3>
+                      <h3 class="themed-background" style="color:white;"><strong>Edit Job</strong></h3>
                     </div>
 
                        {!! Form::open(['url'=>'skill','method'=>'PUT','id'=>'frm-upd']) !!}
                        <input type="hidden" id="specID" name="specID">
                         <div class="form-group">
-                            <label for="SpecDesc">Skill Description</label><span class="text-danger">*</span> 
+                            <label for="SpecDesc">Job Description</label><span class="text-danger">*</span> 
                           <div class="col-md-offset-1">
                             {!!Form::text('SpecDesc' , null,['id'=>'SpecDesc', 'class'=>'form-control', 'maxLength'=>'45'])!!}
                             <span id="duplicate" class="help-block animation-slideDown">
@@ -144,7 +144,7 @@
                       <div class="block-options pull-right">
                           <a href="javascript:void(0)" class="btn btn btn-default close" data-dismiss="modal"><i class="fa fa-times"></i></a>
                       </div>
-                      <h3 class="themed-background" style="color:white;"><strong>Delete Skill</strong></h3>
+                      <h3 class="themed-background" style="color:white;"><strong>Delete Job</strong></h3>
                     </div>
                      {!!Form::open(['url'=>'skill','method'=>'PUT','id'=>'frm-del'])!!}
                           <p><h4>Are you sure you want to delete</h4>
